@@ -1,0 +1,68 @@
+{
+  "name": "tdd-sandbox-web",
+  "version": "0.1.0",
+  "private": true,
+  "author": "adam.szi",
+  "license": "BEERWARE",
+  "dependencies": {
+    "@faker-js/faker": "6.0.0-alpha.5",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-redux": "^7.1.22",
+    "classnames": "^2.3.1",
+    "cross-env": "^7.0.3",
+    "immer": "^9.0.12",
+    "lodash": "^4.17.21",
+    "node-sass": "^6.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-markdown": "^7.1.0",
+    "react-redux": "^7.2.6",
+    "react-router": "^6.0.2",
+    "react-router-dom": "^6.0.2",
+    "react-scripts": "4.0.3",
+    "reselect": "^4.1.5",
+    "socket.io-client": "^4.4.0",
+    "ts-essentials": "^9.1.2",
+    "typesafe-actions": "^5.1.0",
+    "typescript": "^4.6.3",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "cross-env BROWSER=none react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.177",
+    "@types/redux": "^3.6.0",
+    "@types/redux-devtools": "^3.7.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.4.1",
+    "redux-devtools-extension": "^2.13.9"
+  }
+}
