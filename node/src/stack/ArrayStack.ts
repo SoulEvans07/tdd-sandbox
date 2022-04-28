@@ -1,17 +1,7 @@
-export interface IStack {
-  getSize(): number;
-  isEmpty(): boolean;
-  push(value: number): void;
-  pop(): number;
-  getElements(): number[];
-}
+import { IStack, UnderflowError } from './IStack';
 
-export class Stack implements IStack {
+export class ArrayStack implements IStack {
   private elements: number[] = [];
-
-  getElements(): number[] {
-    return this.elements;
-  }
 
   getSize(): number {
     return this.elements.length;
@@ -31,8 +21,4 @@ export class Stack implements IStack {
     this.elements.length--;
     return last;
   }
-}
-
-export class UnderflowError extends Error {
-  name = 'UnderflowError';
 }
