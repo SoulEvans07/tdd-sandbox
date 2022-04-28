@@ -1,7 +1,7 @@
 import { IStack, UnderflowError } from './IStack';
 
-export class ArrayStack implements IStack {
-  private elements: number[] = [];
+export class ArrayStack<T> implements IStack<T> {
+  private elements: T[] = [];
 
   getSize(): number {
     return this.elements.length;
@@ -11,11 +11,11 @@ export class ArrayStack implements IStack {
     return this.getSize() === 0;
   }
 
-  push(value: number): void {
+  push(value: T): void {
     this.elements[this.elements.length] = value;
   }
 
-  pop(): number {
+  pop(): T {
     if (this.isEmpty()) throw new UnderflowError();
     const last = this.elements[this.elements.length - 1];
     this.elements.length--;

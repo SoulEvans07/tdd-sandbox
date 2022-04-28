@@ -1,8 +1,8 @@
 import { IStack, UnderflowError } from './IStack';
 
-export class MapStack implements IStack {
+export class MapStack<T> implements IStack<T> {
   private size: number = 0;
-  private elements: Record<string, number> = Object.create(null);
+  private elements: Record<string, T> = Object.create(null);
 
   getSize(): number {
     return this.size;
@@ -12,11 +12,11 @@ export class MapStack implements IStack {
     return this.getSize() === 0;
   }
 
-  push(value: number): void {
+  push(value: T): void {
     this.elements[this.size++] = value;
   }
 
-  pop(): number {
+  pop(): T {
     if (this.isEmpty()) throw new UnderflowError();
     const last = this.elements[this.size - 1];
     delete this.elements[this.size];
