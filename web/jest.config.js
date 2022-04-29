@@ -8,7 +8,8 @@ module.exports = {
   testRunner: '<rootDir>/node_modules/jest-circus/runner.js',
   transform: {
     '^.+\\.(js|jsx|mjs|cjs|ts|tsx)$': '<rootDir>/config/jest/babelTransform.js',
-    '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
+    // '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
+    '^.+\\.(css|styl|less|sass|scss)$': 'jest-css-modules-transform',
     '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)': '<rootDir>/config/jest/fileTransform.js',
   },
   transformIgnorePatterns: [
@@ -20,7 +21,7 @@ module.exports = {
     '^react-native$': 'react-native-web',
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
   },
-  moduleFileExtensions: ['web.js', 'js', 'web.ts', 'ts', 'web.tsx', 'tsx', 'json', 'web.jsx', 'jsx', 'node'],
+  moduleFileExtensions: ['ts', 'tsx', 'json', 'scss', 'js', 'jsx', 'node', 'web.ts', 'web.tsx', 'web.js', 'web.jsx'],
   watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
   resetMocks: true,
 };

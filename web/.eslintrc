@@ -4,6 +4,7 @@
   "rules": {
     "prettier/prettier": "error",
     "react-hooks/exhaustive-deps": "off",
-    "jsx-a11y/anchor-is-valid": "off"
+    "jsx-a11y/anchor-is-valid": "off",
+    "default-case": "off"
   }
 }
