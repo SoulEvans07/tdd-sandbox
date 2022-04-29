@@ -1,6 +1,6 @@
 {
-  "extends": "react-app",
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "testing-library", "jest-dom"],
+  "extends": ["react-app", "react-app/jest", "plugin:testing-library/react", "plugin:jest-dom/recommended"],
   "rules": {
     "prettier/prettier": "error",
     "react-hooks/exhaustive-deps": "off",

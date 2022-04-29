@@ -5,7 +5,7 @@ export function HomeScreen() {
     <div className="home-screen">
       <header>
         <a href="/" className="title">
-          Home
+          ToDo App
         </a>
       </header>
     </div>
