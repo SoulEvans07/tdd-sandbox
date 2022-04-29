@@ -21,4 +21,9 @@ export class ArrayStack<T> implements IStack<T> {
     this.elements.length--;
     return last;
   }
+
+  top(): T {
+    if (this.isEmpty()) throw new UnderflowError();
+    return this.elements[this.elements.length - 1];
+  }
 }

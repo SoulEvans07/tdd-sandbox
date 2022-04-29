@@ -23,4 +23,9 @@ export class MapStack<T> implements IStack<T> {
     this.size--;
     return last;
   }
+
+  top(): T {
+    if (this.isEmpty()) throw new UnderflowError();
+    return this.elements[this.size - 1];
+  }
 }

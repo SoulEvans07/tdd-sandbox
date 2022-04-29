@@ -34,7 +34,7 @@ function testStackFunctionality<T>(name: string, ctor: () => IStack<T>, valueGen
     });
 
     test('will throw underflow error when empty stack is popped', () => {
-      expect(() => stack.pop()).toThrowError(new UnderflowError());
+      expect(() => stack.pop()).toThrowType(UnderflowError);
     });
 
     test('after one push and one pop stack will be empty; with size of 0', () => {
@@ -88,6 +88,30 @@ function testStackFunctionality<T>(name: string, ctor: () => IStack<T>, valueGen
       items.forEach(item => stack.push(item));
       const reverse = items.reverse();
       reverse.forEach(item => expect(stack.pop()).toBe(item));
+    });
+
+    test('top on empty stack throws Underflow error', () => {
+      expect(() => stack.top()).toThrowType(UnderflowError);
+    });
+
+    test('push once, top once -> stack is not empty', () => {
+      stack.push(valueGen());
+      stack.top();
+      expect(stack.isEmpty()).toBe(false);
+    });
+
+    test('top doesnt change the stack size', () => {
+      const count = 1 + Random.number(9);
+      for (let i = 0; i < count; i++) stack.push(valueGen());
+      stack.top();
+      expect(stack.getSize()).toBe(count);
+    });
+
+    test('top returns last pushed item', () => {
+      const count = 1 + Random.number(9);
+      const values = new Array(count).fill(null).map(() => valueGen());
+      values.forEach(val => stack.push(val));
+      expect(stack.top()).toBe(values[values.length - 1]);
     });
   });
 }

@@ -3,6 +3,7 @@ export interface IStack<T> {
   isEmpty(): boolean;
   push(value: T): void;
   pop(): T;
+  top(): T;
 }
 
 export class UnderflowError extends Error {
