@@ -3,7 +3,11 @@ import './HomeScreen.scss';
 export function HomeScreen() {
   return (
     <div className="home-screen">
-      <header>Home</header>
+      <header>
+        <a href="/" className="title">
+          Home
+        </a>
+      </header>
     </div>
   );
 }

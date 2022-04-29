@@ -5,9 +5,14 @@
     align-items: center;
     justify-content: space-between;
     background: var(--color-primary-500);
-    color: white;
-    font-size: 1rem;
+
     padding: 1rem;
-    font-weight: 500;
+
+    .title {
+      color: white;
+      font-weight: 500;
+      font-size: 1rem;
+      text-decoration: none;
+    }
   }
 }
