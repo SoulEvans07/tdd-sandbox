@@ -30,4 +30,26 @@ describe('Random', () => {
       expect(Random.string(100)).toMatch(/^[a-z]{100}$/);
     });
   });
+
+  describe('choose', () => {
+    const array = [0, 1, 2, 3, 4, 5];
+
+    it('returns with single value if count is not set', () => {
+      const value = Random.choose(array);
+      expect(value).not.toBeArray();
+      expect(value).toBeNumber();
+    });
+
+    it('returns with accurate amout of values if count is set', () => {
+      const count = 3;
+      const value = Random.choose(array, count);
+      expect(value).toBeArray();
+      expect(value).toHaveLength(3);
+    });
+
+    it('throws error when count < 0', () => {
+      expect(() => Random.choose(array, 0)).toThrowType(InvalidArgumentException);
+      expect(() => Random.choose(array, -10)).toThrowType(InvalidArgumentException);
+    });
+  });
 });
