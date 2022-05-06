@@ -6,3 +6,7 @@ input[type="text"] {
   color: var(--color-light-300);
   caret-color: var(--color-primary);
 }
+
+input[type="text"]::selection {
+  background: var(--color-primary);
+}

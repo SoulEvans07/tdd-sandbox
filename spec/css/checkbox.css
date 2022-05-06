@@ -9,7 +9,7 @@
   height: var(--size);
   position: relative;
   border-radius: 100%;
-  background: var(--color-dark-300);
+  background: var(--color-dark-400);
   flex-shrink: 0;
 }
 

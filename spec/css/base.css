@@ -1,20 +1,26 @@
 :root {
+  --color-title: hsl(0, 0%, 100%);
   --color-primary: hsl(220, 98%, 61%);
   --color-grad-from: hsl(192, 100%, 67%);
   --color-grad-to: hsl(280, 87%, 65%);
-  --color-dark-600: hsl(235, 21%, 11%);
-  --color-dark-500: hsl(235, 24%, 19%);
-  --color-dark-400: hsl(237, 14%, 26%);
-  --color-dark-300: hsl(233, 14%, 35%);
-  --color-dark-200: hsl(234, 11%, 52%);
-  --color-light-300: hsl(234, 39%, 85%);
-  --color-light-300-20: hsla(234, 39%, 85%, 0.2);
-  --color-light-300-50: hsla(234, 39%, 85%, 0.5);
-  --color-light-200: hsl(236, 33%, 92%);
-  --color-light-100: hsl(240, 100%, 100%);
-
   /* --color-open-dark: ; */
   /* --color-open-light: ; */
+
+  --font-size: 18px;
+  --border-radius: 0.25rem;
+
+  color-scheme: light;
+}
+
+body {
+  --color-dark-600: hsl(0, 0%, 98%);
+  --color-dark-500: hsl(0, 0%, 100%);
+  --color-dark-400: hsl(236, 33%, 92%);
+  --color-dark-300: hsl(233, 11%, 84%);
+  --color-dark-200: hsl(236, 9%, 61%);
+  --color-light-300: hsl(235, 19%, 35%);
+  --color-light-200: hsl(236, 33%, 8%);
+
   --color-inprogress-light: hsl(165, 71%, 95%);
   --color-inprogress-dark: hsl(165, 31%, 60%);
   --color-blocked-light: hsl(350, 100%, 95%);
@@ -22,10 +28,34 @@
   --color-done-light: hsl(249, 84%, 95%);
   --color-done-dark: hsl(249, 44%, 60%);
 
-  --font-size: 18px;
-  --border-radius: 0.25rem;
+  --drop-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
+  --drop-shadow-small: 0px 3px 5px 0px rgba(0, 0, 0, 0.15);
+
+  --bg-desktop: url("../images/bg-desktop-light.jpg");
+  --bg-mobile: url("../images/bg-mobile-light.jpg");
+}
+
+body.dark {
+  --color-dark-600: hsl(235, 21%, 11%);
+  --color-dark-500: hsl(235, 24%, 19%);
+  --color-dark-400: hsl(237, 14%, 26%);
+  --color-dark-300: hsl(233, 14%, 35%);
+  --color-dark-200: hsl(234, 11%, 52%);
+  --color-light-300: hsl(234, 39%, 85%);
+  --color-light-200: hsl(236, 33%, 92%);
+
+  --color-inprogress-light: hsl(165, 31%, 60%);
+  --color-inprogress-dark: hsl(165, 71%, 95%);
+  --color-blocked-light: hsl(350, 60%, 60%);
+  --color-blocked-dark: hsl(350, 100%, 95%);
+  --color-done-light: hsl(249, 44%, 60%);
+  --color-done-dark: hsl(249, 84%, 95%);
+
   --drop-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3);
   --drop-shadow-small: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+
+  --bg-desktop: url("../images/bg-desktop-dark.jpg");
+  --bg-mobile: url("../images/bg-mobile-dark.jpg");
 
   color-scheme: dark;
 }
@@ -35,7 +65,7 @@ body {
   font-size: var(--font-size);
   color: var(--color-light-300);
 
-  background-image: url("../images/bg-desktop-dark.jpg");
+  background-image: var(--bg-desktop);
   background-repeat: no-repeat;
   background-position: center -100px;
   background-size: auto 400px;
@@ -54,7 +84,7 @@ body {
 @media screen and (max-width: 600px) {
   body {
     background-position: 0 0;
-    background-image: url("../images/bg-mobile-dark.jpg");
+    background-image: var(--bg-mobile);
   }
 }
 

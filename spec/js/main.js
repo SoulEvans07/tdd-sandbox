@@ -28,6 +28,18 @@ function closeDropdown(event) {
   }
 }
 
+function swichTheme() {
+  const switchIcon = document.querySelector("img.theme-switch");
+  const isDark = Array.from(document.body.classList).includes("dark");
+  if (isDark) {
+    document.body.classList.remove("dark");
+    switchIcon.src = "images/icon-moon.svg";
+  } else {
+    document.body.classList.add("dark");
+    switchIcon.src = "images/icon-sun.svg";
+  }
+}
+
 function main() {
   const taskItems = document.querySelectorAll(".task-item");
   taskItems.forEach((item) => item.addEventListener("click", openTask));
@@ -41,6 +53,9 @@ function main() {
 
   const optionItems = document.querySelectorAll(".option-item");
   optionItems.forEach((item) => item.addEventListener("click", closeDropdown));
+
+  const themeSwitch = document.querySelector(".theme-switch");
+  themeSwitch.addEventListener("click", swichTheme);
 }
 
 main();
