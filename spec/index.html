@@ -21,14 +21,17 @@
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/label.css" />
+    <link rel="stylesheet" href="css/input.css" />
     <link rel="stylesheet" href="css/button.css" />
     <link rel="stylesheet" href="css/checkbox.css" />
+    <link rel="stylesheet" href="css/select.css" />
     <link rel="stylesheet" href="css/task-list.css" />
     <link rel="stylesheet" href="css/side-panel.css" />
+    <link rel="stylesheet" href="css/user-tag.css" />
 
     <title>Todo app</title>
   </head>
-  <body>
+  <body class="dark">
     <main>
       <header>
         <h1>Todo</h1>
@@ -43,111 +46,161 @@
           placeholder="New Task"
         />
       </section>
-      <section class="controls">
-        <span class="remaining-counter">5 items left</span>
-        <div class="button-group">
-          <button class="text active">All</button>
-          <button class="text">In Progress</button>
-          <button class="text">Completed</button>
-        </div>
-        <button class="text">Clear Selected</button>
-      </section>
-      <section class="task-list">
-        <div class="task-item done">
-          <div class="checkbox"></div>
-          <span class="task-title">Complete only Javascript course</span>
-          <span class="status-label done">Done</span>
-          <svg
-            class="icon-button remove-task"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
-            />
-          </svg>
-        </div>
-        <div class="task-item">
-          <div class="checkbox checked"></div>
-          <span class="task-title">10 minutes mediataion</span>
-          <svg
-            class="icon-button remove-task"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
-            />
-          </svg>
-        </div>
-        <div class="task-item in-progress">
-          <div class="checkbox"></div>
-          <span class="task-title">Read for 1 hour</span>
-          <span class="status-label in-progress">In Progress</span>
-          <svg
-            class="icon-button remove-task"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
-            />
-          </svg>
-        </div>
-        <div class="task-item blocked">
-          <div class="checkbox"></div>
-          <span class="task-title">Pick up groceries</span>
-          <span class="status-label blocked">Blocked</span>
-          <svg
-            class="icon-button remove-task"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
-            />
-          </svg>
-        </div>
-        <div class="task-item">
-          <div class="checkbox"></div>
-          <span class="task-title">Complete Todo App on Frontend Mentor</span>
-          <svg
-            class="icon-button remove-task"
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-          >
-            <path
-              fill="currentColor"
-              fill-rule="evenodd"
-              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
-            />
-          </svg>
-        </div>
+      <section class="task-list-container">
+        <section class="controls">
+          <span class="remaining-counter">5 items left</span>
+          <div class="button-group text">
+            <button class="text active">All</button>
+            <button class="text">In Progress</button>
+            <button class="text">Completed</button>
+          </div>
+          <button class="text clear-btn">Clear Selected</button>
+        </section>
+        <section class="task-list">
+          <div class="task-item done">
+            <div class="checkbox"></div>
+            <span class="task-title">Complete only Javascript course</span>
+            <span class="status-label done">Done</span>
+            <svg
+              class="icon-button remove-task"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+            >
+              <path
+                fill="currentColor"
+                fill-rule="evenodd"
+                d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+              />
+            </svg>
+          </div>
+          <div class="task-item">
+            <div class="checkbox checked"></div>
+            <span class="task-title">10 minutes mediataion</span>
+            <svg
+              class="icon-button remove-task"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+            >
+              <path
+                fill="currentColor"
+                fill-rule="evenodd"
+                d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+              />
+            </svg>
+          </div>
+          <div class="task-item in-progress">
+            <div class="checkbox"></div>
+            <span class="task-title">Read for 1 hour</span>
+            <span class="status-label in-progress">In Progress</span>
+            <svg
+              class="icon-button remove-task"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+            >
+              <path
+                fill="currentColor"
+                fill-rule="evenodd"
+                d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+              />
+            </svg>
+          </div>
+          <div class="task-item blocked">
+            <div class="checkbox"></div>
+            <span class="task-title">Pick up groceries</span>
+            <span class="status-label blocked">Blocked</span>
+            <svg
+              class="icon-button remove-task"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+            >
+              <path
+                fill="currentColor"
+                fill-rule="evenodd"
+                d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+              />
+            </svg>
+          </div>
+          <div class="task-item">
+            <div class="checkbox"></div>
+            <span class="task-title">Complete Todo App on Frontend Mentor</span>
+            <svg
+              class="icon-button remove-task"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+            >
+              <path
+                fill="currentColor"
+                fill-rule="evenodd"
+                d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+              />
+            </svg>
+          </div>
+        </section>
       </section>
     </main>
     <footer>Select a task open the edit panel</footer>
 
     <aside class="side-panel open">
-      <div class="status-row">
-        <span class="status-label in-progress">In Progress</span>
-        <div class="button-group">
-          <button class="border">Done</button>
-          <button class="border">Blocked</button>
+      <header>
+        <svg
+          class="icon-button close-panel"
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+        >
+          <path
+            fill="currentColor"
+            fill-rule="evenodd"
+            d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+          />
+        </svg>
+      </header>
+      <section class="task-details">
+        <div class="assignee-row">
+          <div class="user-tag purple">
+            <span class="profile-img">S</span>
+            <span class="name">Adam Szi</span>
+          </div>
+          <div class="drop-menu open">
+            <input type="text" class="drop-search" placeholder="Assignee..." />
+            <div class="option-item user-tag purple">
+              <span class="profile-img">S</span>
+              <span class="name">Adam Szi</span>
+            </div>
+            <div class="option-item user-tag red">
+              <span class="profile-img">B</span>
+              <span class="name">András Balogh</span>
+            </div>
+            <div class="option-item user-tag green">
+              <span class="profile-img">H</span>
+              <span class="name">Tamás Horváth</span>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="status-row">
+          <span class="status-label in-progress">In Progress</span>
+          <div class="button-group">
+            <button class="border">Done</button>
+            <button class="border">Blocked</button>
+          </div>
+        </div>
+        <input
+          class="task-title"
+          name="new-task"
+          id="new-task"
+          type="text"
+          placeholder="New Task"
+          value="Read for 1 hour"
+        />
+        <textarea class="task-description" placeholder="Task description">
+Read Clean Code by Uncle Bob!</textarea
+        >
+      </section>
     </aside>
   </body>
 </html>

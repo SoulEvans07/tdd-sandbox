@@ -1,0 +1,39 @@
+.user-tag {
+  display: flex;
+}
+
+.user-tag.green {
+  --color-bg: var(--color-inprogress-dark);
+  --color-fg: var(--color-inprogress-light);
+}
+
+.user-tag.purple {
+  --color-bg: var(--color-done-dark);
+  --color-fg: var(--color-done-light);
+}
+
+.user-tag.red {
+  --color-bg: var(--color-blocked-dark);
+  --color-fg: var(--color-blocked-light);
+}
+
+.user-tag .name {
+  flex: 1;
+  font-size: 1rem;
+  padding-top: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.user-tag .profile-img {
+  --size: 2rem;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 100%;
+  background-color: var(--color-bg, white);
+  color: var(--color-fg, black);
+  font-weight: 700;
+  line-height: calc(var(--size) / 3 * 2);
+  font-size: calc(var(--size) / 3 * 2);
+  padding: calc(var(--size) / 3 * 0.75) calc(var(--size) / 3 * 0.5);
+  text-align: center;
+}

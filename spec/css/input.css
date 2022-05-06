@@ -1,0 +1,8 @@
+input[type="text"] {
+  background-color: transparent;
+  border: none;
+  color: var(--color-light-300);
+  outline: none;
+  color: var(--color-light-300);
+  caret-color: var(--color-primary);
+}

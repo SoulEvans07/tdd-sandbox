@@ -10,6 +10,7 @@
   position: relative;
   border-radius: 100%;
   background: var(--color-dark-300);
+  flex-shrink: 0;
 }
 
 .checkbox::after {

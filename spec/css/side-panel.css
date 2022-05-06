@@ -1,12 +1,91 @@
-aside.side-panel {
+.side-panel {
   display: none;
+  background-color: var(--color-dark-500);
+  box-shadow: var(--drop-shadow);
+  border-radius: var(--border-radius);
   position: fixed;
-  right: 0;
+  inset: 0;
+  height: calc(100vh - 6rem);
+  margin: 3rem 0 3rem auto;
+  width: min(400px, 90vw);
 }
 
-.status-row {
+@media screen and (max-width: 600px) {
+  .side-panel {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .side-panel header .close-panel {
+    float: right;
+  }
+}
+
+.side-panel.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.side-panel header {
+  flex: 0;
+  margin-bottom: 1rem;
+}
+
+.side-panel header .close-panel {
+  padding: 1rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.side-panel .task-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-panel .task-details .assignee-row {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 1rem;
+  padding: 0 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.side-panel .task-details .status-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  flex: 0;
+}
+
+.side-panel .task-details .status-row .button-group,
+.side-panel .task-details .status-row .status-label {
+  margin: 0;
+}
+
+.side-panel .task-details .task-title {
+  width: 100%;
+  border-top: 1px solid var(--color-dark-400);
+  border-bottom: 1px solid var(--color-dark-400);
+  padding: 1rem 1rem 0.7rem;
+  flex: 0;
+}
+
+.side-panel .task-details .task-description {
+  width: 100%;
+  flex: 1;
+  background-color: transparent;
+  caret-color: var(--color-primary);
+  color: var(--color-light-300);
+  padding: 1rem;
+  border: none;
+  outline: none;
+  resize: none;
 }

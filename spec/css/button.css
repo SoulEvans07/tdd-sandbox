@@ -5,21 +5,23 @@ button {
   user-select: none;
   cursor: pointer;
   margin: 0 0.5rem;
+  box-shadow: var(--drop-shadow-small);
 }
 
 button.border {
   border-radius: 0.5rem;
-  border: 2px solid var(--color-dark-300);
+  border: 1px solid var(--color-dark-300);
   background-color: transparent;
 }
 
 button.border:hover {
-  background-color: var(--color-light-300-20);
+  background-color: var(--color-dark-300);
 }
 
 button.border.active,
 button.border:active {
-  background-color: var(--color-light-300-50);
+  background-color: var(--color-dark-200);
+  border-color: var(--color-dark-200);
 }
 
 button.text {
@@ -27,6 +29,7 @@ button.text {
   border: none;
   font-size: 0.8rem;
   color: var(--color-dark-200);
+  box-shadow: none;
 }
 
 button.text:hover {
@@ -58,23 +61,29 @@ button.text:active {
 .button-group {
   margin: 0 2rem;
   display: flex;
+  box-shadow: var(--drop-shadow-small);
+}
+
+.button-group.text {
+  box-shadow: none;
 }
 
 .button-group button {
   border-radius: 0;
   margin: 0;
-  border-left-width: 1px;
+  border-left-width: 0px;
   border-right-width: 1px;
+  box-shadow: none;
 }
 
 .button-group button:first-of-type {
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
-  border-left-width: 2px;
+  border-left-width: 1px;
 }
 
 .button-group button:last-of-type {
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
-  border-right-width: 2px;
+  border-right-width: 1px;
 }
