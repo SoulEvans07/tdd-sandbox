@@ -33,7 +33,7 @@
 
     <title>Todo app</title>
   </head>
-  <body class="">
+  <body class="dark">
     <main>
       <header>
         <h1>Todo</h1>
@@ -50,11 +50,13 @@
       </section>
       <section class="task-list-container">
         <section class="controls">
-          <span class="remaining-counter">5 items left</span>
-          <div class="button-group text">
+          <!-- <span class="remaining-counter">5 items left</span> -->
+          <div class="button-group text filter">
             <button class="text active">All</button>
+            <button class="text">Open</button>
             <button class="text">In Progress</button>
-            <button class="text">Completed</button>
+            <button class="text">Blocked</button>
+            <button class="text">Done</button>
           </div>
           <button class="text clear-btn">Clear Selected</button>
         </section>
@@ -76,7 +78,7 @@
               />
             </svg>
           </div>
-          <div class="task-item">
+          <div class="task-item open">
             <div class="checkbox checked"></div>
             <span class="task-title">10 minutes mediataion</span>
             <svg
@@ -126,7 +128,7 @@
               />
             </svg>
           </div>
-          <div class="task-item">
+          <div class="task-item open">
             <div class="checkbox"></div>
             <span class="task-title">Complete Todo App on Frontend Mentor</span>
             <svg

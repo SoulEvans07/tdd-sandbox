@@ -102,3 +102,7 @@ footer {
   justify-content: center;
   color: var(--color-dark-300);
 }
+
+.hidden {
+  display: none !important;
+}

@@ -56,6 +56,10 @@
   }
 }
 
+.task-list-container .controls .button-group {
+  margin: 0;
+}
+
 .task-list-container .task-list {
   display: flex;
   flex-direction: column;
