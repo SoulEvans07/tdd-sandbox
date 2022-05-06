@@ -1,0 +1,111 @@
+.create-task {
+  margin-bottom: 1.5rem;
+  background-color: var(--color-dark-500);
+  border-radius: var(--border-radius);
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.create-task .checkbox {
+  margin-right: 1rem;
+}
+
+.create-task input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-light-300);
+  caret-color: var(--color-primary);
+}
+
+.create-task input::placeholder {
+  color: var(--color-dark-300);
+}
+
+.controls {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  background-color: var(--color-dark-500);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--color-dark-400);
+}
+
+.remaining-counter {
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  color: var(--color-dark-200);
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-item {
+  position: relative;
+  height: 3.5rem;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--color-dark-500);
+  border-bottom: 1px solid var(--color-dark-400);
+  overflow-x: hidden;
+  cursor: pointer;
+}
+
+.task-item:last-of-type {
+  border-bottom: none;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+}
+
+.task-item .checkbox {
+  margin-right: 1rem;
+}
+
+.task-item .task-title {
+  margin-right: auto;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+}
+
+.task-item.done .task-title {
+  color: var(--color-dark-200);
+  text-decoration: line-through;
+}
+
+.task-item .status-label {
+  margin: 0 0 0 1rem;
+  flex-shrink: 0;
+  transform: translateX(1.5rem);
+  transition: transform 150ms ease-in;
+}
+
+.task-item .remove-task {
+  padding: 1rem;
+  width: 3rem;
+  height: 3rem;
+  margin-right: -1rem;
+
+  position: relative;
+  transform: translateX(3rem);
+  transition: transform 150ms ease-in;
+}
+
+.task-item:hover .status-label {
+  transform: translateX(0);
+}
+
+.task-item:hover .remove-task {
+  transform: translateX(0);
+}

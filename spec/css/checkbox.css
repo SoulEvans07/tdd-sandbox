@@ -1,0 +1,35 @@
+.checkbox {
+  --highlight: linear-gradient(
+    135deg,
+    var(--color-grad-from),
+    var(--color-grad-to)
+  );
+  --size: 1.5rem;
+  width: var(--size);
+  height: var(--size);
+  position: relative;
+  border-radius: 100%;
+  background: var(--color-dark-300);
+}
+
+.checkbox::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 100%;
+  background-color: var(--color-dark-500);
+}
+
+.checkbox:hover {
+  background: var(--highlight);
+}
+
+.checkbox.checked {
+  background: var(--highlight);
+}
+
+.checkbox.checked::after {
+  background: url("/images/icon-check.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+}

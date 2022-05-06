@@ -1,0 +1,12 @@
+aside.side-panel {
+  display: none;
+  position: fixed;
+  right: 0;
+}
+
+.status-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+}

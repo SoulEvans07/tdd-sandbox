@@ -1,36 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | Todo app</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/label.css" />
+    <link rel="stylesheet" href="css/button.css" />
+    <link rel="stylesheet" href="css/checkbox.css" />
+    <link rel="stylesheet" href="css/task-list.css" />
+    <link rel="stylesheet" href="css/side-panel.css" />
 
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
-</head>
-<body>
+    <title>Todo app</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Todo</h1>
+        <img class="theme-selector" src="images/icon-sun.svg" />
+      </header>
+      <section class="create-task">
+        <div class="checkbox"></div>
+        <input
+          type="text"
+          name="new-task"
+          id="new-task"
+          placeholder="New Task"
+        />
+      </section>
+      <section class="controls">
+        <span class="remaining-counter">5 items left</span>
+        <div class="button-group">
+          <button class="text active">All</button>
+          <button class="text">In Progress</button>
+          <button class="text">Completed</button>
+        </div>
+        <button class="text">Clear Selected</button>
+      </section>
+      <section class="task-list">
+        <div class="task-item done">
+          <div class="checkbox"></div>
+          <span class="task-title">Complete only Javascript course</span>
+          <span class="status-label done">Done</span>
+          <svg
+            class="icon-button remove-task"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+          >
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+            />
+          </svg>
+        </div>
+        <div class="task-item">
+          <div class="checkbox checked"></div>
+          <span class="task-title">10 minutes mediataion</span>
+          <svg
+            class="icon-button remove-task"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+          >
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+            />
+          </svg>
+        </div>
+        <div class="task-item in-progress">
+          <div class="checkbox"></div>
+          <span class="task-title">Read for 1 hour</span>
+          <span class="status-label in-progress">In Progress</span>
+          <svg
+            class="icon-button remove-task"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+          >
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+            />
+          </svg>
+        </div>
+        <div class="task-item blocked">
+          <div class="checkbox"></div>
+          <span class="task-title">Pick up groceries</span>
+          <span class="status-label blocked">Blocked</span>
+          <svg
+            class="icon-button remove-task"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+          >
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+            />
+          </svg>
+        </div>
+        <div class="task-item">
+          <div class="checkbox"></div>
+          <span class="task-title">Complete Todo App on Frontend Mentor</span>
+          <svg
+            class="icon-button remove-task"
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+          >
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M16.97 0l.708.707L9.546 8.84l8.132 8.132-.707.707-8.132-8.132-8.132 8.132L0 16.97l8.132-8.132L0 .707.707 0 8.84 8.132 16.971 0z"
+            />
+          </svg>
+        </div>
+      </section>
+    </main>
+    <footer>Select a task open the edit panel</footer>
 
-  Todo
-
-  <!-- Add dynamic number --> items left
-
-  All
-  Active 
-  Completed
-
-  Clear Completed
-
-  Drag and drop to reorder list
-
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
-  </div>
-</body>
+    <aside class="side-panel open">
+      <div class="status-row">
+        <span class="status-label in-progress">In Progress</span>
+        <div class="button-group">
+          <button class="border">Done</button>
+          <button class="border">Blocked</button>
+        </div>
+      </div>
+    </aside>
+  </body>
 </html>

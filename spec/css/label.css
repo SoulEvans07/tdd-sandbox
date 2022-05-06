@@ -1,0 +1,32 @@
+.status-label {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 0.75em;
+  padding: 0.5em 1em 0.35em;
+  border-radius: 2em;
+  margin: 0 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.status-label.open {
+  /* background-color: var(--color-inprogress-light);
+  color: var(--color-inprogress-dark); */
+}
+
+.status-label.in-progress {
+  background-color: var(--color-inprogress-light);
+  color: var(--color-inprogress-dark);
+}
+
+.status-label.blocked {
+  background-color: var(--color-blocked-light);
+  color: var(--color-blocked-dark);
+}
+
+.status-label.done {
+  background-color: var(--color-done-light);
+  color: var(--color-done-dark);
+}

@@ -1,0 +1,80 @@
+button {
+  font-size: 1rem;
+  color: var(--color-light-300);
+  padding: 0.3em 0.7em 0.15em;
+  user-select: none;
+  cursor: pointer;
+  margin: 0 0.5rem;
+}
+
+button.border {
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-dark-300);
+  background-color: transparent;
+}
+
+button.border:hover {
+  background-color: var(--color-light-300-20);
+}
+
+button.border.active,
+button.border:active {
+  background-color: var(--color-light-300-50);
+}
+
+button.text {
+  background-color: transparent;
+  border: none;
+  font-size: 0.8rem;
+  color: var(--color-dark-200);
+}
+
+button.text:hover {
+  color: var(--color-light-200);
+}
+
+button.text.active,
+button.text:active {
+  color: var(--color-primary);
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-dark-300);
+}
+
+.icon-button:hover {
+  color: var(--color-dark-200);
+}
+
+.icon-button.active,
+.icon-button:active {
+  color: var(--color-light-300);
+}
+
+.button-group {
+  margin: 0 2rem;
+  display: flex;
+}
+
+.button-group button {
+  border-radius: 0;
+  margin: 0;
+  border-left-width: 1px;
+  border-right-width: 1px;
+}
+
+.button-group button:first-of-type {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border-left-width: 2px;
+}
+
+.button-group button:last-of-type {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  border-right-width: 2px;
+}
