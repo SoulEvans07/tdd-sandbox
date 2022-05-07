@@ -6,8 +6,16 @@
   position: fixed;
   inset: 0;
   height: calc(100vh - 6rem);
-  margin: 3rem 0 3rem auto;
+
   width: min(400px, 90vw);
+}
+
+.side-panel.right {
+  margin: 3rem 0 3rem auto;
+}
+
+.side-panel.left {
+  margin: 3rem auto 3rem 0;
 }
 
 @media screen and (max-width: 600px) {
@@ -29,7 +37,17 @@
 
 .side-panel header {
   flex: 0;
+  display: flex;
+  justify-content: flex-start;
   margin-bottom: 1rem;
+}
+
+.side-panel.right header {
+  flex-direction: row;
+}
+
+.side-panel.left header {
+  flex-direction: row-reverse;
 }
 
 .side-panel header .close-panel {

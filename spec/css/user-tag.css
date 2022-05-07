@@ -1,5 +1,6 @@
 .user-tag {
   display: flex;
+  user-select: none;
 }
 
 .user-tag.green {

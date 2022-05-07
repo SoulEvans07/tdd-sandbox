@@ -1,31 +1,36 @@
-function openTask() {
-  const sidePanel = document.querySelector(".side-panel");
-  if (!Array.from(sidePanel.classList).includes("open")) {
-    sidePanel.classList.add("open");
+function open(panel) {
+  if (!Array.from(panel.classList).includes("open")) {
+    panel.classList.add("open");
   }
 }
 
-function closeTask() {
-  const sidePanel = document.querySelector(".side-panel");
-  if (Array.from(sidePanel.classList).includes("open")) {
-    sidePanel.classList.remove("open");
+function close(panel) {
+  if (Array.from(panel.classList).includes("open")) {
+    panel.classList.remove("open");
   }
 }
 
-function openDropdown(event) {
-  event.stopPropagation();
-  const dropMenu = document.querySelector(".drop-menu");
-  if (!Array.from(dropMenu.classList).includes("open")) {
-    dropMenu.classList.add("open");
-  }
+function openDropdown(dropMenu) {
+  return function (event) {
+    event.stopPropagation();
+    if (!Array.from(dropMenu.classList).includes("open")) {
+      dropMenu.classList.add("open");
+
+      const optionItems = dropMenu.querySelectorAll(".option-item");
+      optionItems.forEach((item) =>
+        item.addEventListener("click", closeDropdown(dropMenu))
+      );
+    }
+  };
 }
 
-function closeDropdown(event) {
-  event.stopPropagation();
-  const dropMenu = document.querySelector(".drop-menu");
-  if (Array.from(dropMenu.classList).includes("open")) {
-    dropMenu.classList.remove("open");
-  }
+function closeDropdown(dropMenu) {
+  return function (event) {
+    event.stopPropagation();
+    if (Array.from(dropMenu.classList).includes("open")) {
+      dropMenu.classList.remove("open");
+    }
+  };
 }
 
 function swichTheme() {
@@ -99,18 +104,21 @@ function setupFilters() {
 }
 
 function main() {
+  const taskPanel = document.querySelector(".side-panel.right");
   const taskItems = document.querySelectorAll(".task-item");
-  taskItems.forEach((item) => item.addEventListener("click", openTask));
-
-  const sidePanel = document.querySelector(".side-panel");
-  const closeBtn = sidePanel.querySelector(".close-panel");
-  closeBtn.addEventListener("click", closeTask);
+  taskItems.forEach((item) =>
+    item.addEventListener("click", () => open(taskPanel))
+  );
+  const closeBtn = taskPanel.querySelector(".close-panel");
+  closeBtn.addEventListener("click", () => close(taskPanel));
 
   const assigneeBtn = document.querySelector(".assignee-row");
-  assigneeBtn.addEventListener("click", openDropdown);
+  const assigneeDropMenu = assigneeBtn.querySelector(".drop-menu");
+  assigneeBtn.addEventListener("click", openDropdown(assigneeDropMenu));
 
-  const optionItems = document.querySelectorAll(".option-item");
-  optionItems.forEach((item) => item.addEventListener("click", closeDropdown));
+  const userBtn = document.querySelector(".user-menu");
+  const userDropMenu = userBtn.querySelector(".drop-menu");
+  userBtn.addEventListener("click", openDropdown(userDropMenu));
 
   const themeSwitch = document.querySelector(".theme-switch");
   themeSwitch.addEventListener("click", swichTheme);

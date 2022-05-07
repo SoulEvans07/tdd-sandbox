@@ -16,5 +16,23 @@ main header h1 {
 }
 
 main header .theme-switch {
+  margin-left: auto;
+  margin-right: 1rem;
   cursor: pointer;
+}
+
+main header .user-tag {
+  cursor: pointer;
+  position: relative;
+}
+
+main header .user-tag .drop-menu {
+  bottom: -0.5rem;
+  left: 100%;
+  transform: translate(-100%, 100%);
+}
+
+main header .user-tag .drop-menu .option-item:first-of-type {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
 }
