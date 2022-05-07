@@ -103,6 +103,17 @@ function setupFilters() {
   filterBtns[4].addEventListener("click", filterTasks("done"));
 }
 
+function toggleCheckbox(checkbox) {
+  return function (event) {
+    event.stopPropagation();
+    if (Array.from(checkbox.classList).includes("checked")) {
+      checkbox.classList.remove("checked");
+    } else {
+      checkbox.classList.add("checked");
+    }
+  };
+}
+
 function main() {
   const taskPanel = document.querySelector(".side-panel.right");
   const taskItems = document.querySelectorAll(".task-item");
@@ -127,6 +138,9 @@ function main() {
 
   const logoutBtn = document.getElementById("logout");
   logoutBtn.addEventListener("click", () => (window.location.href = "/login"));
+
+  const checkboxes = document.querySelectorAll(".checkbox");
+  checkboxes.forEach((ch) => ch.addEventListener("click", toggleCheckbox(ch)));
 }
 
 main();

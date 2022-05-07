@@ -13,6 +13,12 @@
   /* --color-open-dark: ; */
   /* --color-open-light: ; */
 
+  --color-red-600: hsl(350, 60%, 40%);
+  --color-red-500: hsl(350, 60%, 50%);
+  --color-red-400: hsl(350, 60%, 60%);
+  --color-red-300: hsl(350, 60%, 70%);
+  --color-red-200: hsl(350, 60%, 80%);
+
   --font-size: 18px;
   --border-radius: 0.25rem;
 
@@ -110,6 +116,7 @@ footer {
   margin: auto auto 0;
   display: flex;
   flex-direction: column;
+  text-align: center;
   align-items: center;
   justify-content: center;
   color: var(--color-dark-300);

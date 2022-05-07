@@ -15,6 +15,7 @@
 
 .create-task input {
   padding-top: 0.25rem;
+  width: 100%;
 }
 
 .task-list-container {

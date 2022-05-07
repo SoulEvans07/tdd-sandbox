@@ -13,6 +13,11 @@ button.big {
   padding: 0.5em 1.5em 0.25em;
 }
 
+button.wide {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 button.border {
   border-radius: var(--border-radius);
   border: 1px solid var(--color-dark-300);
@@ -27,6 +32,25 @@ button.border.active,
 button.border:active {
   background-color: var(--color-dark-200);
   border-color: var(--color-dark-200);
+}
+
+button.border.red {
+  border-color: var(--color-red-400);
+  color: var(--color-red-400);
+  box-shadow: 0px 2px 8px 0px rgba(214, 92, 112, 0.3);
+}
+
+button.border.red:hover {
+  border-color: var(--color-red-400);
+  background-color: var(--color-red-400);
+  color: var(--color-red-600);
+}
+
+button.border.red.active,
+button.border.red:active {
+  border-color: var(--color-red-300);
+  background-color: var(--color-red-300);
+  color: var(--color-red-500);
 }
 
 button.text {
