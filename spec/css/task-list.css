@@ -17,10 +17,6 @@
   padding-top: 0.25rem;
 }
 
-.create-task input::placeholder {
-  color: var(--color-dark-300);
-}
-
 .task-list-container {
   border-radius: var(--border-radius);
   box-shadow: var(--drop-shadow);

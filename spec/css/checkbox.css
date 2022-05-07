@@ -1,9 +1,4 @@
 .checkbox {
-  --highlight: linear-gradient(
-    135deg,
-    var(--color-grad-from),
-    var(--color-grad-to)
-  );
   --size: 1.5rem;
   width: var(--size);
   height: var(--size);

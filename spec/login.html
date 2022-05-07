@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/label.css" />
+    <link rel="stylesheet" href="css/input.css" />
+    <link rel="stylesheet" href="css/button.css" />
+    <link rel="stylesheet" href="css/checkbox.css" />
+    <link rel="stylesheet" href="css/select.css" />
+    <link rel="stylesheet" href="css/task-list.css" />
+    <link rel="stylesheet" href="css/side-panel.css" />
+    <link rel="stylesheet" href="css/user-tag.css" />
+
+    <script src="js/login.js" defer></script>
+
+    <title>Login</title>
+  </head>
+  <body class="dark">
+    <main class="card">
+      <header>
+        <h1>Todo</h1>
+      </header>
+      <input
+        class="text-input"
+        type="text"
+        placeholder="Username"
+        autocomplete="off"
+      />
+      <input
+        class="text-input"
+        type="password"
+        placeholder="Password"
+        autocomplete="off"
+      />
+      <button id="login" class="primary big" style="float: right; margin: 0">
+        Login
+      </button>
+    </main>
+    <footer>
+      You don't have an account?
+      <a class="call-to-action" href="/register">Register here!</a>
+    </footer>
+  </body>
+</html>
