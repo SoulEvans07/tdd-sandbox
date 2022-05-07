@@ -42,17 +42,6 @@
   color: var(--color-dark-200);
 }
 
-@media screen and (max-width: 600px) {
-  .task-list-container .controls {
-    justify-content: center;
-  }
-
-  .task-list-container .controls .clear-btn,
-  .task-list-container .controls .remaining-counter {
-    display: none;
-  }
-}
-
 .task-list-container .controls .button-group {
   margin: 0;
 }
@@ -102,7 +91,6 @@
 .task-list-container .task-item .status-label {
   margin: 0 0 0 1rem;
   flex-shrink: 0;
-  transform: translateX(1.5rem);
   transition: transform 150ms ease-in;
 }
 
@@ -111,16 +99,35 @@
   width: 3rem;
   height: 3rem;
   margin-right: -1rem;
-
   position: relative;
   transform: translateX(3rem);
   transition: transform 150ms ease-in;
 }
 
-.task-list-container .task-item:hover .status-label {
-  transform: translateX(0);
+@media screen and (min-width: 600px) {
+  .task-list-container .task-item .status-label {
+    transform: translateX(1.5rem);
+  }
+
+  .task-list-container .task-item:hover .status-label {
+    transform: translateX(0);
+  }
+
+  .task-list-container .task-item:hover .remove-task {
+    transform: translateX(0);
+  }
 }
 
-.task-list-container .task-item:hover .remove-task {
-  transform: translateX(0);
+@media screen and (max-width: 600px) {
+  .task-list-container .controls {
+    justify-content: center;
+  }
+
+  .task-list-container .controls .clear-btn,
+  .task-list-container .controls .remaining-counter,
+  .task-list-container .task-item .remove-task,
+  .task-list-container .task-item .checkbox,
+  .create-task .checkbox {
+    display: none;
+  }
 }

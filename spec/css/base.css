@@ -96,8 +96,16 @@ body {
 
 @media screen and (max-width: 600px) {
   body {
-    background-position: 0 0;
+    background-position: center -100px;
+    background-size: auto 400px;
     background-image: var(--bg-mobile);
+  }
+}
+
+@media screen and (max-width: 563px) {
+  body {
+    background-position: center 0;
+    background-size: auto 300px;
   }
 }
 
