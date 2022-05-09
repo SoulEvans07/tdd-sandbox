@@ -7,7 +7,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist"
+    "outDir": "build",
+    "sourceMap": true,
+    "declaration": true,
+    "typeRoots": ["./node_modules/@types/", "./src/typings/"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "./node_modules", "./node_modules/*"]
