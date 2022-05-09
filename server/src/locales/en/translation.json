@@ -1,0 +1,12 @@
+{
+  "userCreated": "User created",
+  "usernameRequired": "Username is required",
+  "emailRequired": "Email is required",
+  "emailNotValid": "Email is not valid",
+  "emailInUse": "Email in use",
+  "passwordRequired": "Password is required",
+  "accountActivationSuccess": "Account is activated",
+  "accountActivationFailure": "This account is either active or the token is invalid",
+  "validationFailure": "Validation Failure",
+  "userNotFound": "User not found"
+}

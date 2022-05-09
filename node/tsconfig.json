@@ -12,6 +12,6 @@
     "declaration": true,
     "typeRoots": ["./node_modules/@types/", "./src/typings/"]
   },
-  "include": ["src"],
+  "include": ["src", "../server/src/decorators", "../server/src/types"],
   "exclude": ["node_modules", "./node_modules", "./node_modules/*"]
 }
