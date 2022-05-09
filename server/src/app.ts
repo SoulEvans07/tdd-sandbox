@@ -10,6 +10,18 @@ import { getEpMeta } from './decorators/api.decorators';
 import ApiErrorHandler from './utils/ApiErrorHandler';
 import { Logger } from './utils/Logger';
 import { Controllers } from './types/api';
+import helmet from 'helmet';
+import cors from 'cors';
+
+export const baseUrl: string = '/api';
+export const app: Express = express();
+
+app.use(helmet());
+app.use(
+  cors({
+    origin: new RegExp(/http(s)?:\/\/localhost:3000/),
+  })
+);
 
 i18next
   .use(Backend)
@@ -26,9 +38,6 @@ i18next
       lookupHeader: 'accept-language',
     },
   });
-
-export const baseUrl: string = '/api';
-export const app: Express = express();
 
 app.use(middleware.handle(i18next));
 app.use(express.json());
