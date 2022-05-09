@@ -98,7 +98,7 @@
     "start": "cross-env BROWSER=none node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --watchAll=false",
-    "test:watch": "node scripts/test.js"
+    "test:w": "node scripts/test.js"
   },
   "eslintConfig": {
     "extends": [

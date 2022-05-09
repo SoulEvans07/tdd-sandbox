@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './root.scss';
-import { HomeScreen } from './HomeScreen/HomeScreen';
+import RegisterScreen from './RegisterScreen/RegisterScreen';
 
 ReactDOM.render(
   <React.StrictMode>
-    <HomeScreen />
+    <RegisterScreen />
   </React.StrictMode>,
   document.getElementById('root')
 );
