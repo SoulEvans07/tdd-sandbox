@@ -94,6 +94,10 @@
     "jest-css-modules-transform": "git+ssh://git@github.com:SoulEvans07/jest-scss-transform.git#v4.4.0",
     "prettier": "^2.4.1"
   },
+  "resolutions": {
+    "//": "See https://github.com/facebook/create-react-app/issues/11773",
+    "react-error-overlay": "6.0.9"
+  },
   "scripts": {
     "start": "cross-env BROWSER=none node scripts/start.js",
     "build": "node scripts/build.js",
