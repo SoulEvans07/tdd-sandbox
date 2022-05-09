@@ -18,7 +18,7 @@ function getValueOrDefault<T>(target: string | undefined, parser: (v: string) =>
 }
 
 const port: number = getValueOrDefault<number>(process.env.PORT, tryParseInt, 3000);
-const logger: boolean = !!process.env.LOGGER;
+const logger: boolean = process.env.LOGGER !== 'false';
 const dbName = process.env.DB_NAME;
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;

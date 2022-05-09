@@ -1,10 +1,13 @@
 {
   "userCreated": "User created",
   "usernameRequired": "Username is required",
+  "usernameLength": "Must have min 6 and max 32 character",
   "emailRequired": "Email is required",
   "emailNotValid": "Email is not valid",
   "emailInUse": "Email in use",
   "passwordRequired": "Password is required",
+  "passwordLength": "Password must be at least 8 character",
+  "passwordPattern": "Password must contain at least one lowercase, one uppercase and one special key",
   "accountActivationSuccess": "Account is activated",
   "accountActivationFailure": "This account is either active or the token is invalid",
   "validationFailure": "Validation Failure",

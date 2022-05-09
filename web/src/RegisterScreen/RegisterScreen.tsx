@@ -26,6 +26,9 @@ export default function RegisterScreen(): ReactElement {
     e.preventDefault();
     fetch(serverUrl + '/api/1.0/users', {
       method: 'post',
+      headers: {
+        'content-type': 'application/json',
+      },
       body: JSON.stringify({
         username,
         email,
