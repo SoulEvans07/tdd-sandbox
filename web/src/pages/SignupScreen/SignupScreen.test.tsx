@@ -1,10 +1,10 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Random } from '../helpers/Random';
-import { mockRegisterResponse, mockNewUser } from '../mocks/postRegister';
-import RegisterScreen from './RegisterScreen';
+import { Random } from '../../helpers/Random';
+import { mockRegisterResponse, mockNewUser } from '../../mocks/postRegister';
+import SignupScreen from './SignupScreen';
 
-describe('RegisterScreen', () => {
+describe('SignupScreen', () => {
   let nameInput: HTMLInputElement;
   let emailInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
@@ -12,7 +12,7 @@ describe('RegisterScreen', () => {
   let submitButton: HTMLButtonElement;
 
   beforeEach(() => {
-    render(<RegisterScreen />);
+    render(<SignupScreen />);
 
     nameInput = screen.getByRole('textbox', { name: 'username' }) as HTMLInputElement;
     emailInput = screen.getByRole('textbox', { name: 'email' }) as HTMLInputElement;
@@ -31,7 +31,7 @@ describe('RegisterScreen', () => {
   });
 
   describe('validation', () => {
-    it('password', () => {
+    it('password', async () => {
       userEvent.clear(passwordInput);
       userEvent.type(passwordInput, Random.string(5));
       const shortError = screen.getByRole('alert');
@@ -54,21 +54,27 @@ describe('RegisterScreen', () => {
     });
   });
 
-  describe.only('submit', () => {
+  describe('submit', () => {
     test('submit works', async () => {
       expect(submitButton).toBeDisabled();
 
       userEvent.clear(nameInput);
       userEvent.type(nameInput, mockNewUser.username);
+      expect(nameInput).toHaveValue(mockNewUser.username);
+
       userEvent.clear(emailInput);
       userEvent.type(emailInput, mockNewUser.email);
+      expect(emailInput).toHaveValue(mockNewUser.email);
+
       userEvent.clear(passwordInput);
       userEvent.type(passwordInput, mockNewUser.password);
+      expect(passwordInput).toHaveValue(mockNewUser.password);
+
       userEvent.clear(confirmInput);
       userEvent.type(confirmInput, mockNewUser.password);
+      expect(confirmInput).toHaveValue(mockNewUser.password);
 
-      await waitFor(() => expect(submitButton).toBeEnabled());
-
+      expect(submitButton).toBeEnabled();
       userEvent.click(submitButton);
 
       const successText = await screen.findByText(mockRegisterResponse.message);

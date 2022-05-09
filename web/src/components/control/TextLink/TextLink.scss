@@ -1,0 +1,34 @@
+.text-link,
+.text-link:visited {
+  --color-base: var(--color-primary-400);
+  --color-hover: var(--color-primary-300);
+  --color-active: var(--color-primary-500);
+
+  margin: 0 0.5rem;
+  text-decoration: none;
+  background: var(--color-base);
+  cursor: pointer;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  &:hover {
+    background: var(--color-hover);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &:active {
+    background: var(--color-active);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &.rainbow {
+    --color-base: var(--highlight);
+    --color-hover: var(--highlight);
+    --color-active: var(--color-primary-400);
+  }
+}

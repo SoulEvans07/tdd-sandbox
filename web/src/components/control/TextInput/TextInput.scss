@@ -1,18 +1,18 @@
 .text-input {
   width: 100%;
   height: 3.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   padding: 0 1rem;
   border: none;
   outline: none;
   background-color: var(--color-dark-500);
   color: var(--color-light-300);
-  caret-color: var(--color-primary);
+  caret-color: var(--color-primary-400);
   box-shadow: var(--drop-shadow);
   border-radius: var(--border-radius);
 
   &::selection {
-    background: var(--color-primary);
+    background: var(--color-primary-400);
   }
 
   &::placeholder {

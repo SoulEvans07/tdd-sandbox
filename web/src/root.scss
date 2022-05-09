@@ -4,14 +4,18 @@ code {
 
 :root {
   --color-title: hsl(0, 0%, 100%);
-  --color-primary-light: hsl(220, 98%, 68%);
-  --color-primary: hsl(220, 98%, 61%);
-  --color-primary-dark: hsl(220, 78%, 51%);
   --color-grad-from: hsl(192, 100%, 67%);
   --color-grad-to: hsl(280, 87%, 65%);
   --highlight: linear-gradient(135deg, var(--color-grad-from), var(--color-grad-to));
   /* --color-open-dark: ; */
   /* --color-open-light: ; */
+
+  --color-primary-600: hsl(220, 78%, 40%);
+  --color-primary-500: hsl(220, 78%, 50%);
+  --color-primary-400: hsl(220, 98%, 60%);
+  --color-primary-300: hsl(220, 98%, 70%);
+  --color-primary-200: hsl(220, 98%, 80%);
+  --color-primary-100: hsl(220, 98%, 95%);
 
   --color-red-600: hsl(350, 60%, 40%);
   --color-red-500: hsl(350, 60%, 50%);
