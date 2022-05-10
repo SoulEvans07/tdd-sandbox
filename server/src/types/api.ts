@@ -14,7 +14,7 @@ export interface ApiEndpointMeta<T> {
   method: EpMethod;
   version: string;
   path: string;
-  middlewares?: (ApiMiddleware<T> | ((fields?: string | string[] | undefined, message?: any) => void))[];
+  middleware?: (ApiMiddleware<T> | ((fields?: string | string[] | undefined, message?: any) => void))[];
 }
 
 export type ApiMiddleware<T> = (req: Request<{}, {}, T, {}>, res: Response, next: () => void) => void;

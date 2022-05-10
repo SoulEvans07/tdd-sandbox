@@ -5,6 +5,13 @@ import User from '../DAL/models/User';
 import LocaleEn from '../locales/en/translation.json';
 
 describe('User registration', () => {
+  beforeEach(() => {
+    User.drop();
+    User.sync();
+  });
+
+  const mockUser = { username: 'adam.szi', email: 'adam.szi@snapsoft.hu', password: 'Password123!' };
+
   const postUser = async (body?: any) => await request(app).post('/api/1.0/users').send(body);
 
   const dynamicErrorValidator = async (fieldName: string, value: undefined | string, errorMessage: string) => {
@@ -37,6 +44,12 @@ describe('User registration', () => {
       expect(resp.status).toBe(400);
       expect(resp.body.validationErrors.username).toBe(LocaleEn.usernameLength);
     });
+
+    test(`in use`, async () => {
+      await User.create(mockUser);
+      const response = await postUser(mockUser);
+      expect(response.body.validationErrors.username).toBe(LocaleEn.usernameInUse);
+    });
   });
 
   describe('email', () => {
@@ -50,6 +63,12 @@ describe('User registration', () => {
       const resp = await postUser({ email: 'a'.repeat(10) });
       expect(resp.status).toBe(400);
       expect(resp.body.validationErrors.email).toBe(LocaleEn.emailNotValid);
+    });
+
+    test(`in use`, async () => {
+      await User.create(mockUser);
+      const response = await postUser(mockUser);
+      expect(response.body.validationErrors.email).toBe(LocaleEn.emailInUse);
     });
 
     test.each([
@@ -84,13 +103,7 @@ describe('User registration', () => {
   });
 
   describe('database actions', () => {
-    beforeEach(() => {
-      User.drop();
-      User.sync();
-    });
-
     it('saves user to database', async () => {
-      const mockUser = { username: 'adam.szi', email: 'adam.szi@snapsoft.hu', password: 'Password123!' };
       const resp = await postUser(mockUser);
       expect(resp.status).toBe(200);
 

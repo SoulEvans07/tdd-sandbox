@@ -7,11 +7,12 @@ import Backend from 'i18next-fs-backend';
 import middleware from 'i18next-http-middleware';
 
 import { getEpMeta } from './decorators/api.decorators';
-import ApiErrorHandler from './utils/ApiErrorHandler';
 import { Logger } from './utils/Logger';
 import { Controllers } from './types/api';
 import helmet from 'helmet';
 import cors from 'cors';
+import ApiErrorHandler from './middleware/ApiErrorHandler';
+import ValidationMiddleware from './middleware/ValidationMiddleware';
 
 export const baseUrl: string = '/api';
 export const app: Express = express();
@@ -55,27 +56,30 @@ async function attachControllers(app: Express) {
   controllersPaths.forEach(controllerPath => {
     const router = express.Router();
     const ClassType = require(controllerPath).default;
-    const controllerObject = new ClassType();
-    controllers[ClassType.prototype.constructor.name] = controllerObject;
+    if (ClassType) {
+      const controllerObject = new ClassType();
+      controllers[ClassType.prototype.constructor.name] = controllerObject;
 
-    Logger.log(`Controller found: ${ClassType.prototype.constructor.name}`);
+      Logger.log(`Controller found: ${ClassType.prototype.constructor.name}`);
 
-    Object.getOwnPropertyNames(ClassType.prototype).forEach(methodName => {
-      const apiMeta = getEpMeta(controllerObject, methodName);
-      if (apiMeta) {
-        const apiUrl = `${baseUrl}/${apiMeta.version}/${apiMeta.path}`;
-        Logger.log(`Controller method found ${methodName}, ${apiMeta.method.toUpperCase()} ${apiUrl}`);
-        router[apiMeta.method](
-          apiUrl,
-          ...(apiMeta.middlewares && apiMeta.middlewares.length > 0
-            ? apiMeta.middlewares
-            : [(_: unknown, __: unknown, next: () => void) => next()]),
-          controllerObject[methodName].bind(controllerObject)
-        );
-      }
-    });
+      Object.getOwnPropertyNames(ClassType.prototype).forEach(methodName => {
+        const apiMeta = getEpMeta(controllerObject, methodName);
+        if (apiMeta) {
+          const apiUrl = `${baseUrl}/${apiMeta.version}/${apiMeta.path}`;
+          Logger.log(`Controller method found ${methodName}, ${apiMeta.method.toUpperCase()} ${apiUrl}`);
+          router[apiMeta.method](
+            apiUrl,
+            ...(apiMeta.middleware && apiMeta.middleware.length > 0
+              ? apiMeta.middleware
+              : [(_: unknown, __: unknown, next: () => void) => next()]),
+            ValidationMiddleware.throwValidationErrors,
+            controllerObject[methodName].bind(controllerObject)
+          );
+        }
+      });
 
-    app.use(router);
+      app.use(router);
+    }
   });
 
   app.use(ApiErrorHandler.handleError);

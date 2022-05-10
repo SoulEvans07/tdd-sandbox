@@ -2,6 +2,7 @@
   "userCreated": "User created",
   "usernameRequired": "Username is required",
   "usernameLength": "Must have min 6 and max 32 character",
+  "usernameInUse": "Username in use",
   "emailRequired": "Email is required",
   "emailNotValid": "Email is not valid",
   "emailInUse": "Email in use",
