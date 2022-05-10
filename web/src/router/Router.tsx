@@ -1,6 +1,5 @@
 import { ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from '../contexts/AuthContext';
 import { protectedRoute } from './ProtectedRoute';
 import { LoginScreen } from '../pages/LoginScreen/LoginScreen';
 import { SignupScreen } from '../pages/SignupScreen/SignupScreen';
@@ -9,13 +8,11 @@ import { ROUTES } from './types';
 
 export function Router(): ReactElement {
   return (
-    <AuthProvider>
-      <Routes>
-        <Route index element={<Navigate to={ROUTES.LOGIN} />} />
-        <Route path={ROUTES.LOGIN} element={<LoginScreen />} />
-        <Route path={ROUTES.SIGNUP} element={<SignupScreen />} />
-        {protectedRoute({ path: ROUTES.TASKS, element: <TasksPage /> })}
-      </Routes>
-    </AuthProvider>
+    <Routes>
+      <Route index element={<Navigate to={ROUTES.LOGIN} />} />
+      <Route path={ROUTES.LOGIN} element={<LoginScreen />} />
+      <Route path={ROUTES.SIGNUP} element={<SignupScreen />} />
+      {protectedRoute({ path: ROUTES.TASKS, element: <TasksPage /> })}
+    </Routes>
   );
 }

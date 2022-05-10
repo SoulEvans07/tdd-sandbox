@@ -1,11 +1,11 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { mockExistingUser } from '../../mocks/controllers/MockAuthController';
-import { Router } from '../../router/Router';
-import { ROUTES } from '../../router/types';
+import { mockExistingUser } from '../mocks/controllers/MockAuthController';
+import { ROUTES } from '../router/types';
+import App from '../App';
 
-describe('LoginScreen', () => {
+describe('login', () => {
   let titleHeading: HTMLHeadingElement;
   let nameInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
@@ -14,7 +14,7 @@ describe('LoginScreen', () => {
   beforeEach(() => {
     render(
       <MemoryRouter initialEntries={[ROUTES.LOGIN]}>
-        <Router />
+        <App />
       </MemoryRouter>
     );
 
