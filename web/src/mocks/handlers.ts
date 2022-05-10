@@ -1,5 +1,4 @@
-import { getPing } from './getPing';
-import { postRegister } from './auth/postRegister';
-import { postLogin } from './auth/postLogin';
+import { mockAuthController } from './controllers/MockAuthController';
+import { mockUserController } from './controllers/MockUserController';
 
-export const handlers = [getPing, postRegister, postLogin];
+export const handlers = [...Object.values(mockAuthController), ...Object.values(mockUserController)];

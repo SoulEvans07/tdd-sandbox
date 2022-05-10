@@ -1,6 +1,5 @@
 import { ChangeEvent, FormEvent, ReactElement, useMemo, useState } from 'react';
 import './SignupScreen.scss';
-import { serverUrl } from '../../config';
 import { minMaxValidator } from '../../validators/string-validators';
 import { Page } from '../../components/layout/Page/Page';
 import { TextInput } from '../../components/control/TextInput/TextInput';
@@ -9,6 +8,9 @@ import { AppHeader } from '../../containers/AppHeader/AppHeader';
 import { Button } from '../../components/control/Button/Button';
 import { TextLink } from '../../components/control/TextLink/TextLink';
 import { Footer } from '../../components/layout/Footer/Footer';
+import { userController } from '../../controllers/UserController';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../Router';
 
 interface SignupForm {
   username: string;
@@ -25,7 +27,7 @@ const emptyRegForm: SignupForm = {
 };
 
 export function SignupScreen(): ReactElement {
-  const [result, setResult] = useState<string>();
+  const navigate = useNavigate();
   const [error, setError] = useState<boolean>();
 
   const [{ username, email, password, confirmPassword }, setForm] = useState<SignupForm>(emptyRegForm);
@@ -42,21 +44,14 @@ export function SignupScreen(): ReactElement {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch(serverUrl + '/api/1.0/users', {
-      method: 'post',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        username,
-        email,
-        password,
-      }),
-    })
-      .then(res => res.json())
-      .then(data => setResult(data.message))
-      .catch(e => setError(true));
+    userController
+      .register({ username, email, password })
+      .then(() => navigate(ROUTES.LOGIN))
+      .catch(e => {
+        console.log('[err]', e);
+        setError(true);
+      });
   };
-
-  if (result) return <span>{result}</span>;
 
   return (
     <Page className="signup-screen">
@@ -94,7 +89,7 @@ export function SignupScreen(): ReactElement {
       </main>
       <Footer>
         You already have an account?
-        <TextLink color="rainbow" href="/login">
+        <TextLink color="rainbow" href={ROUTES.LOGIN}>
           Login here!
         </TextLink>
       </Footer>

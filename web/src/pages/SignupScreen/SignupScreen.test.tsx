@@ -1,9 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { Random } from '../../helpers/Random';
-import { mockRegisterResponse, mockNewUser } from '../../mocks/auth/postRegister';
-import { SignupScreen } from './SignupScreen';
+import { mockNewUser } from '../../mocks/controllers/MockUserController';
+import { Router, ROUTES } from '../Router';
 
 describe('SignupScreen', () => {
   let nameInput: HTMLInputElement;
@@ -14,8 +14,8 @@ describe('SignupScreen', () => {
 
   beforeEach(() => {
     render(
-      <MemoryRouter>
-        <SignupScreen />
+      <MemoryRouter initialEntries={[ROUTES.SIGNUP]}>
+        <Router />
       </MemoryRouter>
     );
 
@@ -81,8 +81,10 @@ describe('SignupScreen', () => {
       expect(submitButton).toBeEnabled();
       userEvent.click(submitButton);
 
-      const successText = await screen.findByText(mockRegisterResponse.message);
-      expect(successText).toBeInTheDocument();
+      await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: /sign up/i }));
+
+      const loginPageHeading = await screen.findByRole('heading', { name: /login/i });
+      expect(loginPageHeading).toBeInTheDocument();
     });
   });
 });

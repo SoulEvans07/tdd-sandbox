@@ -1,7 +1,8 @@
 import { FormEvent, ChangeEvent, ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginScreen.scss';
-import { serverUrl } from '../../config';
+import { authController } from '../../controllers/AuthController';
+import { ROUTES } from '../Router';
 import { Page } from '../../components/layout/Page/Page';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
 import { TextInput } from '../../components/control/TextInput/TextInput';
@@ -33,16 +34,9 @@ export function LoginScreen(): ReactElement {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch(serverUrl + '/api/1.0/auth/login', {
-      method: 'post',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-      .then(res => res.json())
-      .then(data => navigate('/tasks'))
+    authController
+      .login({ username, password })
+      .then(() => navigate(ROUTES.TASKS))
       .catch(e => setError(true));
   };
 
@@ -73,7 +67,7 @@ export function LoginScreen(): ReactElement {
       </main>
       <Footer>
         You dont have an account yet?
-        <TextLink color="rainbow" href="/signup">
+        <TextLink color="rainbow" href={ROUTES.SIGNUP}>
           Sign up here!
         </TextLink>
       </Footer>
