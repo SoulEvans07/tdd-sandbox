@@ -1,0 +1,30 @@
+.theme-dark .profile-img {
+  --color-bg: var(--color-dark, black);
+  --color-fg: var(--color-light, white);
+}
+
+.theme-dark .profile-img {
+  --color-bg: var(--color-light, white);
+  --color-fg: var(--color-dark, black);
+}
+
+.profile-img {
+  --color-bg: var(--color-dark, black);
+  --color-fg: var(--color-light, white);
+
+  --size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-weight: 700;
+  font-size: calc(var(--size) / 3 * 2);
+  padding-top: calc(var(--size) / 6 * 0.75);
+  text-align: center;
+  text-transform: uppercase;
+  user-select: none;
+}

@@ -1,0 +1,11 @@
+.name-tag {
+  display: flex;
+  user-select: none;
+
+  .name {
+    flex: 1;
+    font-size: 1rem;
+    padding-top: 0.25rem;
+    margin-left: 0.5rem;
+  }
+}
