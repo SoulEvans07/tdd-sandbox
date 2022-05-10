@@ -92,7 +92,8 @@
     "@types/lodash": "^4.14.177",
     "eslint-plugin-prettier": "^4.0.0",
     "jest-css-modules-transform": "git+ssh://git@github.com:SoulEvans07/jest-scss-transform.git#v4.4.0",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "ts-jest": "^28.0.2"
   },
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
