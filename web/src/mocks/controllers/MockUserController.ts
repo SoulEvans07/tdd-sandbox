@@ -8,7 +8,7 @@ export const mockUserController: MockController<typeof userController> = {
   register: rest.post<SignupDTO, {}, {}>(serverUrl + '/api/1.0/users', (req, res, ctx) => {
     const isValid = _.isEqual(req.body, mockNewUser);
     if (!isValid) return res(ctx.status(400));
-    return res(ctx.json({}));
+    return res(ctx.status(200));
   }),
 };
 
