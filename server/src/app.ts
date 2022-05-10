@@ -6,13 +6,15 @@ import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 import middleware from 'i18next-http-middleware';
 
-import { getEpMeta } from './decorators/api.decorators';
+import { epMeta, getEpMeta } from './decorators/api.decorators';
 import { Logger } from './utils/Logger';
-import { Controllers } from './types/api';
+import { Controllers, noopMiddleware } from './types/api';
 import helmet from 'helmet';
 import cors from 'cors';
 import ApiErrorHandler from './middleware/ApiErrorHandler';
 import ValidationMiddleware from './middleware/ValidationMiddleware';
+import AuthMiddleware from './middleware/AuthMiddleware';
+import AuthorizeMiddleware from './middleware/AuthorizeMiddleware';
 
 export const baseUrl: string = '/api';
 export const app: Express = express();
@@ -69,9 +71,9 @@ async function attachControllers(app: Express) {
           Logger.log(`Controller method found ${methodName}, ${apiMeta.method.toUpperCase()} ${apiUrl}`);
           router[apiMeta.method](
             apiUrl,
-            ...(apiMeta.middleware && apiMeta.middleware.length > 0
-              ? apiMeta.middleware
-              : [(_: unknown, __: unknown, next: () => void) => next()]),
+            AuthMiddleware.handleRequest,
+            apiMeta.isAuthorized ? AuthorizeMiddleware.handleRequest : noopMiddleware,
+            ...(apiMeta.middleware && apiMeta.middleware.length > 0 ? apiMeta.middleware : [noopMiddleware]),
             ValidationMiddleware.throwValidationErrors,
             controllerObject[methodName].bind(controllerObject)
           );

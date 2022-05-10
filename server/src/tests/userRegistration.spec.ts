@@ -1,6 +1,5 @@
 import request from 'supertest';
 import { app } from '../app';
-import sequelize from '../DAL/database';
 import User from '../DAL/models/User';
 import LocaleEn from '../locales/en/translation.json';
 

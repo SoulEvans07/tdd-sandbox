@@ -12,5 +12,7 @@
   "accountActivationSuccess": "Account is activated",
   "accountActivationFailure": "This account is either active or the token is invalid",
   "validationFailure": "Validation Failure",
-  "userNotFound": "User not found"
+  "userNotFound": "User not found",
+  "userPasswordIsWrong": "Bad password",
+  "unAuthorize": "Unauthorized"
 }

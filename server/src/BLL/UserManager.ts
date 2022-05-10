@@ -1,15 +1,17 @@
-import bcrypt from 'bcrypt';
 import User, { UserInput } from '../DAL/models/User';
+import SecurityHelper from '../utils/SecurityHelper';
 
 export class UserManager {
   public static async save(user: UserInput) {
-    const hashed = await bcrypt.hash(user.password, 10);
-
     return User.create({
       username: user.username,
       email: user.email,
-      password: hashed,
+      password: await SecurityHelper.hashPassword(user.password),
     });
+  }
+
+  public static async getUserByName(username: string) {
+    return await User.findOne({ where: { username } });
   }
 
   public static async isExistsByEmail(email: string): Promise<boolean> {
