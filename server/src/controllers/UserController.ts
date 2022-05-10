@@ -12,20 +12,7 @@ export default class UserController extends ControllerBase {
     method: 'post',
     version: '1.0',
     path: 'users',
-    middleware: [
-      UserController.validateUsername,
-      check('password')
-        .notEmpty()
-        .withMessage(R.passwordRequired)
-        .bail()
-        .isLength({ min: 8 })
-        .withMessage(R.passwordLength)
-        .bail()
-        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
-        .withMessage(R.passwordPattern)
-        .bail(),
-      UserController.validateEmail,
-    ],
+    middleware: [UserController.validateUsername, UserController.validateEmail, UserController.validatePassword],
   })
   async register(req: ValidatedRequest<UserInput>, res: Response, _: NextFunction) {
     const isEmpty = JSON.stringify(req.body) === '{}';
@@ -44,7 +31,9 @@ export default class UserController extends ControllerBase {
       .isLength({ min: 6, max: 32 })
       .withMessage(R.usernameLength)
       .bail()
-      .custom(UserController.validateUsernameIsInUse)(req, res, next);
+      .custom((value: string) =>
+        UserController.validateIsInUse(value, UserManager.isExistsByUsername, R.usernameInUse)
+      )(req, res, next);
   }
 
   private static validateEmail(req: ValidatedRequest<UserInput>, res: Response, next: () => void) {
@@ -55,18 +44,33 @@ export default class UserController extends ControllerBase {
       .isEmail()
       .withMessage(R.emailNotValid)
       .bail()
-      .custom(UserController.validateEmailIsInUse)(req, res, next);
+      .custom((value: string) => UserController.validateIsInUse(value, UserManager.isExistsByEmail, R.emailInUse))(
+      req,
+      res,
+      next
+    );
   }
 
-  private static async validateEmailIsInUse(email: string) {
-    if (await UserManager.isExistsByEmail(email)) {
-      throw new Error(R.emailInUse);
-    }
+  private static validatePassword(req: ValidatedRequest<UserInput>, res: Response, next: () => void) {
+    check('password')
+      .notEmpty()
+      .withMessage(R.passwordRequired)
+      .bail()
+      .isLength({ min: 8 })
+      .withMessage(R.passwordLength)
+      .bail()
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
+      .withMessage(R.passwordPattern)
+      .bail()(req, res, next);
   }
 
-  private static async validateUsernameIsInUse(username: string) {
-    if (await UserManager.isExistsByUsername(username)) {
-      throw new Error(R.usernameInUse);
+  private static async validateIsInUse(
+    value: string,
+    managerFunc: (value: string) => Promise<boolean>,
+    errorMsg: string
+  ) {
+    if (await managerFunc(value)) {
+      throw new Error(errorMsg);
     }
   }
 }
