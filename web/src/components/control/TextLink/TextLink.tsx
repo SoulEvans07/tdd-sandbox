@@ -1,13 +1,13 @@
 import { MouseEvent, HTMLProps, ReactElement } from 'react';
-import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
 import './TextLink.scss';
 
 interface TextLinkProps extends HTMLProps<HTMLAnchorElement> {
   color?: 'primary' | 'rainbow';
 }
 
-export default function TextLink(props: TextLinkProps): ReactElement {
+export function TextLink(props: TextLinkProps): ReactElement {
   const navigate = useNavigate();
   const { color = 'primary', className, href, onClick, children, ...restProps } = props;
 

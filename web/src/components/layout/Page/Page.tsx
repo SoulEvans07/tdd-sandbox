@@ -4,7 +4,7 @@ import './Page.scss';
 
 type PageProps = HTMLProps<HTMLDivElement>;
 
-export default function Page(props: PropsWithChildren<PageProps>): ReactElement {
+export function Page(props: PropsWithChildren<PageProps>): ReactElement {
   const { children, className, ...restProps } = props;
 
   return (

@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import LoginScreen from './LoginScreen/LoginScreen';
-import SignupScreen from './SignupScreen/SignupScreen';
-import TasksPage from './TasksPage/TasksPage';
+import { LoginScreen } from './LoginScreen/LoginScreen';
+import { SignupScreen } from './SignupScreen/SignupScreen';
+import { TasksPage } from './TasksPage/TasksPage';
 
-export default function Router(): ReactElement {
+export function Router(): ReactElement {
   return (
     <Routes>
       <Route index element={<Navigate to="/login" />} />

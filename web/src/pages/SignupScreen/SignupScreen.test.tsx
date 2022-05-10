@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { Random } from '../../helpers/Random';
 import { mockRegisterResponse, mockNewUser } from '../../mocks/auth/postRegister';
-import SignupScreen from './SignupScreen';
+import { SignupScreen } from './SignupScreen';
 
 describe('SignupScreen', () => {
   let nameInput: HTMLInputElement;

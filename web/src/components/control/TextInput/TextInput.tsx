@@ -6,7 +6,7 @@ export interface TextInputProps extends Omit<HTMLProps<HTMLInputElement>, 'role'
   type?: 'text' | 'password';
 }
 
-export default function TextInput(props: TextInputProps): ReactElement {
+export function TextInput(props: TextInputProps): ReactElement {
   const { type = 'text', id, title, className, ...restProps } = props;
 
   return (

@@ -9,7 +9,7 @@ interface ButtonProps extends HtmlButtonProps {
   color?: 'primary'; // | 'error';
 }
 
-export default function Button(props: ButtonProps): ReactElement {
+export function Button(props: ButtonProps): ReactElement {
   const { size, fill = 'fill', color, children, className, ...restProps } = props;
 
   return (

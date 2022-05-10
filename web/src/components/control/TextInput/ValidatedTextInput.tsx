@@ -1,14 +1,14 @@
 import { ChangeEvent, ReactElement, useState } from 'react';
 import classNames from 'classnames';
-import { InputValidator } from '../../../validators/types';
-import TextInput, { TextInputProps } from './TextInput';
 import './ValidatedTextInput.scss';
+import { InputValidator } from '../../../validators/types';
+import { TextInput, TextInputProps } from './TextInput';
 
 interface ValidatedTextInputProps extends TextInputProps {
   validator: InputValidator;
 }
 
-export default function ValidatedTextInput(props: ValidatedTextInputProps): ReactElement {
+export function ValidatedTextInput(props: ValidatedTextInputProps): ReactElement {
   const { validator, onChange, className, ...restProps } = props;
   const [error, setError] = useState('');
 

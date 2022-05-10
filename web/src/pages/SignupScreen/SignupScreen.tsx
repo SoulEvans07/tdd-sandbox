@@ -2,13 +2,13 @@ import { ChangeEvent, FormEvent, ReactElement, useMemo, useState } from 'react';
 import './SignupScreen.scss';
 import { serverUrl } from '../../config';
 import { minMaxValidator } from '../../validators/string-validators';
-import Page from '../../components/layout/Page/Page';
-import TextInput from '../../components/control/TextInput/TextInput';
-import ValidatedTextInput from '../../components/control/TextInput/ValidatedTextInput';
-import AppHeader from '../../containers/AppHeader/AppHeader';
-import Button from '../../components/control/Button/Button';
-import TextLink from '../../components/control/TextLink/TextLink';
-import Footer from '../../components/layout/Footer/Footer';
+import { Page } from '../../components/layout/Page/Page';
+import { TextInput } from '../../components/control/TextInput/TextInput';
+import { ValidatedTextInput } from '../../components/control/TextInput/ValidatedTextInput';
+import { AppHeader } from '../../containers/AppHeader/AppHeader';
+import { Button } from '../../components/control/Button/Button';
+import { TextLink } from '../../components/control/TextLink/TextLink';
+import { Footer } from '../../components/layout/Footer/Footer';
 
 interface SignupForm {
   username: string;
@@ -24,7 +24,7 @@ const emptyRegForm: SignupForm = {
   confirmPassword: '',
 };
 
-export default function SignupScreen(): ReactElement {
+export function SignupScreen(): ReactElement {
   const [result, setResult] = useState<string>();
   const [error, setError] = useState<boolean>();
 

@@ -5,7 +5,7 @@ interface AppHeaderProps {
   title: string;
 }
 
-export default function AppHeader(props: AppHeaderProps): ReactElement {
+export function AppHeader(props: AppHeaderProps): ReactElement {
   const { title } = props;
   return (
     <header className="app-header">

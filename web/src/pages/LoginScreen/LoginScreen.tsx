@@ -2,12 +2,12 @@ import { FormEvent, ChangeEvent, ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginScreen.scss';
 import { serverUrl } from '../../config';
-import Page from '../../components/layout/Page/Page';
-import AppHeader from '../../containers/AppHeader/AppHeader';
-import TextInput from '../../components/control/TextInput/TextInput';
-import Button from '../../components/control/Button/Button';
-import TextLink from '../../components/control/TextLink/TextLink';
-import Footer from '../../components/layout/Footer/Footer';
+import { Page } from '../../components/layout/Page/Page';
+import { AppHeader } from '../../containers/AppHeader/AppHeader';
+import { TextInput } from '../../components/control/TextInput/TextInput';
+import { Button } from '../../components/control/Button/Button';
+import { TextLink } from '../../components/control/TextLink/TextLink';
+import { Footer } from '../../components/layout/Footer/Footer';
 
 interface LoginForm {
   username: string;
@@ -19,7 +19,7 @@ const emptyLoginForm: LoginForm = {
   password: '',
 };
 
-export default function LoginScreen(): ReactElement {
+export function LoginScreen(): ReactElement {
   const navigate = useNavigate();
   const [error, setError] = useState<boolean>();
 
