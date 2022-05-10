@@ -23,6 +23,11 @@
     padding-right: 2rem;
   }
 
+  &:disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
   &.fill {
     --color-400: var(--color-dark-400);
     --color-300: var(--color-dark-300);
@@ -42,11 +47,18 @@
       background-color: var(--color-400);
     }
 
+    // colors
     &.primary {
       --color-400: var(--color-primary-500);
       --color-300: var(--color-primary-400);
       --color-200: var(--color-primary-300);
       --color-100: var(--color-primary-100);
+    }
+
+    // disabled
+    &:disabled {
+      --color-300: var(--color-dark-400);
+      --color-100: var(--color-dark-300);
     }
   }
 
@@ -68,6 +80,14 @@
       background-color: var(--color-200);
       border-color: var(--color-200);
     }
+
+    // colors
+
+    // disabled
+    &:disabled {
+      --color-300: var(--color-dark-400);
+      --color-100: var(--color-dark-300);
+    }
   }
 
   &.text {
@@ -78,15 +98,22 @@
     background-color: transparent;
     border: none;
     box-shadow: none;
-    color: var(--color-dark-200);
+    color: var(--color-300);
 
     &:hover {
-      color: var(--color-light-200);
+      color: var(--color-200);
     }
 
     &.active,
     &:active {
-      color: var(--color-primary-400);
+      color: var(--color-100);
+    }
+
+    // colors
+
+    // disabled
+    &:disabled {
+      --color-300: var(--color-dark-400);
     }
   }
 }

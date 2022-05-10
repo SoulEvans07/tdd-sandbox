@@ -8,15 +8,16 @@ import ValidatedTextInput from '../../components/control/TextInput/ValidatedText
 import AppHeader from '../../containers/AppHeader/AppHeader';
 import Button from '../../components/control/Button/Button';
 import TextLink from '../../components/control/TextLink/TextLink';
+import Footer from '../../components/layout/Footer/Footer';
 
-interface RegistrationForm {
+interface SignupForm {
   username: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
-const emptyRegForm: RegistrationForm = {
+const emptyRegForm: SignupForm = {
   username: '',
   email: '',
   password: '',
@@ -27,17 +28,13 @@ export default function SignupScreen(): ReactElement {
   const [result, setResult] = useState<string>();
   const [error, setError] = useState<boolean>();
 
-  const [{ username, email, password, confirmPassword }, setForm] = useState<RegistrationForm>(emptyRegForm);
+  const [{ username, email, password, confirmPassword }, setForm] = useState<SignupForm>(emptyRegForm);
 
-  const changeFormValue = (field: keyof RegistrationForm, value: string) => {
-    setForm(prev => ({ ...prev, [field]: value }));
-  };
-
-  const handleUsername = (e: ChangeEvent<HTMLInputElement>) => changeFormValue('username', e.target.value);
-  const handleEmail = (e: ChangeEvent<HTMLInputElement>) => changeFormValue('email', e.target.value);
-  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => changeFormValue('password', e.target.value);
-  const handleConfirmPassword = (e: ChangeEvent<HTMLInputElement>) =>
-    changeFormValue('confirmPassword', e.target.value);
+  const handlFieldChange =
+    (field: keyof SignupForm) =>
+    ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+      setForm(prev => ({ ...prev, [field]: value }));
+    };
 
   const isValid = useMemo(() => {
     return username.length > 0 && email.length > 0 && password.length && confirmPassword.length > 0;
@@ -60,21 +57,20 @@ export default function SignupScreen(): ReactElement {
   };
 
   if (result) return <span>{result}</span>;
-  if (error) return <span role="alert">Registration Error</span>;
 
   return (
     <Page className="signup-screen">
       <main className="card">
-        <AppHeader />
+        <AppHeader title="Sign up" />
         <form onSubmit={handleSubmit}>
-          <TextInput id="username" placeholder="Username" value={username} onChange={handleUsername} />
-          <TextInput id="email" placeholder="Email" value={email} onChange={handleEmail} />
+          <TextInput id="username" placeholder="Username" value={username} onChange={handlFieldChange('username')} />
+          <TextInput id="email" placeholder="Email" value={email} onChange={handlFieldChange('email')} />
           <ValidatedTextInput
             id="password"
             type="password"
             placeholder="Password"
             value={password}
-            onChange={handlePassword}
+            onChange={handlFieldChange('password')}
             validator={minMaxValidator(6, 32)}
           />
           <TextInput
@@ -82,16 +78,26 @@ export default function SignupScreen(): ReactElement {
             type="password"
             placeholder="Confirm password"
             value={confirmPassword}
-            onChange={handleConfirmPassword}
+            onChange={handlFieldChange('confirmPassword')}
           />
-          <Button disabled={!isValid} type="submit" size="big" color="primary">
-            Register
-          </Button>
+          <div className="row">
+            {error && (
+              <span className="error-message" role="alert">
+                Registration Error
+              </span>
+            )}
+            <Button disabled={!isValid} type="submit" size="big" color="primary">
+              Register
+            </Button>
+          </div>
         </form>
       </main>
-      <footer>
-        You already have an account? <TextLink color="rainbow"> Sign in here!</TextLink>
-      </footer>
+      <Footer>
+        You already have an account?
+        <TextLink color="rainbow" href="/login">
+          Login here!
+        </TextLink>
+      </Footer>
     </Page>
   );
 }

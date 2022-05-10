@@ -1,5 +1,6 @@
+import { MouseEvent, HTMLProps, ReactElement } from 'react';
 import classNames from 'classnames';
-import { HTMLProps, ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './TextLink.scss';
 
 interface TextLinkProps extends HTMLProps<HTMLAnchorElement> {
@@ -7,9 +8,16 @@ interface TextLinkProps extends HTMLProps<HTMLAnchorElement> {
 }
 
 export default function TextLink(props: TextLinkProps): ReactElement {
-  const { color = 'primary', className, children, ...restProps } = props;
+  const navigate = useNavigate();
+  const { color = 'primary', className, href, onClick, children, ...restProps } = props;
+
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    if (onClick) return onClick(e);
+    if (href) navigate(href);
+  };
+
   return (
-    <a className={classNames('text-link', className, color)} {...restProps}>
+    <a {...restProps} className={classNames('text-link', className, color)} onClick={handleClick}>
       {children}
     </a>
   );

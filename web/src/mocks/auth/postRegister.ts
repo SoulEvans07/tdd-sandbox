@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { rest } from 'msw';
-import { serverUrl } from '../config';
+import { serverUrl } from '../../config';
 
 export interface RegisterBody {
   username: string;

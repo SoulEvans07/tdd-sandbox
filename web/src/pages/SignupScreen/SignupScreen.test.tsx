@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 import { Random } from '../../helpers/Random';
-import { mockRegisterResponse, mockNewUser } from '../../mocks/postRegister';
+import { mockRegisterResponse, mockNewUser } from '../../mocks/auth/postRegister';
 import SignupScreen from './SignupScreen';
 
 describe('SignupScreen', () => {
@@ -12,17 +13,20 @@ describe('SignupScreen', () => {
   let submitButton: HTMLButtonElement;
 
   beforeEach(() => {
-    render(<SignupScreen />);
+    render(
+      <MemoryRouter>
+        <SignupScreen />
+      </MemoryRouter>
+    );
 
     nameInput = screen.getByRole('textbox', { name: 'username' }) as HTMLInputElement;
     emailInput = screen.getByRole('textbox', { name: 'email' }) as HTMLInputElement;
     passwordInput = screen.getByRole('textbox', { name: 'password' }) as HTMLInputElement;
     confirmInput = screen.getByRole('textbox', { name: 'confirm-password' }) as HTMLInputElement;
-
     submitButton = screen.getByRole('button', { name: /register/i }) as HTMLButtonElement;
   });
 
-  it('has a username, email, password input and a submit button', () => {
+  it('page composition', () => {
     expect(nameInput).toBeInTheDocument();
     expect(emailInput).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();
