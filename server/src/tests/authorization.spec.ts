@@ -66,4 +66,6 @@ describe('Authorization', () => {
       .send();
     validateTokenResponse(resp);
   });
+
+  // TODO token expire test
 });

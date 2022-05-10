@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 
 import { ValidationException } from '../types/exceptions/ValidationException';
 import { BaseException } from '../types/exceptions/BaseException';
+import { Logger } from '../utils/Logger';
 
 export default class ApiErrorHandler {
   public static handleError(err: BaseException | ValidationException, req: Request, res: Response, _: any) {
@@ -32,5 +33,6 @@ export default class ApiErrorHandler {
       message: req.t(message),
       validationErrors,
     });
+    Logger.log(`[ApiErrorHandler] Error occurred(${status}): ${message}`);
   }
 }

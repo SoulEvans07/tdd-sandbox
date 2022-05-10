@@ -15,6 +15,7 @@ import ApiErrorHandler from './middleware/ApiErrorHandler';
 import ValidationMiddleware from './middleware/ValidationMiddleware';
 import AuthMiddleware from './middleware/AuthMiddleware';
 import AuthorizeMiddleware from './middleware/AuthorizeMiddleware';
+import ApiEndpointLoggerMiddleware from './middleware/ApiEndpointLoggerMiddleware';
 
 export const baseUrl: string = '/api';
 export const app: Express = express();
@@ -72,6 +73,7 @@ async function attachControllers(app: Express) {
           router[apiMeta.method](
             apiUrl,
             AuthMiddleware.handleRequest,
+            ApiEndpointLoggerMiddleware.log,
             apiMeta.isAuthorized ? AuthorizeMiddleware.handleRequest : noopMiddleware,
             ...(apiMeta.middleware && apiMeta.middleware.length > 0 ? apiMeta.middleware : [noopMiddleware]),
             ValidationMiddleware.throwValidationErrors,
