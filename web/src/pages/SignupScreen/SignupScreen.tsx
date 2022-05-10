@@ -10,7 +10,7 @@ import { TextLink } from '../../components/control/TextLink/TextLink';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { userController } from '../../controllers/UserController';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../Router';
+import { ROUTES } from '../../router/types';
 
 interface SignupForm {
   username: string;

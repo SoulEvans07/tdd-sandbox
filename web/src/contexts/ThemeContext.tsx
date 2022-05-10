@@ -16,7 +16,7 @@ const Theme = createContext<ThemeContext | undefined>(undefined);
 
 export function useTheme() {
   const context = useContext(Theme);
-  if (!context) throw new Error('useTheme must be used within an ThemeProvider');
+  if (!context) throw new Error('useTheme must be used within a ThemeProvider');
   return context;
 }
 
@@ -24,9 +24,7 @@ interface ThemeProviderProps {
   default?: ThemeName;
 }
 
-type NewType = ReactElement;
-
-export function ThemeProvider(props: PropsWithChildren<ThemeProviderProps>): NewType {
+export function ThemeProvider(props: PropsWithChildren<ThemeProviderProps>): ReactElement {
   const [currentTheme, setCurrentTheme] = useState<ThemeName>(props.default || 'dark');
 
   const value = useMemo((): ThemeContext => {

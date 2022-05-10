@@ -2,7 +2,8 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { mockExistingUser } from '../../mocks/controllers/MockAuthController';
-import { Router, ROUTES } from '../Router';
+import { Router } from '../../router/Router';
+import { ROUTES } from '../../router/types';
 
 describe('LoginScreen', () => {
   let titleHeading: HTMLHeadingElement;

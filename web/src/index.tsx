@@ -1,20 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import './root.scss';
-import { ThemeProvider } from './contexts/Theme';
-import { ThemeSetter } from './containers/ThemeSetter/ThemeSetter';
-import { Router } from './pages/Router';
+import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider default="dark">
-      <ThemeSetter>
-        <BrowserRouter>
-          <Router />
-        </BrowserRouter>
-      </ThemeSetter>
-    </ThemeProvider>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

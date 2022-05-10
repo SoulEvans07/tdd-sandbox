@@ -1,8 +1,10 @@
 import { FormEvent, ChangeEvent, ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginScreen.scss';
+import { useLocation } from '../../hooks/userLocation';
+import { useAuth, User } from '../../contexts/AuthContext';
 import { authController } from '../../controllers/AuthController';
-import { ROUTES } from '../Router';
+import { ROUTES } from '../../router/types';
 import { Page } from '../../components/layout/Page/Page';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
 import { TextInput } from '../../components/control/TextInput/TextInput';
@@ -21,9 +23,17 @@ const emptyLoginForm: LoginForm = {
 };
 
 export function LoginScreen(): ReactElement {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [error, setError] = useState<boolean>();
+  const { login } = useAuth();
 
+  const handleSuccess = (user: User, token: string) => {
+    login(user, token);
+    const next = location.state?.from?.pathname || ROUTES.TASKS;
+    navigate(next, { replace: true });
+  };
+
+  const [error, setError] = useState<boolean>();
   const [{ username, password }, setForm] = useState<LoginForm>(emptyLoginForm);
 
   const handlFieldChange =
@@ -36,7 +46,7 @@ export function LoginScreen(): ReactElement {
     e.preventDefault();
     authController
       .login({ username, password })
-      .then(() => navigate(ROUTES.TASKS))
+      .then(data => handleSuccess(data.user, data.token))
       .catch(e => setError(true));
   };
 
