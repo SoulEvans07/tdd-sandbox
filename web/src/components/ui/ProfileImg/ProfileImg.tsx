@@ -10,7 +10,7 @@ interface ProfileImgProps {
   onClick?: VoidFunction;
 }
 
-export default function ProfileImg(props: ProfileImgProps): ReactElement {
+export function ProfileImg(props: ProfileImgProps): ReactElement {
   const { username, className, onClick } = props;
 
   const hue = useMemo(() => textToHue(username), [username]);

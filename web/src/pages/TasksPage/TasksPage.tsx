@@ -2,22 +2,30 @@ import { ChangeEvent, KeyboardEvent, ReactElement, useState } from 'react';
 import './TasksPage.scss';
 import { Page } from '../../components/layout/Page/Page';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
-import { useAuth } from '../../contexts/AuthContext';
 import { TextInput } from '../../components/control/TextInput/TextInput';
 import { Checkbox } from '../../components/control/Checkbox/Checkbox';
+import { TaskList } from '../../containers/TaskList/TaskList';
+import { Task } from '../../contexts/StoreContext';
 
 export function TasksPage(): ReactElement {
-  const { currentUser, token } = useAuth();
   const [checkAll, setCheckAll] = useState(false);
   const handleCheckAll = (checked: boolean) => setCheckAll(checked);
 
-  const [newTask, setTaskText] = useState('');
-  const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => setTaskText(e.target.value);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => setNewTaskTitle(e.target.value);
   const handleKeyEvent = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') createNewTask();
+    if (!!newTaskTitle && e.key === 'Enter') createNewTask();
   };
+
   const createNewTask = () => {
-    setTaskText('');
+    const newTask: Task = {
+      id: tasks.length,
+      title: newTaskTitle,
+      status: 'todo',
+    };
+    setTasks(prev => [...prev, newTask]);
+    setNewTaskTitle('');
   };
 
   return (
@@ -30,11 +38,12 @@ export function TasksPage(): ReactElement {
             id="new-task"
             title="New Task"
             placeholder="New Task"
-            value={newTask}
+            value={newTaskTitle}
             onChange={handleTextChange}
             onKeyDown={handleKeyEvent}
           />
         </section>
+        <TaskList list={tasks} />
       </main>
     </Page>
   );

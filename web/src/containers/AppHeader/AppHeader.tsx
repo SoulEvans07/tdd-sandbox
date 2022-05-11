@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
 import './AppHeader.scss';
 import { useAuth } from '../../contexts/AuthContext';
-import ProfileImg from '../../components/ui/ProfileImg/ProfileImg';
-import ThemeSwitch from '../ThemeSwitch/ThemeSwitch';
+import { ProfileImg } from '../../components/ui/ProfileImg/ProfileImg';
+import { ThemeSwitch } from '../ThemeSwitch/ThemeSwitch';
 
 interface AppHeaderProps {
   title: string;

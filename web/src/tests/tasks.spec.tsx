@@ -38,10 +38,28 @@ describe('tasks behavior', () => {
     expect(profileImg).toBeInTheDocument();
   });
 
-  it('clears the create task input when enter is pressed', () => {
-    userEvent.clear(createTaskInput);
-    userEvent.type(createTaskInput, 'Read for at least an hour');
-    userEvent.type(createTaskInput, '{enter}');
-    expect(createTaskInput).toHaveValue('');
+  describe('create task', () => {
+    it('has an empty list message at first', () => {
+      const emptyListMessage = screen.getByText('There is nothing to do!');
+      expect(emptyListMessage).toBeInTheDocument();
+    });
+
+    it('doesnt add item when input is empty but enter is pressed', () => {
+      userEvent.clear(createTaskInput);
+      userEvent.type(createTaskInput, '{enter}');
+      const taskItem = screen.queryByTestId(/task-item-/i);
+      expect(taskItem).not.toBeInTheDocument();
+    });
+
+    it('clears input and adds item to list when enter is pressed', async () => {
+      const newTaskTitle = 'Read for at least an hour';
+      userEvent.clear(createTaskInput);
+      userEvent.type(createTaskInput, newTaskTitle);
+      userEvent.type(createTaskInput, '{enter}');
+      expect(createTaskInput).toHaveValue('');
+      const taskItem = await screen.findByTestId(/task-item-/i);
+      expect(taskItem).toBeInTheDocument();
+      expect(taskItem).toHaveTextContent(newTaskTitle);
+    });
   });
 });

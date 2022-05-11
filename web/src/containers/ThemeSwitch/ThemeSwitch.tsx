@@ -8,7 +8,7 @@ const themeIcons: Record<ThemeName, string> = {
   light: 'moon',
 };
 
-export default function ThemeSwitch(): ReactElement {
+export function ThemeSwitch(): ReactElement {
   const { currentTheme, switchTheme } = useTheme();
   const icon = themeIcons[currentTheme];
 

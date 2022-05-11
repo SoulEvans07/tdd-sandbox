@@ -1,0 +1,62 @@
+.task-list-container {
+  border-radius: var(--border-radius);
+  box-shadow: var(--drop-shadow);
+
+  .controls {
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    background-color: var(--color-dark-500);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem;
+
+    .button-group {
+      margin: 0;
+    }
+  }
+
+  .remaining-counter {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    color: var(--color-dark-200);
+  }
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+
+  .empty-list {
+    height: 3.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-dark-500);
+    border-top: 1px solid var(--color-dark-400);
+    color: var(--color-dark-300);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .task-list-container {
+    .controls {
+      justify-content: center;
+
+      .clear-btn {
+        display: none;
+      }
+    }
+  }
+
+  .task-list {
+    .task-item {
+      .remove-task,
+      .checkbox {
+        display: none;
+      }
+    }
+  }
+}

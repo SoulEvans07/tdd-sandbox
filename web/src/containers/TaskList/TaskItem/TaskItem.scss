@@ -1,0 +1,53 @@
+.task-item {
+  position: relative;
+  height: 3.5rem;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--color-dark-500);
+  border-top: 1px solid var(--color-dark-400);
+  overflow-x: hidden;
+  cursor: pointer;
+
+  &:last-of-type {
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+  }
+
+  .checkbox {
+    margin-right: 1rem;
+  }
+
+  .task-title {
+    margin-right: auto;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+    padding-top: 0.25rem;
+  }
+
+  .status-label {
+    margin: 0 0 0 1rem;
+    flex-shrink: 0;
+    transition: transform 150ms ease-in;
+  }
+
+  .remove-task {
+    padding: 1rem;
+    width: 3rem;
+    height: 3rem;
+    margin-right: -1rem;
+    position: relative;
+    transform: translateX(3rem);
+    transition: transform 150ms ease-in;
+  }
+
+  &.done {
+    .task-title {
+      color: var(--color-dark-200);
+      text-decoration: line-through;
+    }
+  }
+}

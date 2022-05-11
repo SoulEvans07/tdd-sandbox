@@ -1,0 +1,30 @@
+.button-group {
+  margin: 0 2rem;
+  display: flex;
+  border-radius: var(--border-radius);
+  box-shadow: var(--drop-shadow-small);
+
+  &.text {
+    box-shadow: none;
+  }
+
+  .button {
+    border-radius: 0;
+    margin: 0;
+    border-left-width: 0px;
+    border-right-width: 1px;
+    box-shadow: none;
+
+    &:first-of-type {
+      border-top-left-radius: var(--border-radius);
+      border-bottom-left-radius: var(--border-radius);
+      border-left-width: 1px;
+    }
+
+    &:last-of-type {
+      border-top-right-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+      border-right-width: 1px;
+    }
+  }
+}
