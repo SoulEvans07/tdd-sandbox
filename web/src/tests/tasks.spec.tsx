@@ -1,29 +1,32 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { ROUTES } from '../router/types';
 import { TasksPage } from '../pages/TasksPage/TasksPage';
+import { StoreProvider } from '../contexts/store/StoreContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
-import userEvent from '@testing-library/user-event';
+import { StoreData, Task } from '../contexts/store/types';
 
 describe('tasks behavior', () => {
-  const user = {
-    id: 0,
-    username: 'adam.szi',
-    email: 'adam.szi@snapsoft.hu',
-    tenants: [1],
-  };
-  const jwtToken = 'random.super.secretToken';
-
   let createTaskInput: HTMLInputElement;
   let profileImg: HTMLElement;
 
-  beforeEach(() => {
+  const setupTaskPage = (init?: StoreData) => {
+    const jwtToken = 'random.super.secretToken';
+    const user = {
+      id: 0,
+      username: 'adam.szi',
+      email: 'adam.szi@snapsoft.hu',
+      tenants: [1],
+    };
     render(
       <MemoryRouter initialEntries={[ROUTES.TASKS]}>
         <ThemeProvider initial="dark">
           <AuthProvider initial={{ currentUser: user, token: jwtToken }}>
-            <TasksPage />
+            <StoreProvider initial={init}>
+              <TasksPage />
+            </StoreProvider>
           </AuthProvider>
         </ThemeProvider>
       </MemoryRouter>
@@ -31,20 +34,23 @@ describe('tasks behavior', () => {
 
     createTaskInput = screen.getByRole('textbox', { name: /new task/i }) as HTMLInputElement;
     profileImg = screen.getByTitle(user.username) as HTMLInputElement;
-  });
+  };
 
   it('page composition', () => {
+    setupTaskPage();
     expect(createTaskInput).toBeInTheDocument();
     expect(profileImg).toBeInTheDocument();
   });
 
   describe('create task', () => {
     it('has an empty list message at first', () => {
+      setupTaskPage();
       const emptyListMessage = screen.getByText('There is nothing to do!');
       expect(emptyListMessage).toBeInTheDocument();
     });
 
     it('doesnt add item when input is empty but enter is pressed', () => {
+      setupTaskPage();
       userEvent.clear(createTaskInput);
       userEvent.type(createTaskInput, '{enter}');
       const taskItem = screen.queryByTestId(/task-item-/i);
@@ -52,6 +58,7 @@ describe('tasks behavior', () => {
     });
 
     it('clears input and adds item to list when enter is pressed', async () => {
+      setupTaskPage();
       const newTaskTitle = 'Read for at least an hour';
       userEvent.clear(createTaskInput);
       userEvent.type(createTaskInput, newTaskTitle);
@@ -60,6 +67,26 @@ describe('tasks behavior', () => {
       const taskItem = await screen.findByTestId(/task-item-/i);
       expect(taskItem).toBeInTheDocument();
       expect(taskItem).toHaveTextContent(newTaskTitle);
+    });
+
+    it('deletes a task when the remove button is pressed', () => {
+      const task: Task = { id: 0, title: 'Existing Task', status: 'todo' };
+      setupTaskPage({
+        activeWS: '_personal',
+        workspaces: {
+          _personal: [task],
+        },
+      });
+
+      const taskItem = screen.getByText(task.title);
+      expect(taskItem).toBeInTheDocument();
+
+      const removeBtn = screen.getByRole('button', { name: /remove-task/i });
+      expect(removeBtn).toBeInTheDocument();
+
+      userEvent.click(removeBtn);
+      const removedTask = screen.queryByText(task.title);
+      expect(removedTask).not.toBeInTheDocument();
     });
   });
 });

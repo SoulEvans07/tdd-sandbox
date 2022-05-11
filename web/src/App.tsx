@@ -3,6 +3,7 @@ import './root.scss';
 import { persistentStorage } from './services/storage/persistentStorage';
 import { AuthProvider, AuthState, clearedState, User } from './contexts/AuthContext';
 import { ThemeName, ThemeProvider } from './contexts/ThemeContext';
+import { StoreProvider } from './contexts/store/StoreContext';
 import { ThemeSetter } from './containers/ThemeSetter/ThemeSetter';
 import { Router } from './router/Router';
 import { secureStorage } from './services/storage/secureStorage';
@@ -33,7 +34,9 @@ export default function App(): ReactElement {
     <ThemeProvider initial={initialTheme} onChange={onThemeChange}>
       <ThemeSetter>
         <AuthProvider initial={initialUser} onLogin={onLogin} onLogout={onLogout}>
-          <Router />
+          <StoreProvider>
+            <Router />
+          </StoreProvider>
         </AuthProvider>
       </ThemeSetter>
     </ThemeProvider>

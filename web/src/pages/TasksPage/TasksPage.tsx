@@ -5,28 +5,34 @@ import { AppHeader } from '../../containers/AppHeader/AppHeader';
 import { TextInput } from '../../components/control/TextInput/TextInput';
 import { Checkbox } from '../../components/control/Checkbox/Checkbox';
 import { TaskList } from '../../containers/TaskList/TaskList';
-import { Task } from '../../contexts/StoreContext';
+import { useDispatch, useSelector } from '../../contexts/store/StoreContext';
+import { selectActiveWorkspace } from '../../contexts/store/selectors';
+import { Task } from '../../contexts/store/types';
+import { createTask, removeTask } from '../../contexts/store/actions';
 
 export function TasksPage(): ReactElement {
+  const dispatch = useDispatch();
+  const tasks = useSelector(selectActiveWorkspace);
   const [checkAll, setCheckAll] = useState(false);
   const handleCheckAll = (checked: boolean) => setCheckAll(checked);
 
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => setNewTaskTitle(e.target.value);
   const handleKeyEvent = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (!!newTaskTitle && e.key === 'Enter') createNewTask();
+    if (!!newTaskTitle && e.key === 'Enter') handleCreate();
   };
 
-  const createNewTask = () => {
+  const handleCreate = () => {
     const newTask: Task = {
       id: tasks.length,
       title: newTaskTitle,
       status: 'todo',
     };
-    setTasks(prev => [...prev, newTask]);
+    dispatch(createTask(newTask));
     setNewTaskTitle('');
   };
+
+  const handleRemove = (task: Task) => dispatch(removeTask(task));
 
   return (
     <Page className="tasks-page">
@@ -43,7 +49,7 @@ export function TasksPage(): ReactElement {
             onKeyDown={handleKeyEvent}
           />
         </section>
-        <TaskList list={tasks} />
+        <TaskList list={tasks} onRemove={handleRemove} />
       </main>
     </Page>
   );

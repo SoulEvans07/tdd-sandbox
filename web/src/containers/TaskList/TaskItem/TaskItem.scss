@@ -36,18 +36,50 @@
 
   .remove-task {
     padding: 1rem;
-    width: 3rem;
-    height: 3rem;
+    width: calc(18px + 2rem);
+    height: calc(18px + 2rem);
     margin-right: -1rem;
     position: relative;
     transform: translateX(3rem);
     transition: transform 150ms ease-in;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    stroke: var(--color-dark-300);
+
+    &:hover {
+      stroke: var(--color-dark-200);
+    }
+
+    &:active {
+      stroke: var(--color-light-300);
+    }
   }
 
   &.done {
     .task-title {
       color: var(--color-dark-200);
       text-decoration: line-through;
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .task-item {
+    .status-label {
+      transform: translateX(1.5rem);
+    }
+
+    &:hover {
+      .status-label {
+        transform: translateX(0);
+      }
+
+      .remove-task {
+        transform: translateX(0);
+      }
     }
   }
 }

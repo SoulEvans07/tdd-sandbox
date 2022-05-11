@@ -1,16 +1,17 @@
 import { ReactElement } from 'react';
 import './TaskList.scss';
-import { Task } from '../../contexts/StoreContext';
+import { Task } from '../../contexts/store/types';
 import { TaskItem } from './TaskItem/TaskItem';
 import { Button } from '../../components/control/Button/Button';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
 
 interface TaskListProps {
   list: Task[];
+  onRemove: (task: Task) => void;
 }
 
 export function TaskList(props: TaskListProps): ReactElement {
-  const { list } = props;
+  const { list, onRemove } = props;
 
   return (
     <section className="task-list-container">
@@ -35,7 +36,7 @@ export function TaskList(props: TaskListProps): ReactElement {
       <section className="task-list">
         {list.length === 0 && <div className="empty-list">There is nothing to do!</div>}
         {list.map(task => (
-          <TaskItem task={task} key={task.id} />
+          <TaskItem task={task} key={task.id} onRemove={() => onRemove(task)} />
         ))}
       </section>
     </section>
