@@ -2,6 +2,16 @@ import { Request, Response } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { UserOutput } from '../DAL/models/User';
 
+export interface AuthResponse {
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    tenants: number[];
+  };
+  token: string;
+}
+
 export interface ValidatedRequest<T extends object> extends Request<{}, {}, T> {
   validationErrors?: {
     [key in keyof T]?: string;
@@ -9,6 +19,10 @@ export interface ValidatedRequest<T extends object> extends Request<{}, {}, T> {
 }
 
 export interface AuthorizedRequest extends Request {
+  user?: UserOutput;
+}
+
+export interface ValidatedAuthorizedRequest<T extends object> extends ValidatedRequest<T> {
   user?: UserOutput;
 }
 

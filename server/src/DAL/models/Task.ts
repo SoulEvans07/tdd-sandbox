@@ -22,7 +22,8 @@ interface TaskAttributes {
   deletedAt?: Date;
 }
 
-export interface TaskInput extends Optional<TaskAttributes, 'id' | 'tenantId' | 'parentId' | 'assigneeId'> {}
+export interface TaskInput
+  extends Optional<TaskAttributes, 'id' | 'tenantId' | 'parentId' | 'assigneeId' | 'order' | 'status'> {}
 export interface TaskOutput extends Required<TaskAttributes> {}
 
 class Task extends Model<TaskAttributes, TaskInput> implements TaskAttributes {
@@ -60,7 +61,7 @@ Task.init(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM,
+      type: DataTypes.ENUM(...Object.keys(TaskStatus).map(o => o)),
       allowNull: false,
     },
     tenantId: {

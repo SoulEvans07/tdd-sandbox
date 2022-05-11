@@ -1,6 +1,5 @@
 import Tenant, { TenantOutput } from '../DAL/models/Tenant';
-import User, { UserInput, UserOutput } from '../DAL/models/User';
-import SecurityHelper from '../utils/SecurityHelper';
+import { UserOutput } from '../DAL/models/User';
 
 export class TenantManager {
   public static async getTenantsForUser(user: UserOutput): Promise<TenantOutput[]> {
