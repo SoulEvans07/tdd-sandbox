@@ -50,6 +50,7 @@ describe('Tasks', () => {
   }
 
   function validateTenantTask(task: TaskOutput, taskInput: TaskInput, order: number) {
+    validateTaskResponseSchema(task);
     expect(task.assigneeId).toBeFalsy();
     expect(task.tenantId).toBe(taskInput.tenantId);
     expect(task.parentId).toBeFalsy();
@@ -65,6 +66,7 @@ describe('Tasks', () => {
     taskInputPersonal: TaskInput,
     order: number
   ) {
+    validateTaskResponseSchema(task);
     expect(task.assigneeId).toBe(loginData.user.id);
     expect(task.tenantId).toBeFalsy();
     expect(task.parentId).toBeFalsy();
@@ -82,34 +84,27 @@ describe('Tasks', () => {
   describe('Create task', () => {
     test('Personal', async () => {
       const loginData = await getLoggedInUser();
-
       const resp = await postRequest('/api/1.0/tasks', taskInputPersonal, {
         authorization: 'Bearer ' + loginData.token,
       });
       const task: TaskOutput = resp.body;
-
-      validateTaskResponseSchema(task);
       validatePersonalTask(task, loginData, taskInputPersonal, 1);
     });
 
     test('Tenant', async () => {
       const loginData = await getLoggedInUser();
-
       const taskInput = {
         title: 'New task for tenant',
         description: 'Description for task',
         tenantId: loginData.user.tenants[0],
       };
-
       const resp = await postRequest('/api/1.0/tasks', taskInput, { authorization: 'Bearer ' + loginData.token });
       const task: TaskOutput = resp.body;
-      validateTaskResponseSchema(task);
       validateTenantTask(task, taskInput, 1);
     });
 
     test('Task order', async () => {
       const loginData = await getLoggedInUser();
-
       const taskInputTenant = {
         title: 'New task for tenant',
         description: 'Description for task',
@@ -120,24 +115,20 @@ describe('Tasks', () => {
         authorization: 'Bearer ' + loginData.token,
       });
       let task: TaskOutput = resp.body;
-      validateTaskResponseSchema(task);
       validatePersonalTask(task, loginData, taskInputPersonal, 1);
 
       resp = await postRequest('/api/1.0/tasks', taskInputTenant, { authorization: 'Bearer ' + loginData.token });
       task = resp.body;
-      validateTaskResponseSchema(task);
       validateTenantTask(task, taskInputTenant, 1);
 
       resp = await postRequest('/api/1.0/tasks', taskInputTenant, { authorization: 'Bearer ' + loginData.token });
       task = resp.body;
-      validateTaskResponseSchema(task);
       validateTenantTask(task, taskInputTenant, 2);
 
       resp = await postRequest('/api/1.0/tasks', taskInputPersonal, {
         authorization: 'Bearer ' + loginData.token,
       });
       task = resp.body;
-      validateTaskResponseSchema(task);
       validatePersonalTask(task, loginData, taskInputPersonal, 2);
     });
   });
@@ -163,7 +154,6 @@ describe('Tasks', () => {
         exceptedMessage: string;
       }) => {
         const loginData = await getLoggedInUser();
-
         const resp = await postRequest(
           '/api/1.0/tasks',
           { ...taskInputPersonal, [property]: value },
