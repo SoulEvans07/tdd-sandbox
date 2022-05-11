@@ -4,6 +4,7 @@ import User from '../DAL/models/User';
 import { AuthResponse } from '../types/api';
 import { mockUser } from './mocks';
 import { postRequest, postUser, validateTokenResponse } from './testHelpers';
+import LocaleEn from '../locales/en/translation.json';
 
 describe('Tasks', () => {
   beforeEach(() => {
@@ -48,45 +49,82 @@ describe('Tasks', () => {
     expect(task).toHaveProperty('updatedAt');
   }
 
-  test('Create personal task', async () => {
-    const loginData = await getLoggedInUser();
+  const taskInputPersonal = {
+    title: 'New task for personal',
+    description: 'Description for task',
+  };
 
-    const taskInput = {
-      title: 'New task for personal',
-      description: 'Description for task',
-    };
+  describe('Create task', () => {
+    test('Personal', async () => {
+      const loginData = await getLoggedInUser();
 
-    const resp = await postRequest('/api/1.0/tasks', taskInput, { authorization: 'Bearer ' + loginData.token });
-    const task: TaskOutput = resp.body;
+      const resp = await postRequest('/api/1.0/tasks', taskInputPersonal, {
+        authorization: 'Bearer ' + loginData.token,
+      });
+      const task: TaskOutput = resp.body;
 
-    validateTaskResponseSchema(task);
-    expect(task.assigneeId).toBe(loginData.user.id);
-    expect(task.tenantId).toBeFalsy();
-    expect(task.parentId).toBeFalsy();
-    expect(task.order).toBe(1);
-    expect(task.status).toBe(TaskStatus.Todo);
-    expect(task.title).toBe(taskInput.title);
-    expect(task.description).toBe(taskInput.description);
+      validateTaskResponseSchema(task);
+      expect(task.assigneeId).toBe(loginData.user.id);
+      expect(task.tenantId).toBeFalsy();
+      expect(task.parentId).toBeFalsy();
+      expect(task.order).toBe(1);
+      expect(task.status).toBe(TaskStatus.Todo);
+      expect(task.title).toBe(taskInputPersonal.title);
+      expect(task.description).toBe(taskInputPersonal.description);
+    });
+
+    test('Tenant', async () => {
+      const loginData = await getLoggedInUser();
+
+      const taskInput = {
+        title: 'New task for tenant',
+        description: 'Description for task',
+        tenantId: loginData.user.tenants[0],
+      };
+
+      const resp = await postRequest('/api/1.0/tasks', taskInput, { authorization: 'Bearer ' + loginData.token });
+      const task: TaskOutput = resp.body;
+      validateTaskResponseSchema(task);
+      expect(task.assigneeId).toBeFalsy();
+      expect(task.tenantId).toBe(taskInput.tenantId);
+      expect(task.parentId).toBeFalsy();
+      expect(task.order).toBe(1);
+      expect(task.status).toBe(TaskStatus.Todo);
+      expect(task.title).toBe(taskInput.title);
+      expect(task.description).toBe(taskInput.description);
+    });
   });
 
-  test('Create tenant task', async () => {
-    const loginData = await getLoggedInUser();
+  describe('Validation', () => {
+    test.each`
+      testName          | property         | value              | exceptedMessage
+      ${'required'}     | ${'title'}       | ${undefined}       | ${LocaleEn.titleRequiredForTask}
+      ${'length short'} | ${'title'}       | ${'s'}             | ${LocaleEn.titleLengthForTask}
+      ${'length short'} | ${'title'}       | ${'ss'}            | ${LocaleEn.titleLengthForTask}
+      ${'length long'}  | ${'title'}       | ${'s'.repeat(201)} | ${LocaleEn.titleLengthForTask}
+      ${'required'}     | ${'description'} | ${undefined}       | ${LocaleEn.descriptionRequiredForTask}
+    `(
+      '$property $testName',
+      async ({
+        property,
+        value,
+        exceptedMessage,
+      }: {
+        testName: string;
+        property: string;
+        value: any;
+        exceptedMessage: string;
+      }) => {
+        const loginData = await getLoggedInUser();
 
-    const taskInput = {
-      title: 'New task for tenant',
-      description: 'Description for task',
-      tenantId: loginData.user.tenants[0],
-    };
-
-    const resp = await postRequest('/api/1.0/tasks', taskInput, { authorization: 'Bearer ' + loginData.token });
-    const task: TaskOutput = resp.body;
-    validateTaskResponseSchema(task);
-    expect(task.assigneeId).toBeFalsy();
-    expect(task.tenantId).toBe(taskInput.tenantId);
-    expect(task.parentId).toBeFalsy();
-    expect(task.order).toBe(1);
-    expect(task.status).toBe(TaskStatus.Todo);
-    expect(task.title).toBe(taskInput.title);
-    expect(task.description).toBe(taskInput.description);
+        const resp = await postRequest(
+          '/api/1.0/tasks',
+          { ...taskInputPersonal, [property]: value },
+          { authorization: 'Bearer ' + loginData.token }
+        );
+        expect(resp.status).toBe(400);
+        expect(resp.body.validationErrors[property]).toBe(exceptedMessage);
+      }
+    );
   });
 });

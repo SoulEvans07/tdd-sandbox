@@ -14,5 +14,8 @@
   "validationFailure": "Validation Failure",
   "userNotFound": "User not found",
   "userPasswordIsWrong": "Bad password",
-  "unAuthorize": "Unauthorized"
+  "unAuthorize": "Unauthorized",
+  "titleRequiredForTask": "Title required",
+  "titleLengthForTask": "Must have min 3 and max 200 character",
+  "descriptionRequiredForTask": "Description required"
 }

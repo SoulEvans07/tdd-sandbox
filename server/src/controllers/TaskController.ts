@@ -1,8 +1,10 @@
 import { NextFunction, Response } from 'express';
+import { check } from 'express-validator';
 import { TaskManager } from '../BLL/TaskManager';
 import { TaskInput } from '../DAL/models/Task';
 import { epMeta } from '../decorators/api.decorators';
 import { ControllerBase, ValidatedAuthorizedRequest } from '../types/api';
+import { R } from '../types/localization';
 
 export default class TaskController extends ControllerBase {
   @epMeta({
@@ -10,7 +12,15 @@ export default class TaskController extends ControllerBase {
     version: '1.0',
     path: 'tasks',
     isAuthorized: true,
-    middleware: [],
+    middleware: [
+      check('title')
+        .notEmpty()
+        .withMessage(R.titleRequiredForTask)
+        .bail()
+        .isLength({ min: 3, max: 200 })
+        .withMessage(R.titleLengthForTask),
+      check('description').notEmpty().withMessage(R.descriptionRequiredForTask),
+    ],
   })
   public async createTask(req: ValidatedAuthorizedRequest<TaskInput>, res: Response, next: NextFunction) {
     try {
