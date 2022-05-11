@@ -3,7 +3,7 @@ import Tenant, { TenantOutput } from '../DAL/models/Tenant';
 import User from '../DAL/models/User';
 import { AuthResponse } from '../types/api';
 import { mockUser } from './mocks';
-import { postRequest, postUser, validateTokenResponse } from './testHelpers';
+import { ApiEndpoints, postRequest, postUser, validateTokenResponse } from './testHelpers';
 import LocaleEn from '../locales/en/translation.json';
 
 describe('Tasks', () => {
@@ -15,6 +15,8 @@ describe('Tasks', () => {
     Task.drop();
     Task.sync();
   });
+
+  type LoginData = AuthResponse & { tenants: TenantOutput[] };
 
   async function getLoggedInUser(): Promise<AuthResponse & { tenants: TenantOutput[] }> {
     const emailPostFix = mockUser.email.split('@')[1];
@@ -30,13 +32,17 @@ describe('Tasks', () => {
     expect(tenants[0].name).toBe(emailPostFix);
     expect(tenants[0].id).toBe(users[0].tenantId);
 
-    resp = await postRequest('/api/1.0/auth/login', { username: mockUser.username, password: mockUser.password });
+    resp = await postRequest(ApiEndpoints.Login, { username: mockUser.username, password: mockUser.password });
     validateTokenResponse(users[0], resp);
 
     return {
       ...resp.body,
       tenants,
     };
+  }
+
+  function generateAuthorizationHeader(loginData: LoginData): Record<string, string> | undefined {
+    return { authorization: 'Bearer ' + loginData.token };
   }
 
   function validateTaskResponseSchema(task: TaskOutput) {
@@ -84,9 +90,11 @@ describe('Tasks', () => {
   describe('Create task', () => {
     test('Personal', async () => {
       const loginData = await getLoggedInUser();
-      const resp = await postRequest('/api/1.0/tasks', taskInputPersonal, {
-        authorization: 'Bearer ' + loginData.token,
-      });
+      const resp = await postRequest(
+        ApiEndpoints.CreateTask,
+        taskInputPersonal,
+        generateAuthorizationHeader(loginData)
+      );
       const task: TaskOutput = resp.body;
       validatePersonalTask(task, loginData, taskInputPersonal, 1);
     });
@@ -98,7 +106,7 @@ describe('Tasks', () => {
         description: 'Description for task',
         tenantId: loginData.user.tenants[0],
       };
-      const resp = await postRequest('/api/1.0/tasks', taskInput, { authorization: 'Bearer ' + loginData.token });
+      const resp = await postRequest(ApiEndpoints.CreateTask, taskInput, generateAuthorizationHeader(loginData));
       const task: TaskOutput = resp.body;
       validateTenantTask(task, taskInput, 1);
     });
@@ -111,23 +119,19 @@ describe('Tasks', () => {
         tenantId: loginData.user.tenants[0],
       };
 
-      let resp = await postRequest('/api/1.0/tasks', taskInputPersonal, {
-        authorization: 'Bearer ' + loginData.token,
-      });
+      let resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, generateAuthorizationHeader(loginData));
       let task: TaskOutput = resp.body;
       validatePersonalTask(task, loginData, taskInputPersonal, 1);
 
-      resp = await postRequest('/api/1.0/tasks', taskInputTenant, { authorization: 'Bearer ' + loginData.token });
+      resp = await postRequest(ApiEndpoints.CreateTask, taskInputTenant, generateAuthorizationHeader(loginData));
       task = resp.body;
       validateTenantTask(task, taskInputTenant, 1);
 
-      resp = await postRequest('/api/1.0/tasks', taskInputTenant, { authorization: 'Bearer ' + loginData.token });
+      resp = await postRequest(ApiEndpoints.CreateTask, taskInputTenant, generateAuthorizationHeader(loginData));
       task = resp.body;
       validateTenantTask(task, taskInputTenant, 2);
 
-      resp = await postRequest('/api/1.0/tasks', taskInputPersonal, {
-        authorization: 'Bearer ' + loginData.token,
-      });
+      resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, generateAuthorizationHeader(loginData));
       task = resp.body;
       validatePersonalTask(task, loginData, taskInputPersonal, 2);
     });
@@ -155,9 +159,9 @@ describe('Tasks', () => {
       }) => {
         const loginData = await getLoggedInUser();
         const resp = await postRequest(
-          '/api/1.0/tasks',
+          ApiEndpoints.CreateTask,
           { ...taskInputPersonal, [property]: value },
-          { authorization: 'Bearer ' + loginData.token }
+          generateAuthorizationHeader(loginData)
         );
         expect(resp.status).toBe(400);
         expect(resp.body.validationErrors[property]).toBe(exceptedMessage);

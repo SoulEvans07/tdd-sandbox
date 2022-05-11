@@ -2,7 +2,15 @@ import request from 'supertest';
 import { app } from '../app';
 import { UserInput } from '../DAL/models/User';
 
-export const postUser = async (body?: any) => await postRequest('/api/1.0/users', body);
+export enum ApiEndpoints {
+  CreateUser = '/api/1.0/users',
+  Login = '/api/1.0/auth/login',
+  GetToken = '/api/1.0/auth/token',
+  CreateTask = '/api/1.0/tasks',
+  GetTenantsForUser = '/api/1.0/tenants/user',
+}
+
+export const postUser = async (body?: any) => await postRequest(ApiEndpoints.CreateUser, body);
 
 export const postRequest = async (path: string, body?: any, headers?: Record<string, string>) => {
   const req = request(app).post(path);

@@ -1,7 +1,7 @@
 import Tenant from '../DAL/models/Tenant';
 import User from '../DAL/models/User';
 import { mockUser } from './mocks';
-import { getRequest, postRequest, postUser, validateTokenResponse } from './testHelpers';
+import { ApiEndpoints, getRequest, postRequest, postUser, validateTokenResponse } from './testHelpers';
 
 describe('Tenants', () => {
   beforeEach(() => {
@@ -58,10 +58,10 @@ describe('Tenants', () => {
     expect(tenants[0].name).toBe(emailPostFix);
     expect(tenants[0].id).toBe(users[0].tenantId);
 
-    resp = await postRequest('/api/1.0/auth/login', { username: mockUser.username, password: mockUser.password });
+    resp = await postRequest(ApiEndpoints.Login, { username: mockUser.username, password: mockUser.password });
     validateTokenResponse(users[0], resp);
 
-    resp = await getRequest('/api/1.0/tenants/user', { authorization: 'Bearer ' + resp.body.token });
+    resp = await getRequest(ApiEndpoints.GetTenantsForUser, { authorization: 'Bearer ' + resp.body.token });
     expect(resp.body).toHaveLength(1);
 
     const tenant = resp.body[0];
