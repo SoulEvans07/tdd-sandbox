@@ -56,6 +56,7 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>): React
       const response = await authController.refreshToken(token);
       login(response.user, response.token);
     } catch (e) {
+      logout();
       navigate(ROUTES.LOGIN, { state: { from: location } });
     }
   };
