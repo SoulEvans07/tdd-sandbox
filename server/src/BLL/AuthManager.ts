@@ -20,14 +20,7 @@ export default class AuthManager {
       throw new BadPasswordException();
     }
 
-    return {
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      },
-      token: SecurityHelper.generateJwtToken(user),
-    };
+    return AuthManager.generateLoginResponse(user);
   }
 
   public static async generateTokenForUser(username: string) {
@@ -41,11 +34,16 @@ export default class AuthManager {
       throw new UserNotFoundException(403);
     }
 
+    return AuthManager.generateLoginResponse(user);
+  }
+
+  private static generateLoginResponse(user: User) {
     return {
       user: {
         id: user.id,
         username: user.username,
         email: user.email,
+        tenants: [user.tenantId],
       },
       token: SecurityHelper.generateJwtToken(user),
     };

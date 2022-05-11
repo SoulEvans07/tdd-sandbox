@@ -45,6 +45,8 @@ describe('Authorization', () => {
       expect(response.body.user.username).toBe(user.username);
       expect(response.body.user).toHaveProperty('email');
       expect(response.body.user.email).toBe(user.email);
+      expect(response.body.user).toHaveProperty('tenants');
+      expect(response.body.user.tenants).toStrictEqual([1]);
       expect(response.body).toHaveProperty('token');
     };
 
