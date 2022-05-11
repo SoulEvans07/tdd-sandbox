@@ -3,9 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { authController } from '../controllers/AuthController';
 import { useLocation } from '../hooks/userLocation';
 import { ROUTES } from '../router/types';
-import { secureStorage } from '../services/storage/secureStorage';
-
-export const authStoreKey = 'io.todo.auth';
 
 export interface User {
   id: number;
@@ -28,44 +25,46 @@ export function useAuth() {
   return context;
 }
 
-type AuthState = Omit<AuthContext, 'login' | 'logout' | 'refreshToken'>;
+export type AuthState = Omit<AuthContext, 'login' | 'logout' | 'refreshToken'>;
 
-const initialState: AuthState = { currentUser: undefined, token: undefined };
+export const clearedState: AuthState = { currentUser: undefined, token: undefined };
 
-export function AuthProvider(props: PropsWithChildren<{}>): ReactElement {
+interface AuthProviderProps {
+  initial: AuthState;
+  onLogin?: (user: User, token: string) => void;
+  onLogout?: VoidFunction;
+}
+
+export function AuthProvider(props: PropsWithChildren<AuthProviderProps>): ReactElement {
+  const { initial, onLogin, onLogout } = props;
+  const [userData, setState] = useState<AuthState>(initial);
   const location = useLocation();
   const navigate = useNavigate();
-  const [{ currentUser, token }, setState] = useState<AuthState>(initialState);
 
   const login = (currentUser: User, token: string) => {
-    const userData = { currentUser, token };
-    setState(userData);
-    secureStorage.set(authStoreKey, userData);
+    setState({ currentUser, token });
+    if (onLogin) onLogin(currentUser, token);
   };
 
   const logout = () => {
-    secureStorage.remove(authStoreKey);
-    setState(initialState);
+    if (onLogout) onLogout();
+    setState(clearedState);
   };
 
   const refreshToken = async (token: string) => {
     try {
       const response = await authController.refreshToken(token);
-      const newUserData = { currentUser: response.user, token: response.token };
-      setState(newUserData);
-      secureStorage.set(authStoreKey, newUserData);
+      login(response.user, response.token);
     } catch (e) {
       navigate(ROUTES.LOGIN, { state: { from: location } });
     }
   };
 
   useEffect(() => {
-    const storedValue = secureStorage.get<AuthState>(authStoreKey);
-    if (storedValue?.currentUser && storedValue?.token) {
-      setState(storedValue);
-      refreshToken(storedValue.token);
+    if (initial?.currentUser && initial?.token) {
+      refreshToken(initial.token);
     }
-  }, []);
+  }, [initial]);
 
-  return <Auth.Provider value={{ currentUser, token, login, logout }} {...props} />;
+  return <Auth.Provider value={{ ...userData, login, logout }} {...props} />;
 }

@@ -5,7 +5,7 @@ import { mockExistingUser } from '../mocks/controllers/MockAuthController';
 import { ROUTES } from '../router/types';
 import App from '../App';
 
-describe('login', () => {
+describe('login behavior', () => {
   let titleHeading: HTMLHeadingElement;
   let nameInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;

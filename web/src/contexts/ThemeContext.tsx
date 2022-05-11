@@ -1,8 +1,6 @@
-import { createContext, PropsWithChildren, ReactElement, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, ReactElement, useContext, useMemo, useState } from 'react';
 import { ArrayHelpers } from '../helpers/ArrayHelpers';
-import { persistentStorage } from '../services/storage/persistentStorage';
 
-export const themeStoreKey = 'io.todo.theme';
 export const themes = ['dark', 'light'] as const;
 
 export type ThemeName = typeof themes[number];
@@ -23,21 +21,18 @@ export function useTheme() {
 }
 
 interface ThemeProviderProps {
-  default?: ThemeName;
+  initial: ThemeName;
+  onChange?: (theme: ThemeName) => void;
 }
 
 export function ThemeProvider(props: PropsWithChildren<ThemeProviderProps>): ReactElement {
-  const [currentTheme, setCurrentTheme] = useState<ThemeName>(props.default || 'dark');
-
-  useEffect(() => {
-    const storedValue = persistentStorage.get<ThemeName>(themeStoreKey);
-    setCurrentTheme(storedValue || props.default || 'dark');
-  }, []);
+  const { initial, onChange, ...restProps } = props;
+  const [currentTheme, setCurrentTheme] = useState<ThemeName>(initial);
 
   const value = useMemo((): ThemeContext => {
     const setTheme = (theme: ThemeName) => {
       setCurrentTheme(theme);
-      persistentStorage.set(themeStoreKey, theme);
+      if (onChange) onChange(theme);
     };
 
     const switchTheme = () => setTheme(ArrayHelpers.next(themes as unknown as ThemeName[], currentTheme));
@@ -45,5 +40,5 @@ export function ThemeProvider(props: PropsWithChildren<ThemeProviderProps>): Rea
     return { currentTheme, switchTheme, setTheme };
   }, [currentTheme]);
 
-  return <Theme.Provider value={value} {...props} />;
+  return <Theme.Provider value={value} {...restProps} />;
 }

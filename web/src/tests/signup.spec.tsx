@@ -6,7 +6,7 @@ import { mockNewUser } from '../mocks/controllers/MockUserController';
 import { ROUTES } from '../router/types';
 import App from '../App';
 
-describe('signup', () => {
+describe('signup behavior', () => {
   let nameInput: HTMLInputElement;
   let emailInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
