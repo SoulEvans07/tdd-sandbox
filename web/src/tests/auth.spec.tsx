@@ -32,7 +32,7 @@ describe('login behavior', () => {
   });
 
   describe('submit', () => {
-    test('submit works', async () => {
+    test('login and logout works', async () => {
       userEvent.clear(nameInput);
       userEvent.type(nameInput, mockExistingUser.username);
       expect(nameInput).toHaveValue(mockExistingUser.username);
@@ -43,11 +43,16 @@ describe('login behavior', () => {
 
       expect(submitButton).toBeEnabled();
       userEvent.click(submitButton);
-
       await waitForElementToBeRemoved(() => screen.queryByRole('heading', { name: /login/i }));
-
       const taskPageHeading = await screen.findByRole('heading', { name: /todo/i });
       expect(taskPageHeading).toBeInTheDocument();
+
+      const profileImg = screen.getByTitle(mockExistingUser.username) as HTMLInputElement;
+      expect(profileImg).toBeInTheDocument();
+
+      userEvent.click(profileImg);
+      const loginPageHeading = await screen.findByRole('heading', { name: /login/i });
+      expect(loginPageHeading).toBeInTheDocument();
     });
   });
 });
