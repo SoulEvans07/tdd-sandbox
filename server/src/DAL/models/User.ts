@@ -6,12 +6,13 @@ interface UserAttributes {
   username: string;
   email: string;
   password: string;
+  tenantId: number;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
 }
 
-export interface UserInput extends Optional<UserAttributes, 'id'> {}
+export interface UserInput extends Optional<UserAttributes, 'id' | 'tenantId'> {}
 export interface UserOutput extends Required<UserAttributes> {}
 
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
@@ -19,6 +20,7 @@ class User extends Model<UserAttributes, UserInput> implements UserAttributes {
   public username!: string;
   public email!: string;
   public password!: string;
+  public tenantId!: number;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -45,6 +47,10 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    tenantId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
     },
   },
   {

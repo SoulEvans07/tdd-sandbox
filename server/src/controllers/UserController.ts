@@ -14,13 +14,9 @@ export default class UserController extends ControllerBase {
     path: 'users',
     middleware: [UserController.validateUsername, UserController.validateEmail, UserController.validatePassword],
   })
-  async register(req: ValidatedRequest<UserInput>, res: Response, _: NextFunction) {
-    const isEmpty = JSON.stringify(req.body) === '{}';
-    if (isEmpty) return res.status(400).send();
-
+  public async register(req: ValidatedRequest<UserInput>, res: Response, _: NextFunction) {
     await UserManager.save(req.body);
-
-    return res.status(200).send();
+    return res.status(200).send({ message: req.t(R.userCreated) });
   }
 
   private static validateUsername(req: ValidatedRequest<UserInput>, res: Response, next: () => void) {

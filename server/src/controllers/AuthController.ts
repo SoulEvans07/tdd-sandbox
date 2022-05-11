@@ -18,7 +18,7 @@ export default class AuthController extends ControllerBase {
       check('password').notEmpty().withMessage(R.passwordRequired),
     ],
   })
-  async login(req: ValidatedRequest<UserInput>, res: Response, next: NextFunction) {
+  public async login(req: ValidatedRequest<UserInput>, res: Response, next: NextFunction) {
     try {
       const loginResponse = await AuthManager.login(req.body.username, req.body.password);
       return res.send(loginResponse);
@@ -33,7 +33,7 @@ export default class AuthController extends ControllerBase {
     isAuthorized: true,
     path: `${AuthController.baseUrl}/token`,
   })
-  async token(req: AuthorizedRequest, res: Response, next: NextFunction) {
+  public async token(req: AuthorizedRequest, res: Response, next: NextFunction) {
     try {
       if (!req.user) {
         throw new Error('Unexpected error occurred');

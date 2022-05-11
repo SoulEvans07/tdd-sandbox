@@ -1,17 +1,13 @@
-import request from 'supertest';
-import { app } from '../app';
 import User from '../DAL/models/User';
 import LocaleEn from '../locales/en/translation.json';
+import { mockUser } from './mocks';
+import { postUser } from './testHelpers';
 
 describe('User registration', () => {
   beforeEach(() => {
     User.drop();
     User.sync();
   });
-
-  const mockUser = { username: 'adam.szi', email: 'adam.szi@snapsoft.hu', password: 'Password123!' };
-
-  const postUser = async (body?: any) => await request(app).post('/api/1.0/users').send(body);
 
   const dynamicErrorValidator = async (fieldName: string, value: undefined | string, errorMessage: string) => {
     const resp = await postUser({ [fieldName]: value });
@@ -105,6 +101,8 @@ describe('User registration', () => {
     it('saves user to database', async () => {
       const resp = await postUser(mockUser);
       expect(resp.status).toBe(200);
+      expect(resp.body).toHaveProperty('message');
+      expect(resp.body.message).toBe(LocaleEn.userCreated);
 
       const users = await User.findAll();
       expect(users).toHaveLength(1);
