@@ -1,4 +1,3 @@
-import { request } from '../services/request/request';
 import { ControllerBase } from './types';
 
 class UserController extends ControllerBase {
@@ -6,7 +5,7 @@ class UserController extends ControllerBase {
   protected name = 'users';
 
   register(data: SignupDTO) {
-    return request.post<{}>(this.baseUrl, data);
+    return this.post<{}>(this.baseUrl, data);
   }
 }
 

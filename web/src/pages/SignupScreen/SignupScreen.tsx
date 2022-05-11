@@ -49,10 +49,7 @@ export function SignupScreen(): ReactElement {
     userController
       .register({ username, email, password })
       .then(() => navigate(ROUTES.LOGIN))
-      .catch(e => {
-        console.log('[err]', e);
-        setError(true);
-      });
+      .catch(e => setError(true));
   };
 
   if (currentUser) return <Navigate to={ROUTES.TASKS} />;

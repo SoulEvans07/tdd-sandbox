@@ -1,4 +1,3 @@
-import { request } from '../services/request/request';
 import { ControllerBase } from './types';
 
 class AuthController extends ControllerBase {
@@ -6,11 +5,11 @@ class AuthController extends ControllerBase {
   protected name = 'auth';
 
   login(user: LoginDTO) {
-    return request.post<LoginResponseDTO>(this.baseUrl + '/login', user);
+    return this.post<LoginResponseDTO>(this.baseUrl + '/login', user);
   }
 
   refreshToken(token: string) {
-    return request.post<RefreshTokenResponseDTO>(this.baseUrl + '/token', {}, { authorization: `Bearer ${token}` });
+    return this.post<RefreshTokenResponseDTO>(this.baseUrl + '/token', {}, { authorization: `Bearer ${token}` });
   }
 }
 
