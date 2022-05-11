@@ -3,4 +3,25 @@
     width: calc(min(540px, 90vw));
     margin: 0 auto;
   }
+
+  .create-task {
+    margin-bottom: 1.5rem;
+    background-color: var(--color-dark-500);
+    border-radius: var(--border-radius);
+    box-shadow: var(--drop-shadow);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+
+    .checkbox {
+      margin-right: 1rem;
+    }
+
+    .text-input {
+      width: 100%;
+      background-color: transparent;
+      box-shadow: none;
+      margin: 0;
+    }
+  }
 }

@@ -20,11 +20,9 @@ export default function App(): ReactElement {
 
   useEffect(() => {
     const storedTheme = persistentStorage.get<ThemeName>(themeStoreKey);
-    console.log('[load.theme]', storedTheme);
     setTheme(storedTheme || 'dark');
 
     const storedUser = secureStorage.get<AuthState>(authStoreKey);
-    console.log('[load.user]', storedUser);
     setUserData(storedUser || clearedState);
     if (storedUser?.currentUser && storedUser?.token) setUserData(storedUser);
   }, []);

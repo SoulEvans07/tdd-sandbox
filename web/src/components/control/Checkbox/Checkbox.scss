@@ -1,0 +1,39 @@
+.checkbox {
+  --size: 1.5rem;
+  width: var(--size);
+  height: var(--size);
+  position: relative;
+  border-radius: 100%;
+  background: var(--color-dark-400);
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: 100%;
+    background-color: var(--color-dark-500);
+  }
+
+  &:hover {
+    background: var(--highlight);
+  }
+
+  &[aria-checked="true"] {
+    background: var(--highlight);
+
+    &::after {
+      background: var(--highlight);
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  .icon {
+    z-index: 1;
+  }
+}
