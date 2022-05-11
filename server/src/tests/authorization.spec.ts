@@ -3,7 +3,7 @@ import { app } from '../app';
 import User from '../DAL/models/User';
 import LocaleEn from '../locales/en/translation.json';
 import { mockUser } from './mocks';
-import { postRequest, postUser } from './testHelpers';
+import { postRequest, postUser, validateTokenResponse } from './testHelpers';
 
 describe('Authorization', () => {
   beforeEach(() => {
@@ -36,20 +36,6 @@ describe('Authorization', () => {
   });
 
   test('Login successful', async () => {
-    const validateTokenResponse = (response: request.Response) => {
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('user');
-      expect(response.body.user).toHaveProperty('id');
-      expect(response.body.user.id).toBe(1);
-      expect(response.body.user).toHaveProperty('username');
-      expect(response.body.user.username).toBe(user.username);
-      expect(response.body.user).toHaveProperty('email');
-      expect(response.body.user.email).toBe(user.email);
-      expect(response.body.user).toHaveProperty('tenants');
-      expect(response.body.user.tenants).toStrictEqual([1]);
-      expect(response.body).toHaveProperty('token');
-    };
-
     let resp = await postUser(mockUser);
     expect(resp.status).toBe(200);
 
@@ -58,10 +44,10 @@ describe('Authorization', () => {
     const user = users[0];
 
     resp = await postRequest('/api/1.0/auth/login', { username: mockUser.username, password: mockUser.password });
-    validateTokenResponse(resp);
+    validateTokenResponse(user, resp);
 
     resp = await postRequest('/api/1.0/auth/token', undefined, { authorization: 'Bearer ' + resp.body.token });
-    validateTokenResponse(resp);
+    validateTokenResponse(user, resp);
   });
 
   // TODO token expire test

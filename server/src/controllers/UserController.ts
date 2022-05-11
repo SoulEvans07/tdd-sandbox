@@ -1,10 +1,9 @@
 import { NextFunction, Response } from 'express';
-import { check, validationResult } from 'express-validator';
+import { check } from 'express-validator';
 import { UserManager } from '../BLL/UserManager';
 import { UserInput } from '../DAL/models/User';
 import { epMeta } from '../decorators/api.decorators';
 import { ControllerBase, ValidatedRequest } from '../types/api';
-import { ValidationException } from '../types/exceptions/ValidationException';
 import { R } from '../types/localization';
 
 export default class UserController extends ControllerBase {
