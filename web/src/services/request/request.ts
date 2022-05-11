@@ -1,22 +1,34 @@
 import { IRequest, RequestBody, RequestHeaders, ResponseBody } from './types';
 
-async function parseBody(res: Response) {
-  return res.text().then(text => Promise.resolve(JSON.parse(text || '{}')));
+async function parseBody(response: Response) {
+  return response.text().then(text => JSON.parse(text || '{}'));
+}
+
+async function handleResponse<R extends ResponseBody>(response: Response): Promise<R> {
+  return new Promise<R>((resolve, reject) => {
+    if (response.status !== 200) parseBody(response).then(error => reject(error));
+    else parseBody(response).then(data => resolve(data));
+  });
 }
 
 async function get<R extends ResponseBody>(url: string, headers?: RequestHeaders): Promise<R> {
-  return fetch(url, { method: 'get', headers }).then(res => res.json());
+  return fetch(url, { method: 'get', headers }).then(response => handleResponse(response));
 }
 
 async function post<R extends ResponseBody>(url: string, body?: RequestBody, headers?: RequestHeaders): Promise<R> {
-  return fetch(url, {
-    method: 'post',
-    headers: {
-      'content-type': 'application/json',
-      ...headers,
-    },
-    body: JSON.stringify(body),
-  }).then(res => parseBody(res));
+  return new Promise<R>((resolve, reject) =>
+    fetch(url, {
+      method: 'post',
+      headers: {
+        'content-type': 'application/json',
+        ...headers,
+      },
+      body: JSON.stringify(body),
+    }).then(
+      response => resolve(handleResponse(response)),
+      err => reject(err) // fetch error, i.e: no internet
+    )
+  );
 }
 
 export const request: IRequest = { get, post } as const;

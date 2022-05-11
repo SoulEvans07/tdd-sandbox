@@ -47,7 +47,10 @@ export function LoginScreen(): ReactElement {
     authController
       .login({ username, password })
       .then(data => handleSuccess(data.user, data.token))
-      .catch(e => setError(true));
+      .catch(e => {
+        console.log('[err]', e);
+        setError(true);
+      });
   };
 
   if (currentUser) return <Navigate to={ROUTES.TASKS} />;
