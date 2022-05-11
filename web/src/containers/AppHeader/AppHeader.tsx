@@ -15,12 +15,8 @@ export function AppHeader(props: AppHeaderProps): ReactElement {
   return (
     <header className="app-header">
       <h1>{title}</h1>
-      {!!currentUser && (
-        <>
-          <ThemeSwitch />
-          <ProfileImg username={currentUser.username} />
-        </>
-      )}
+      <ThemeSwitch />
+      {!!currentUser && <ProfileImg username={currentUser.username} />}
     </header>
   );
 }

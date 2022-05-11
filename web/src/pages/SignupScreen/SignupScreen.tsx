@@ -1,5 +1,8 @@
 import { ChangeEvent, FormEvent, ReactElement, useMemo, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './SignupScreen.scss';
+import { userController } from '../../controllers/UserController';
+import { useAuth } from '../../contexts/AuthContext';
 import { minMaxValidator } from '../../validators/string-validators';
 import { Page } from '../../components/layout/Page/Page';
 import { TextInput } from '../../components/control/TextInput/TextInput';
@@ -8,8 +11,6 @@ import { AppHeader } from '../../containers/AppHeader/AppHeader';
 import { Button } from '../../components/control/Button/Button';
 import { TextLink } from '../../components/control/TextLink/TextLink';
 import { Footer } from '../../components/layout/Footer/Footer';
-import { userController } from '../../controllers/UserController';
-import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../router/types';
 
 interface SignupForm {
@@ -28,6 +29,7 @@ const emptyRegForm: SignupForm = {
 
 export function SignupScreen(): ReactElement {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [error, setError] = useState<boolean>();
 
   const [{ username, email, password, confirmPassword }, setForm] = useState<SignupForm>(emptyRegForm);
@@ -52,6 +54,8 @@ export function SignupScreen(): ReactElement {
         setError(true);
       });
   };
+
+  if (currentUser) return <Navigate to={ROUTES.TASKS} />;
 
   return (
     <Page className="signup-screen">

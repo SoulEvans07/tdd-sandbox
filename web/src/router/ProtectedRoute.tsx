@@ -12,7 +12,7 @@ function ProtectedPage(props: PropsWithChildren<ProtectedRouteProps>): ReactElem
   const { currentUser } = useAuth();
   const location = useLocation();
 
-  if (currentUser === null) {
+  if (!currentUser) {
     // https://stackblitz.com/github/remix-run/react-router/tree/main/examples/auth
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them

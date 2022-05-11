@@ -32,8 +32,6 @@ export interface LoginResponseDTO {
 
 export interface LoginErrorDTO {}
 
-export interface RefreshTokenResponseDTO {
-  token: string;
-}
+export interface RefreshTokenResponseDTO extends LoginResponseDTO {}
 
 export interface RefreshTokenErrorDTO {}

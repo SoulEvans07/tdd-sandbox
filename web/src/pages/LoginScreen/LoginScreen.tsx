@@ -1,5 +1,5 @@
 import { FormEvent, ChangeEvent, ReactElement, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './LoginScreen.scss';
 import { useLocation } from '../../hooks/userLocation';
 import { useAuth, User } from '../../contexts/AuthContext';
@@ -25,7 +25,7 @@ const emptyLoginForm: LoginForm = {
 export function LoginScreen(): ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { currentUser, login } = useAuth();
 
   const handleSuccess = (user: User, token: string) => {
     login(user, token);
@@ -49,6 +49,8 @@ export function LoginScreen(): ReactElement {
       .then(data => handleSuccess(data.user, data.token))
       .catch(e => setError(true));
   };
+
+  if (currentUser) return <Navigate to={ROUTES.TASKS} />;
 
   return (
     <Page className="login-screen">

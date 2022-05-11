@@ -17,20 +17,23 @@ export const mockAuthController: MockController<typeof authController> = {
   }),
 };
 
-export const mockExistingUser: LoginDTO = {
+const user = {
+  id: 0,
   username: 'adam.szi',
+  email: 'adam.szi@snapsoft.hu',
+};
+
+export const mockExistingUser: LoginDTO = {
+  username: user.username,
   password: '123456',
 };
 
 export const mockLoginResponse: LoginResponseDTO = {
-  user: {
-    id: 0,
-    username: 'adam.szi',
-    email: 'adam.szi@snapsoft.hu',
-  },
+  user,
   token: 'randomJwtToken',
 };
 
 export const mockRefreshTokenResponse: RefreshTokenResponseDTO = {
+  user,
   token: 'newRandomJwtToken',
 };
