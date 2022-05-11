@@ -9,14 +9,14 @@ interface AppHeaderProps {
 }
 
 export function AppHeader(props: AppHeaderProps): ReactElement {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   const { title } = props;
 
   return (
     <header className="app-header">
       <h1>{title}</h1>
       <ThemeSwitch />
-      {!!currentUser && <ProfileImg username={currentUser.username} />}
+      {!!currentUser && <ProfileImg className="profile" username={currentUser.username} onClick={() => logout()} />}
     </header>
   );
 }
