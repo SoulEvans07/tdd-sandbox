@@ -1,6 +1,7 @@
 import Task, { TaskInput, TaskOutput, TaskStatus } from '../DAL/models/Task';
 import { UserOutput } from '../DAL/models/User';
 import { ForbiddenException } from '../types/exceptions/ForbiddenException';
+import { TaskNotFoundException } from '../types/exceptions/TaskNotFoundException';
 
 export class TaskManager {
   public static async createTask(task: TaskInput, user: UserOutput): Promise<TaskOutput> {
@@ -9,11 +10,12 @@ export class TaskManager {
     const taskForSave: TaskInput = {
       title: task.title,
       description: task.description,
-      tenantId: task.tenantId,
+      tenantId: task.tenantId ? task.tenantId : null,
       status: TaskStatus.Todo,
-      assigneeId: isPersonal ? user.id : undefined,
-      parentId: undefined,
+      assigneeId: isPersonal ? user.id : null,
+      parentId: null,
       order,
+      deletedAt: null,
     };
 
     return await Task.create(taskForSave);
@@ -45,5 +47,26 @@ export class TaskManager {
     });
 
     await Task.destroy({ where: { id: taskIds } });
+  }
+
+  public static async updateTask(taskId: number, task: TaskInput, user: UserOutput) {
+    const oldTask = await Task.findOne({ where: { id: taskId } });
+
+    if (!oldTask) {
+      throw new TaskNotFoundException();
+    }
+
+    if (oldTask?.assigneeId) {
+    }
+
+    const update = await Task.update(
+      {
+        title: task.title,
+        description: task.description,
+      },
+      { where: { id: taskId } }
+    );
+
+    return await Task.findOne({ where: { id: taskId } });
   }
 }

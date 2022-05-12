@@ -14,12 +14,12 @@ interface TaskAttributes {
   description: string;
   order: number;
   status: TaskStatus;
-  tenantId?: number;
-  parentId?: number;
-  assigneeId?: number;
+  tenantId?: number | null;
+  parentId?: number | null;
+  assigneeId?: number | null;
   createdAt?: Date;
   updatedAt?: Date;
-  deletedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 export interface TaskInput
@@ -35,13 +35,13 @@ class Task extends Model<TaskAttributes, TaskInput> implements TaskAttributes {
   public description!: string;
   public order!: number;
   public status!: TaskStatus;
-  public tenantId!: number;
-  public parentId!: number;
-  public assigneeId!: number;
+  public tenantId!: number | null;
+  public parentId!: number | null;
+  public assigneeId!: number | null;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  public readonly deletedAt!: Date;
+  public readonly deletedAt!: Date | null;
 }
 
 Task.init(
@@ -70,14 +70,17 @@ Task.init(
     tenantId: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue: null,
     },
     parentId: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue: null,
     },
     assigneeId: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue: null,
     },
   },
   {

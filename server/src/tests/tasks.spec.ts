@@ -3,7 +3,7 @@ import Tenant, { TenantOutput } from '../DAL/models/Tenant';
 import User, { UserInput } from '../DAL/models/User';
 import { AuthResponse } from '../types/api';
 import { mockUser } from './mocks';
-import { ApiEndpoints, deleteRequest, getRequest, postRequest, postUser } from './testHelpers';
+import { ApiEndpoints, deleteRequest, getRequest, patchRequest, postRequest, postUser } from './testHelpers';
 import LocaleEn from '../locales/en/translation.json';
 import { TaskManager } from '../BLL/TaskManager';
 
@@ -79,6 +79,20 @@ describe('Tasks', () => {
     expect(task.status).toBe(TaskStatus.Todo);
     expect(task.title).toBe(taskInputPersonal.title);
     expect(task.description).toBe(taskInputPersonal.description);
+  }
+
+  function compareTasks(task: TaskOutput, compareWith: TaskOutput) {
+    validateTaskResponseSchema(task);
+    expect(task.id).toBe(compareWith.id);
+    expect(task.title).toBe(compareWith.title);
+    expect(task.description).toBe(compareWith.description);
+    expect(task.order).toBe(compareWith.order);
+    expect(task.status).toBe(compareWith.status);
+    expect(task.assigneeId).toBe(compareWith.assigneeId);
+    expect(task.parentId).toBe(compareWith.parentId);
+    expect(task.tenantId).toBe(compareWith.tenantId);
+    expect(task.createdAt).toBe(compareWith.createdAt);
+    expect(task.deletedAt).toBe(compareWith.deletedAt);
   }
 
   const taskInputPersonal = {
@@ -298,6 +312,68 @@ describe('Tasks', () => {
 
       await checkTaskList(10, user2Auth);
       await checkTaskList(10, user2Auth, loginData2.user.tenants[0]);
+    });
+  });
+
+  describe('Task edit', () => {
+    test('Id is missing from request', async () => {
+      const loginData = await getLoggedInUser();
+
+      const resp = await patchRequest(
+        ApiEndpoints.EditTask.replace(':id', 'asd1'),
+        {},
+        generateAuthorizationHeader(loginData)
+      );
+      expect(resp.status).toBe(400);
+      expect(resp.body.message).toBe(LocaleEn.idRequiredAndMustBeNumber);
+    });
+
+    test('Task ids are miss match', async () => {
+      const loginData = await getLoggedInUser();
+
+      const resp = await patchRequest(
+        ApiEndpoints.EditTask.replace(':id', '1'),
+        {},
+        generateAuthorizationHeader(loginData)
+      );
+
+      expect(resp.status).toBe(400);
+      expect(resp.body.message).toBe(LocaleEn.badRequest);
+    });
+
+    test('Task not found', async () => {
+      const loginData = await getLoggedInUser();
+
+      const resp = await patchRequest(
+        ApiEndpoints.EditTask.replace(':id', '1'),
+        { id: 1 },
+        generateAuthorizationHeader(loginData)
+      );
+      expect(resp.status).toBe(404);
+      expect(resp.body.message).toBe(LocaleEn.taskNotFound);
+    });
+
+    test('Title and desc', async () => {
+      const loginData = await getLoggedInUser();
+      let resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, generateAuthorizationHeader(loginData));
+      let task: TaskOutput = resp.body;
+      validatePersonalTask(task, loginData, taskInputPersonal, 1);
+
+      const newTaskData = {
+        ...task,
+        title: 'New title',
+        description: 'New description',
+      };
+
+      resp = await patchRequest(
+        ApiEndpoints.EditTask.replace(':id', task.id.toString()),
+        newTaskData,
+        generateAuthorizationHeader(loginData)
+      );
+      expect(resp.status).toBe(200);
+      task = resp.body;
+      compareTasks(task, newTaskData);
+      expect(new Date(task.updatedAt).getTime()).toBeGreaterThan(new Date(newTaskData.updatedAt).getTime());
     });
   });
 

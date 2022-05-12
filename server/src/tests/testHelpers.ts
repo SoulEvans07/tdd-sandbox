@@ -10,7 +10,7 @@ export enum ApiEndpoints {
   TaskList = '/api/1.0/tasks/:tenantId',
   GetTenantsForUser = '/api/1.0/tenants/user',
   DeleteTasks = '/api/1.0/tasks',
-  EditTask = '/api/1.0/task',
+  EditTask = '/api/1.0/task/:id',
 }
 
 export const postUser = async (body?: any) => await postRequest(ApiEndpoints.CreateUser, body);
@@ -46,7 +46,7 @@ export const deleteRequest = async (path: string, body?: any, headers?: Record<s
 };
 
 export const patchRequest = async (path: string, body?: any, headers?: Record<string, string>) => {
-  const req = request(app).delete(path);
+  const req = request(app).patch(path);
   if (headers) {
     Object.entries(headers).forEach(entry => {
       req.set(entry[0], entry[1]);

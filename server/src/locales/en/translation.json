@@ -19,5 +19,8 @@
   "titleLengthForTask": "Must have min 3 and max 200 character",
   "descriptionRequiredForTask": "Description required",
   "forbidden": "Forbidden",
-  "deleteSuccessful":"Delete successful"
+  "deleteSuccessful": "Delete successful",
+  "idRequiredAndMustBeNumber": "Id is required and must be number",
+  "badRequest": "Bad request",
+  "taskNotFound": "Task not found"
 }

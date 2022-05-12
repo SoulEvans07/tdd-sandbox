@@ -55,7 +55,7 @@ export const noopMiddleware = (_: unknown, __: unknown, next: () => void) => nex
 
 export type ApiMiddleware<T> = (req: Request<{}, {}, T, {}>, res: Response, next: () => void) => void;
 
-export type EpMethod = 'post' | 'get' | 'put' | 'delete';
+export type EpMethod = 'post' | 'get' | 'put' | 'delete' | 'patch';
 
 export class ControllerBase {}
 
