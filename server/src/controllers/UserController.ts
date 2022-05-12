@@ -10,7 +10,7 @@ export default class UserController extends ControllerBase {
   @epMeta({
     method: 'post',
     version: '1.0',
-    path: 'users',
+    path: 'user',
     middleware: [UserController.validateUsername, UserController.validateEmail, UserController.validatePassword],
   })
   public async register(req: ValidatedRequest<UserInput>, res: Response, _: NextFunction) {

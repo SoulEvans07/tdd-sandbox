@@ -3,13 +3,14 @@ import { app } from '../app';
 import { UserInput } from '../DAL/models/User';
 
 export enum ApiEndpoints {
-  CreateUser = '/api/1.0/users',
+  CreateUser = '/api/1.0/user',
   Login = '/api/1.0/auth/login',
   GetToken = '/api/1.0/auth/token',
-  CreateTask = '/api/1.0/tasks',
+  CreateTask = '/api/1.0/task',
   TaskList = '/api/1.0/tasks/:tenantId',
   GetTenantsForUser = '/api/1.0/tenants/user',
   DeleteTasks = '/api/1.0/tasks',
+  EditTask = '/api/1.0/task',
 }
 
 export const postUser = async (body?: any) => await postRequest(ApiEndpoints.CreateUser, body);
@@ -35,6 +36,16 @@ export const getRequest = async (path: string, headers?: Record<string, string>)
 };
 
 export const deleteRequest = async (path: string, body?: any, headers?: Record<string, string>) => {
+  const req = request(app).delete(path);
+  if (headers) {
+    Object.entries(headers).forEach(entry => {
+      req.set(entry[0], entry[1]);
+    });
+  }
+  return req.send(body);
+};
+
+export const patchRequest = async (path: string, body?: any, headers?: Record<string, string>) => {
   const req = request(app).delete(path);
   if (headers) {
     Object.entries(headers).forEach(entry => {

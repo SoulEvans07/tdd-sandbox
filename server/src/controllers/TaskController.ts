@@ -15,7 +15,7 @@ export default class TaskController extends ControllerBase {
   @epMeta({
     method: 'post',
     version: '1.0',
-    path: 'tasks',
+    path: 'task',
     isAuthorized: true,
     middleware: [
       check('title')
