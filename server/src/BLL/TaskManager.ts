@@ -61,8 +61,9 @@ export class TaskManager {
 
     const update = await Task.update(
       {
-        title: task.title,
-        description: task.description,
+        // title: task.title,
+        // description: task.description,
+        ...task, // hack everything
       },
       { where: { id: taskId } }
     );

@@ -353,38 +353,58 @@ describe('Tasks', () => {
       expect(resp.body.message).toBe(LocaleEn.taskNotFound);
     });
 
-    test('Title and desc', async () => {
-      const loginData = await getLoggedInUser();
-      let resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, generateAuthorizationHeader(loginData));
-      let task: TaskOutput = resp.body;
-      validatePersonalTask(task, loginData, taskInputPersonal, 1);
+    //${'Title and desc'} | ${taskInputPersonal}| ${{ assigneeId: null, tenantId: 1 }}                      | ${200} | ${''}
+    test.each`
+      testName            | taskFrom             | payload                                                   | status | exceptedMessage
+      ${'Title and desc'} | ${taskInputPersonal} | ${{ title: 'New title', description: 'New description' }} | ${200} | ${''}
+    `(
+      '$testName',
+      async ({
+        payload,
+        status,
+        taskFrom,
+        exceptedMessage,
+      }: {
+        testName: string;
+        payload: any;
+        status: number;
+        taskFrom: TaskInput;
+        exceptedMessage: string;
+      }) => {
+        const loginData = await getLoggedInUser();
+        let resp = await postRequest(ApiEndpoints.CreateTask, taskFrom, generateAuthorizationHeader(loginData));
+        let task: TaskOutput = resp.body;
+        validatePersonalTask(task, loginData, taskFrom, 1);
 
-      const newTaskData = {
-        ...task,
-        title: 'New title',
-        description: 'New description',
-      };
+        const newTaskData = {
+          ...task,
+          ...payload,
+        };
 
-      resp = await patchRequest(
-        ApiEndpoints.EditTask.replace(':id', task.id.toString()),
-        newTaskData,
-        generateAuthorizationHeader(loginData)
-      );
-      expect(resp.status).toBe(200);
-      task = resp.body;
-      compareTasks(task, newTaskData);
-      expect(new Date(task.updatedAt).getTime()).toBeGreaterThan(new Date(newTaskData.updatedAt).getTime());
-    });
+        resp = await patchRequest(
+          ApiEndpoints.EditTask.replace(':id', task.id.toString()),
+          newTaskData,
+          generateAuthorizationHeader(loginData)
+        );
+        expect(resp.status).toBe(status);
+        if (exceptedMessage) {
+          expect(resp.body.message).toBe(exceptedMessage);
+        } else {
+          task = resp.body;
+          compareTasks(task, newTaskData);
+          expect(new Date(task.updatedAt).getTime()).toBeGreaterThan(new Date(newTaskData.updatedAt).getTime());
+        }
+      }
+    );
   });
 
   describe('Validation', () => {
     test.each`
-      testName          | property         | value              | exceptedMessage
-      ${'required'}     | ${'title'}       | ${undefined}       | ${LocaleEn.titleRequiredForTask}
-      ${'length short'} | ${'title'}       | ${'s'}             | ${LocaleEn.titleLengthForTask}
-      ${'length short'} | ${'title'}       | ${'ss'}            | ${LocaleEn.titleLengthForTask}
-      ${'length long'}  | ${'title'}       | ${'s'.repeat(201)} | ${LocaleEn.titleLengthForTask}
-      ${'required'}     | ${'description'} | ${undefined}       | ${LocaleEn.descriptionRequiredForTask}
+      testName          | property   | value              | exceptedMessage
+      ${'required'}     | ${'title'} | ${undefined}       | ${LocaleEn.titleRequiredForTask}
+      ${'length short'} | ${'title'} | ${'s'}             | ${LocaleEn.titleLengthForTask}
+      ${'length short'} | ${'title'} | ${'ss'}            | ${LocaleEn.titleLengthForTask}
+      ${'length long'}  | ${'title'} | ${'s'.repeat(201)} | ${LocaleEn.titleLengthForTask}
     `(
       '$property $testName',
       async ({
