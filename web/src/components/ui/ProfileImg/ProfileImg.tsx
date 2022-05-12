@@ -11,7 +11,7 @@ interface ProfileImgProps {
 }
 
 export function ProfileImg(props: ProfileImgProps): ReactElement {
-  const { username, className, onClick } = props;
+  const { img, username, className, onClick } = props;
 
   const hue = useMemo(() => textToHue(username), [username]);
   const colors = {
@@ -19,9 +19,21 @@ export function ProfileImg(props: ProfileImgProps): ReactElement {
     '--color-light': `hsl(${hue}, 80%, 95%)`,
   } as CSSProperties;
 
+  if (!img) {
+    return (
+      <span className={classNames('profile-img', className)} title={username} style={colors} onClick={onClick}>
+        {username[0]}
+      </span>
+    );
+  }
+
   return (
-    <span className={classNames('profile-img', className)} title={username} style={colors} onClick={onClick}>
-      {username[0]}
-    </span>
+    <img
+      src={img}
+      className={classNames('profile-img', className)}
+      alt={`${username}'s profile`}
+      title={username}
+      onClick={onClick}
+    />
   );
 }

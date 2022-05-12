@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
-import { ProfileImg } from '../ProfileImg/ProfileImg';
 import './NameTag.scss';
+import { ProfileImg } from '../ProfileImg/ProfileImg';
 
 interface NameTagProps {
   name: string;
-  img: string;
+  img?: string;
 }
 
 export function NameTag(props: NameTagProps): ReactElement {
