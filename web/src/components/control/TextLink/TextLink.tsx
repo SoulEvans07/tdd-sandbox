@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import './TextLink.scss';
 
-interface TextLinkProps extends HTMLProps<HTMLAnchorElement> {
+interface TextLinkProps extends Omit<HTMLProps<HTMLAnchorElement>, 'role'> {
   color?: 'primary' | 'rainbow';
 }
 
@@ -17,7 +17,7 @@ export function TextLink(props: TextLinkProps): ReactElement {
   };
 
   return (
-    <a {...restProps} className={classNames('text-link', className, color)} onClick={handleClick}>
+    <a {...restProps} className={classNames('text-link', className, color)} onClick={handleClick} role="link">
       {children}
     </a>
   );
