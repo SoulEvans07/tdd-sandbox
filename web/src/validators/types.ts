@@ -1,3 +1,1 @@
-import { ChangeEvent } from 'react';
-
-export type InputValidator = (e: ChangeEvent<HTMLInputElement>) => string | null;
+export type InputValidator = (value: string) => string | null;

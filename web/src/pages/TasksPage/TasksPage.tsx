@@ -52,6 +52,7 @@ export function TasksPage(): ReactElement {
         <section className="create-task">
           <Checkbox checked={checkAll} onChange={handleCheckAll} />
           <TextInput
+            type="text"
             id="new-task"
             title="New Task"
             placeholder="New Task"

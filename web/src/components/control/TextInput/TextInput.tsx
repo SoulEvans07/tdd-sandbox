@@ -1,10 +1,7 @@
-import { HTMLProps, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import classNames from 'classnames';
 import './TextInput.scss';
-
-export interface TextInputProps extends Omit<HTMLProps<HTMLInputElement>, 'role'> {
-  type?: 'text' | 'password';
-}
+import { TextInputProps } from './types';
 
 export function TextInput(props: TextInputProps): ReactElement {
   const { type = 'text', id, title, className, ...restProps } = props;

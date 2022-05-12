@@ -11,6 +11,7 @@ import { TextInput } from '../../components/control/TextInput/TextInput';
 import { Button } from '../../components/control/Button/Button';
 import { TextLink } from '../../components/control/TextLink/TextLink';
 import { Footer } from '../../components/layout/Footer/Footer';
+import { PasswordInput } from '../../components/control/TextInput/PasswordInput';
 
 interface LoginForm {
   username: string;
@@ -58,12 +59,12 @@ export function LoginScreen(): ReactElement {
         <AppHeader title="Login" />
         <form onSubmit={handleSubmit}>
           <TextInput id="username" placeholder="Username" value={username} onChange={handlFieldChange('username')} />
-          <TextInput
+          <PasswordInput
             id="password"
-            type="password"
             placeholder="Password"
             value={password}
             onChange={handlFieldChange('password')}
+            enableShow
           />
           <div className="row">
             {error && (

@@ -6,12 +6,13 @@ import { useAuth } from '../../contexts/AuthContext';
 import { minMaxValidator } from '../../validators/string-validators';
 import { Page } from '../../components/layout/Page/Page';
 import { TextInput } from '../../components/control/TextInput/TextInput';
-import { ValidatedTextInput } from '../../components/control/TextInput/ValidatedTextInput';
+import { ValidatedInput } from '../../components/control/TextInput/ValidatedInput';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
 import { Button } from '../../components/control/Button/Button';
 import { TextLink } from '../../components/control/TextLink/TextLink';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { ROUTES } from '../../router/types';
+import { PasswordInput } from '../../components/control/TextInput/PasswordInput';
 
 interface SignupForm {
   username: string;
@@ -59,15 +60,22 @@ export function SignupScreen(): ReactElement {
       <main className="card">
         <AppHeader title="Sign up" />
         <form onSubmit={handleSubmit}>
-          <TextInput id="username" placeholder="Username" value={username} onChange={handlFieldChange('username')} />
-          <TextInput id="email" placeholder="Email" value={email} onChange={handlFieldChange('email')} />
-          <ValidatedTextInput
+          <TextInput
+            type="text"
+            id="username"
+            placeholder="Username"
+            value={username}
+            onChange={handlFieldChange('username')}
+          />
+          <TextInput type="text" id="email" placeholder="Email" value={email} onChange={handlFieldChange('email')} />
+          <ValidatedInput
+            validator={minMaxValidator(6, 32)}
+            Input={PasswordInput}
             id="password"
-            type="password"
             placeholder="Password"
             value={password}
             onChange={handlFieldChange('password')}
-            validator={minMaxValidator(6, 32)}
+            enableShow
           />
           <TextInput
             id="confirm-password"
