@@ -5,6 +5,10 @@ import * as actions from './actions';
 
 export function rootReducer(state: StoreData, action: ActionType<typeof actions>): StoreData {
   switch (action.type) {
+    case 'todo.io/load-tasks':
+      return produce(state, draft => {
+        draft.workspaces[action.payload.wsId] = action.payload.tasks;
+      });
     case 'todo.io/create-task':
       return produce(state, draft => {
         draft.workspaces[draft.activeWS].push(action.payload);

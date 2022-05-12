@@ -5,11 +5,11 @@ class AuthController extends ControllerBase {
   protected name = 'auth';
 
   login(user: LoginDTO) {
-    return this.post<LoginResponseDTO>(this.baseUrl + '/login', user);
+    return this.post<LoginResponseDTO>(this.entityUrl + '/login', user);
   }
 
   refreshToken(token: string) {
-    return this.post<RefreshTokenResponseDTO>(this.baseUrl + '/token', {}, { authorization: `Bearer ${token}` });
+    return this.post<RefreshTokenResponseDTO>(this.entityUrl + '/token', {}, this.toAuthHeader(token));
   }
 }
 

@@ -23,7 +23,10 @@ interface TaskAttributes {
 }
 
 export interface TaskInput
-  extends Optional<TaskAttributes, 'id' | 'tenantId' | 'parentId' | 'assigneeId' | 'order' | 'status'> {}
+  extends Optional<
+    TaskAttributes,
+    'id' | 'tenantId' | 'parentId' | 'assigneeId' | 'description' | 'order' | 'status'
+  > {}
 export interface TaskOutput extends Required<TaskAttributes> {}
 
 class Task extends Model<TaskAttributes, TaskInput> implements TaskAttributes {

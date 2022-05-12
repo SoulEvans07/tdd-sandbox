@@ -5,7 +5,7 @@ class UserController extends ControllerBase {
   protected name = 'users';
 
   register(data: SignupDTO) {
-    return this.post<{}>(this.baseUrl, data);
+    return this.post<{}>(this.entityUrl, data);
   }
 }
 

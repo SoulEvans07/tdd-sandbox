@@ -1,4 +1,17 @@
-import { IRequest, RequestBody, RequestHeaders, ResponseBody } from './types';
+import { IRequest, QueryParams, RequestBody, RequestHeaders, ResponseBody } from './types';
+
+function stringifyParams(query?: QueryParams): string {
+  if (query === undefined) return '';
+
+  const keyPairs = Object.entries(query).filter(([, value]) => value !== undefined && value !== null);
+  if (keyPairs.length === 0) return '';
+
+  const stringified = Object.entries(query)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
+
+  return '?' + stringified;
+}
 
 async function parseBody(response: Response) {
   return response.text().then(text => JSON.parse(text || '{}'));
@@ -11,8 +24,8 @@ async function handleResponse<R extends ResponseBody>(response: Response): Promi
   });
 }
 
-async function get<R extends ResponseBody>(url: string, headers?: RequestHeaders): Promise<R> {
-  return fetch(url, { method: 'get', headers }).then(response => handleResponse(response));
+async function get<R extends ResponseBody>(url: string, query?: QueryParams, headers?: RequestHeaders): Promise<R> {
+  return fetch(url + stringifyParams(query), { method: 'get', headers }).then(response => handleResponse(response));
 }
 
 async function post<R extends ResponseBody>(url: string, body?: RequestBody, headers?: RequestHeaders): Promise<R> {

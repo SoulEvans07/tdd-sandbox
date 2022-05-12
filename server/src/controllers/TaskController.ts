@@ -24,13 +24,15 @@ export default class TaskController extends ControllerBase {
         .bail()
         .isLength({ min: 3, max: 200 })
         .withMessage(R.titleLengthForTask),
-      check('description').notEmpty().withMessage(R.descriptionRequiredForTask),
     ],
   })
   public async createTask(req: ValidatedAuthorizedRequest<TaskInput>, res: Response, next: NextFunction) {
     try {
       if (!req.user) {
         throw new Error('Unexpected error occurred');
+      }
+      if (!req.body.description) {
+        req.body.description = '';
       }
       const task = await TaskManager.createTask(req.body, req.user);
       return res.send(task);

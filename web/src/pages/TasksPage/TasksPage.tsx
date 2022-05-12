@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, ReactElement, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, ReactElement, useEffect, useState } from 'react';
 import './TasksPage.scss';
 import { Page } from '../../components/layout/Page/Page';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
@@ -6,15 +6,27 @@ import { TextInput } from '../../components/control/TextInput/TextInput';
 import { Checkbox } from '../../components/control/Checkbox/Checkbox';
 import { TaskList } from '../../containers/TaskList/TaskList';
 import { useDispatch, useSelector } from '../../contexts/store/StoreContext';
-import { selectActiveWorkspace } from '../../contexts/store/selectors';
+import { selectActiveWorkspace, selectWorkspaceTasks } from '../../contexts/store/selectors';
 import { Task } from '../../contexts/store/types';
-import { createTask, removeTask } from '../../contexts/store/actions';
+import { createTask, loadTasks, removeTask } from '../../contexts/store/actions';
+import { taskController } from '../../controllers/TaskController';
+import { useAuth } from '../../contexts/AuthContext';
 
 export function TasksPage(): ReactElement {
   const dispatch = useDispatch();
-  const tasks = useSelector(selectActiveWorkspace);
+  const { token } = useAuth();
+  const { workspace, isPersonal } = useSelector(selectActiveWorkspace);
+  const tasks = useSelector(selectWorkspaceTasks);
   const [checkAll, setCheckAll] = useState(false);
   const handleCheckAll = (checked: boolean) => setCheckAll(checked);
+
+  useEffect(() => {
+    if (token) {
+      taskController
+        .list(token, isPersonal ? undefined : Number(workspace))
+        .then(list => dispatch(loadTasks(list, workspace)));
+    }
+  }, [workspace]);
 
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => setNewTaskTitle(e.target.value);
@@ -23,12 +35,8 @@ export function TasksPage(): ReactElement {
   };
 
   const handleCreate = () => {
-    const newTask: Task = {
-      id: tasks.length,
-      title: newTaskTitle,
-      status: 'todo',
-    };
-    dispatch(createTask(newTask));
+    if (!token) return;
+    taskController.create({ title: newTaskTitle }, token).then(newTask => dispatch(createTask(newTask)));
     setNewTaskTitle('');
   };
 

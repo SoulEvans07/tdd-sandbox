@@ -1,4 +1,4 @@
-export type TaskStatus = 'todo' | 'inProgress' | 'blocked' | 'done';
+export type TaskStatus = 'Todo' | 'InProgress' | 'Blocked' | 'Done';
 
 export interface Task {
   id: number;
@@ -10,7 +10,7 @@ export const personalWs = '_personal' as const;
 
 export type Workspaces = {
   [personalWs]: Task[];
-  [wsname: string]: Task[];
+  [wsname: number]: Task[];
 };
 
 export interface StoreData {

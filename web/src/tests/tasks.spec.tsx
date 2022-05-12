@@ -7,13 +7,14 @@ import { StoreProvider } from '../contexts/store/StoreContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { StoreData, Task } from '../contexts/store/types';
+import { mockNewTask } from '../mocks/controllers/MockTaskController';
+import { mockJwtToken } from '../mocks/controllers/mockData';
 
 describe('tasks behavior', () => {
   let createTaskInput: HTMLInputElement;
   let profileImg: HTMLElement;
 
   const setupTaskPage = (init?: StoreData) => {
-    const jwtToken = 'random.super.secretToken';
     const user = {
       id: 0,
       username: 'adam.szi',
@@ -23,7 +24,7 @@ describe('tasks behavior', () => {
     render(
       <MemoryRouter initialEntries={[ROUTES.TASKS]}>
         <ThemeProvider initial="dark">
-          <AuthProvider initial={{ currentUser: user, token: jwtToken }}>
+          <AuthProvider initial={{ currentUser: user, token: mockJwtToken }}>
             <StoreProvider initial={init}>
               <TasksPage />
             </StoreProvider>
@@ -59,18 +60,17 @@ describe('tasks behavior', () => {
 
     it('clears input and adds item to list when enter is pressed', async () => {
       setupTaskPage();
-      const newTaskTitle = 'Read for at least an hour';
       userEvent.clear(createTaskInput);
-      userEvent.type(createTaskInput, newTaskTitle);
+      userEvent.type(createTaskInput, mockNewTask.title);
       userEvent.type(createTaskInput, '{enter}');
       expect(createTaskInput).toHaveValue('');
       const taskItem = await screen.findByTestId(/task-item-/i);
       expect(taskItem).toBeInTheDocument();
-      expect(taskItem).toHaveTextContent(newTaskTitle);
+      expect(taskItem).toHaveTextContent(mockNewTask.title);
     });
 
     it('deletes a task when the remove button is pressed', () => {
-      const task: Task = { id: 0, title: 'Existing Task', status: 'todo' };
+      const task: Task = { id: 0, title: 'Existing Task', status: 'Todo' };
       setupTaskPage({
         activeWS: '_personal',
         workspaces: {
