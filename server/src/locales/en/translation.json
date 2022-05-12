@@ -17,5 +17,6 @@
   "unAuthorize": "Unauthorized",
   "titleRequiredForTask": "Title required",
   "titleLengthForTask": "Must have min 3 and max 200 character",
-  "descriptionRequiredForTask": "Description required"
+  "descriptionRequiredForTask": "Description required",
+  "forbidden": "Forbidden"
 }

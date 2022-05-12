@@ -7,6 +7,7 @@ export enum ApiEndpoints {
   Login = '/api/1.0/auth/login',
   GetToken = '/api/1.0/auth/token',
   CreateTask = '/api/1.0/tasks',
+  TaskList = '/api/1.0/tasks/:tenantId',
   GetTenantsForUser = '/api/1.0/tenants/user',
 }
 

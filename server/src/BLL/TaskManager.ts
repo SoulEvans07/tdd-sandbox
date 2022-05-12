@@ -17,4 +17,16 @@ export class TaskManager {
 
     return await Task.create(taskForSave);
   }
+
+  public static async listTasks(user: UserOutput, tenantId?: number) {
+    const personalQuery = {
+      assigneeId: user.id,
+    };
+
+    const tenantQuery = {
+      tenantId,
+    };
+
+    return await Task.findAll({ where: tenantId ? tenantQuery : personalQuery });
+  }
 }

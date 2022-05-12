@@ -1,9 +1,9 @@
 import Task, { TaskInput, TaskOutput, TaskStatus } from '../DAL/models/Task';
 import Tenant, { TenantOutput } from '../DAL/models/Tenant';
-import User from '../DAL/models/User';
+import User, { UserInput } from '../DAL/models/User';
 import { AuthResponse } from '../types/api';
 import { mockUser } from './mocks';
-import { ApiEndpoints, postRequest, postUser, validateTokenResponse } from './testHelpers';
+import { ApiEndpoints, getRequest, postRequest, postUser } from './testHelpers';
 import LocaleEn from '../locales/en/translation.json';
 
 describe('Tasks', () => {
@@ -18,26 +18,24 @@ describe('Tasks', () => {
 
   type LoginData = AuthResponse & { tenants: TenantOutput[] };
 
-  async function getLoggedInUser(): Promise<AuthResponse & { tenants: TenantOutput[] }> {
-    const emailPostFix = mockUser.email.split('@')[1];
+  async function getLoggedInUser(userInput: UserInput = mockUser): Promise<AuthResponse & { tenants: TenantOutput[] }> {
+    const emailPostFix = userInput.email.split('@')[1];
 
-    let resp = await postUser(mockUser);
+    let resp = await postUser(userInput);
     expect(resp.status).toBe(200);
 
-    const users = await User.findAll();
-    expect(users).toHaveLength(1);
+    const user = await User.findOne({ where: { username: userInput.username } });
+    if (!user) throw new Error();
+    expect(user).toBeTruthy();
 
     const tenants = await Tenant.findAll();
-    expect(tenants).toHaveLength(1);
-    expect(tenants[0].name).toBe(emailPostFix);
-    expect(tenants[0].id).toBe(users[0].tenantId);
+    const userTenants = tenants.filter(o => o.id === user.tenantId);
 
-    resp = await postRequest(ApiEndpoints.Login, { username: mockUser.username, password: mockUser.password });
-    validateTokenResponse(users[0], resp);
+    resp = await postRequest(ApiEndpoints.Login, { username: userInput.username, password: userInput.password });
 
     return {
       ...resp.body,
-      tenants,
+      tenants: userTenants,
     };
   }
 
@@ -134,6 +132,88 @@ describe('Tasks', () => {
       resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, generateAuthorizationHeader(loginData));
       task = resp.body;
       validatePersonalTask(task, loginData, taskInputPersonal, 2);
+    });
+
+    test('Task list', async () => {
+      const loginData1 = await getLoggedInUser();
+      const user1Auth = generateAuthorizationHeader(loginData1);
+      const loginData2 = await getLoggedInUser({
+        username: 'user___2',
+        email: 'user2@email.com',
+        password: 'Password1234!',
+      });
+      const user2Auth = generateAuthorizationHeader(loginData2);
+
+      const taskInputTenant = {
+        title: 'New task for tenant',
+        description: 'Description for task',
+      };
+
+      const user1TaskInputTenant = {
+        ...taskInputTenant,
+        tenantId: loginData1.user.tenants[0],
+      };
+      let resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, user1Auth);
+      const user1PersonalTask1: TaskOutput = resp.body;
+      validatePersonalTask(user1PersonalTask1, loginData1, taskInputPersonal, 1);
+      resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, user1Auth);
+      const user1PersonalTask2: TaskOutput = resp.body;
+      validatePersonalTask(user1PersonalTask2, loginData1, taskInputPersonal, 2);
+      resp = await postRequest(ApiEndpoints.CreateTask, user1TaskInputTenant, user1Auth);
+      const user1TenantTask1: TaskOutput = resp.body;
+      validateTenantTask(user1TenantTask1, user1TaskInputTenant, 1);
+
+      const user2TaskInputTenant = {
+        ...taskInputTenant,
+        tenantId: loginData2.user.tenants[0],
+      };
+      resp = await postRequest(ApiEndpoints.CreateTask, user2TaskInputTenant, user2Auth);
+      const user2TenantTask1: TaskOutput = resp.body;
+      validateTenantTask(user2TenantTask1, user2TaskInputTenant, 1);
+      resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, user2Auth);
+      const user2PersonalTask1: TaskOutput = resp.body;
+      validatePersonalTask(user2PersonalTask1, loginData2, taskInputPersonal, 1);
+
+      //TODo list asserts
+      resp = await getRequest(ApiEndpoints.TaskList.replace('/:tenantId', ''), user1Auth);
+      expect(resp.status).toBe(200);
+      expect(resp.body).toHaveLength(2);
+      let tasks: TaskOutput[] = resp.body;
+      let task = tasks.find(o => o.id === user1PersonalTask1.id);
+      expect(task).toBeTruthy();
+      task = tasks.find(o => o.id === user1PersonalTask2.id);
+      expect(task).toBeTruthy();
+
+      resp = await getRequest(
+        ApiEndpoints.TaskList.replace(':tenantId', loginData1.user.tenants[0].toString()),
+        user1Auth
+      );
+      expect(resp.status).toBe(200);
+      expect(resp.body).toHaveLength(1);
+      tasks = resp.body;
+      task = tasks.find(o => o.id === user1TenantTask1.id);
+      expect(task).toBeTruthy();
+
+      resp = await getRequest(ApiEndpoints.TaskList.replace('/:tenantId', ''), user2Auth);
+      expect(resp.status).toBe(200);
+      expect(resp.body).toHaveLength(1);
+      tasks = resp.body;
+      task = tasks.find(o => o.id === user2PersonalTask1.id);
+      expect(task).toBeTruthy();
+
+      resp = await getRequest(
+        ApiEndpoints.TaskList.replace(':tenantId', loginData2.user.tenants[0].toString()),
+        user2Auth
+      );
+      expect(resp.status).toBe(200);
+      expect(resp.body).toHaveLength(1);
+      tasks = resp.body;
+      task = tasks.find(o => o.id === user2TenantTask1.id);
+      expect(task).toBeTruthy();
+
+      resp = await getRequest(ApiEndpoints.TaskList.replace(':tenantId', '666'), user2Auth);
+      expect(resp.status).toBe(403);
+      expect(resp.body.message).toBe(LocaleEn.forbidden);
     });
   });
 
