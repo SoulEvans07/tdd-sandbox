@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { ROUTES } from '../router/types';
@@ -69,7 +69,7 @@ describe('tasks behavior', () => {
       expect(taskItem).toHaveTextContent(mockNewTask.title);
     });
 
-    it('deletes a task when the remove button is pressed', () => {
+    it('deletes a task when the remove button is pressed', async () => {
       const task: Task = { id: 0, title: 'Existing Task', status: 'Todo' };
       setupTaskPage({
         activeWS: '_personal',
@@ -85,8 +85,7 @@ describe('tasks behavior', () => {
       expect(removeBtn).toBeInTheDocument();
 
       userEvent.click(removeBtn);
-      const removedTask = screen.queryByText(task.title);
-      expect(removedTask).not.toBeInTheDocument();
+      await waitForElementToBeRemoved(() => screen.queryByText(task.title));
     });
   });
 });

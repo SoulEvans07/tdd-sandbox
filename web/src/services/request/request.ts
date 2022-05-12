@@ -32,10 +32,7 @@ async function post<R extends ResponseBody>(url: string, body?: RequestBody, hea
   return new Promise<R>((resolve, reject) =>
     fetch(url, {
       method: 'post',
-      headers: {
-        'content-type': 'application/json',
-        ...headers,
-      },
+      headers: { 'content-type': 'application/json', ...headers },
       body: JSON.stringify(body),
     }).then(
       response => resolve(handleResponse(response)),
@@ -44,4 +41,17 @@ async function post<R extends ResponseBody>(url: string, body?: RequestBody, hea
   );
 }
 
-export const request: IRequest = { get, post } as const;
+async function del<R extends ResponseBody>(url: string, body?: RequestBody, headers?: RequestHeaders): Promise<R> {
+  return new Promise<R>((resolve, reject) =>
+    fetch(url, {
+      method: 'delete',
+      headers: { 'content-type': 'application/json', ...headers },
+      body: JSON.stringify(body),
+    }).then(
+      response => resolve(handleResponse(response)),
+      err => reject(err)
+    )
+  );
+}
+
+export const request: IRequest = { get, post, delete: del } as const;

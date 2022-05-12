@@ -29,4 +29,12 @@ export abstract class ControllerBase {
   protected async post<R extends ResponseBody>(url: string, body?: RequestBody, headers?: RequestHeaders): Promise<R> {
     return request.post<R>(url, body, headers);
   }
+
+  protected async delete<R extends ResponseBody>(
+    url: string,
+    body?: RequestBody,
+    headers?: RequestHeaders
+  ): Promise<R> {
+    return request.delete<R>(url, body, headers);
+  }
 }

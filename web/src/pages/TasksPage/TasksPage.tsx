@@ -40,7 +40,10 @@ export function TasksPage(): ReactElement {
     setNewTaskTitle('');
   };
 
-  const handleRemove = (task: Task) => dispatch(removeTask(task));
+  const handleRemove = (task: Task) => {
+    if (!token) return;
+    taskController.remove([task.id], token).then(() => dispatch(removeTask(task)));
+  };
 
   return (
     <Page className="tasks-page">

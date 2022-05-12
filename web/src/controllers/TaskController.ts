@@ -8,6 +8,10 @@ class TaskController extends ControllerBase {
     return this.post<CreateTaskResponseDTO>(this.apiUrl + '/task', task, this.toAuthHeader(token));
   }
 
+  remove(taskIds: number[], token: string) {
+    return this.delete(this.entityUrl, taskIds, this.toAuthHeader(token));
+  }
+
   list(token: string, tenantId?: number) {
     const tenant = tenantId ? '/' + tenantId : '';
     return this.get<CreateTaskResponseDTO[]>(this.entityUrl + tenant, undefined, this.toAuthHeader(token));

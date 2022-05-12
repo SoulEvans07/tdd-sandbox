@@ -10,6 +10,9 @@ export const mockTaskController: MockController<typeof taskController> = {
   list: rest.get<{}, {}, CreateTaskResponseDTO[]>(serverUrl + '/api/1.0/tasks', (req, res, ctx) => {
     return res(ctx.json([mockNewTask]));
   }),
+  remove: rest.delete<{}, {}, CreateTaskResponseDTO[]>(serverUrl + '/api/1.0/tasks', (req, res, ctx) => {
+    return res(ctx.json([mockNewTask]));
+  }),
 };
 
 export const mockNewTask: CreateTaskResponseDTO = {
