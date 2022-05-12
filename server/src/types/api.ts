@@ -12,17 +12,21 @@ export interface AuthResponse {
   token: string;
 }
 
-export interface ValidatedRequest<T extends object> extends Request<{}, {}, T> {
+export interface ValidatedRequest<T extends Record<string, any>> extends Request<{}, {}, T> {
   validationErrors?: {
     [key in keyof T]?: string;
   };
 }
 
-export interface AuthorizedRequest extends Request {
+export interface AuthorizedRequest<
+  Params extends Record<string, any> = {},
+  Req extends Record<string, any> = {},
+  ReqQuery extends Record<string, any> = {}
+> extends Request<Params, {}, Req, ReqQuery> {
   user?: UserOutput;
 }
 
-export interface ValidatedAuthorizedRequest<T extends object> extends ValidatedRequest<T> {
+export interface ValidatedAuthorizedRequest<T extends Record<string, any>> extends ValidatedRequest<T> {
   user?: UserOutput;
 }
 

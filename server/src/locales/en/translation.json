@@ -18,5 +18,6 @@
   "titleRequiredForTask": "Title required",
   "titleLengthForTask": "Must have min 3 and max 200 character",
   "descriptionRequiredForTask": "Description required",
-  "forbidden": "Forbidden"
+  "forbidden": "Forbidden",
+  "deleteSuccessful":"Delete successful"
 }

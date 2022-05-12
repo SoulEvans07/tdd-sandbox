@@ -9,6 +9,7 @@ export enum ApiEndpoints {
   CreateTask = '/api/1.0/tasks',
   TaskList = '/api/1.0/tasks/:tenantId',
   GetTenantsForUser = '/api/1.0/tenants/user',
+  DeleteTasks = '/api/1.0/tasks',
 }
 
 export const postUser = async (body?: any) => await postRequest(ApiEndpoints.CreateUser, body);
@@ -31,6 +32,16 @@ export const getRequest = async (path: string, headers?: Record<string, string>)
     });
   }
   return req.send();
+};
+
+export const deleteRequest = async (path: string, body?: any, headers?: Record<string, string>) => {
+  const req = request(app).delete(path);
+  if (headers) {
+    Object.entries(headers).forEach(entry => {
+      req.set(entry[0], entry[1]);
+    });
+  }
+  return req.send(body);
 };
 
 export const validateTokenResponse = (user: UserInput, response: request.Response) => {

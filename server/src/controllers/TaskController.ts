@@ -8,6 +8,9 @@ import { AuthorizedRequest, ControllerBase, ValidatedAuthorizedRequest } from '.
 import { ForbiddenException } from '../types/exceptions/ForbiddenException';
 import { R } from '../types/localization';
 
+interface A {
+  tenantId?: string;
+}
 export default class TaskController extends ControllerBase {
   @epMeta({
     method: 'post',
@@ -42,11 +45,12 @@ export default class TaskController extends ControllerBase {
     path: 'tasks/:tenantId?',
     isAuthorized: true,
   })
-  public async listTasks(req: AuthorizedRequest, res: Response, next: NextFunction) {
+  public async listTasks(req: AuthorizedRequest<{ tenantId?: string }>, res: Response, next: NextFunction) {
     try {
       if (!req.user) {
         throw new Error('Unexpected error occurred');
       }
+
       const tenantId = req.params.tenantId ? parseInt(req.params.tenantId, 10) : undefined;
 
       if (tenantId && req.user.tenantId !== tenantId) {
@@ -55,6 +59,25 @@ export default class TaskController extends ControllerBase {
 
       const task = await TaskManager.listTasks(req.user, tenantId);
       return res.send(task);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  @epMeta({
+    method: 'delete',
+    version: '1.0',
+    path: 'tasks',
+    isAuthorized: true,
+  })
+  public async removeTasks(req: AuthorizedRequest<{}, number[]>, res: Response, next: NextFunction) {
+    try {
+      if (!req.user) {
+        throw new Error('Unexpected error occurred');
+      }
+
+      await TaskManager.removeTasks(req.body, req.user);
+      return res.send({ message: req.t(R.deleteSuccessful) });
     } catch (err) {
       next(err);
     }

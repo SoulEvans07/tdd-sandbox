@@ -1,5 +1,6 @@
 import Task, { TaskInput, TaskOutput, TaskStatus } from '../DAL/models/Task';
 import { UserOutput } from '../DAL/models/User';
+import { ForbiddenException } from '../types/exceptions/ForbiddenException';
 
 export class TaskManager {
   public static async createTask(task: TaskInput, user: UserOutput): Promise<TaskOutput> {
@@ -28,5 +29,21 @@ export class TaskManager {
     };
 
     return await Task.findAll({ where: tenantId ? tenantQuery : personalQuery });
+  }
+
+  public static async removeTasks(taskIds: number[], user: UserOutput) {
+    const tasksForDelete = await Task.findAll({
+      where: {
+        id: taskIds,
+      },
+    });
+
+    tasksForDelete.forEach(task => {
+      if ((task.assigneeId !== user.id && !task.tenantId) || (task.tenantId && task.tenantId !== user.tenantId)) {
+        throw new ForbiddenException();
+      }
+    });
+
+    await Task.destroy({ where: { id: taskIds } });
   }
 }

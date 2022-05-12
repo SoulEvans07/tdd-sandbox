@@ -3,8 +3,9 @@ import Tenant, { TenantOutput } from '../DAL/models/Tenant';
 import User, { UserInput } from '../DAL/models/User';
 import { AuthResponse } from '../types/api';
 import { mockUser } from './mocks';
-import { ApiEndpoints, getRequest, postRequest, postUser } from './testHelpers';
+import { ApiEndpoints, deleteRequest, getRequest, postRequest, postUser } from './testHelpers';
 import LocaleEn from '../locales/en/translation.json';
+import { TaskManager } from '../BLL/TaskManager';
 
 describe('Tasks', () => {
   beforeEach(() => {
@@ -133,7 +134,9 @@ describe('Tasks', () => {
       task = resp.body;
       validatePersonalTask(task, loginData, taskInputPersonal, 2);
     });
+  });
 
+  describe('Task bulk actions', () => {
     test('Task list', async () => {
       const loginData1 = await getLoggedInUser();
       const user1Auth = generateAuthorizationHeader(loginData1);
@@ -174,7 +177,6 @@ describe('Tasks', () => {
       const user2PersonalTask1: TaskOutput = resp.body;
       validatePersonalTask(user2PersonalTask1, loginData2, taskInputPersonal, 1);
 
-      //TODo list asserts
       resp = await getRequest(ApiEndpoints.TaskList.replace('/:tenantId', ''), user1Auth);
       expect(resp.status).toBe(200);
       expect(resp.body).toHaveLength(2);
@@ -214,6 +216,88 @@ describe('Tasks', () => {
       resp = await getRequest(ApiEndpoints.TaskList.replace(':tenantId', '666'), user2Auth);
       expect(resp.status).toBe(403);
       expect(resp.body.message).toBe(LocaleEn.forbidden);
+    });
+
+    test('Remove tasks', async () => {
+      const checkTaskList = async (
+        haveToLength: number,
+        userAuth: Record<string, string> | undefined,
+        tenantId?: number
+      ) => {
+        const resp = await getRequest(
+          ApiEndpoints.TaskList.replace(':tenantId', tenantId ? tenantId.toString() : ''),
+          userAuth
+        );
+        expect(resp.status).toBe(200);
+        expect(resp.body).toHaveLength(haveToLength);
+      };
+
+      const user2Name = 'user___2';
+      const loginData1 = await getLoggedInUser();
+      const loginData2 = await getLoggedInUser({
+        username: user2Name,
+        email: 'user2@email.com',
+        password: 'Password1234!',
+      });
+      const user1Auth = generateAuthorizationHeader(loginData1);
+      const user2Auth = generateAuthorizationHeader(loginData2);
+      const user1 = await User.findOne({ where: { username: mockUser.username } });
+      const user2 = await User.findOne({ where: { username: user2Name } });
+
+      if (!user1) throw Error();
+      if (!user2) throw Error();
+
+      const tenantTaskInputForUser1 = {
+        title: 'New task for tenant',
+        description: 'Description for task',
+        tenantId: loginData1.user.tenants[0],
+      };
+      const tenantTaskInputForUser2 = {
+        title: 'New task for tenant',
+        description: 'Description for task',
+        tenantId: loginData2.user.tenants[0],
+      };
+
+      const personalTaskIdsForUser1: number[] = [];
+      const tenantTaskIdsForUser1: number[] = [];
+      const personalTaskIdsForUser2: number[] = [];
+      const tenantTaskIdsForUser2: number[] = [];
+
+      for (let index = 0; index < 10; index++) {
+        personalTaskIdsForUser1.push((await TaskManager.createTask(taskInputPersonal, user1)).id);
+        tenantTaskIdsForUser1.push((await TaskManager.createTask(tenantTaskInputForUser1, user1)).id);
+        personalTaskIdsForUser2.push((await TaskManager.createTask(taskInputPersonal, user2)).id);
+        tenantTaskIdsForUser2.push((await TaskManager.createTask(tenantTaskInputForUser2, user2)).id);
+      }
+
+      await checkTaskList(10, user1Auth);
+      await checkTaskList(10, user1Auth, loginData1.user.tenants[0]);
+      await checkTaskList(10, user2Auth);
+      await checkTaskList(10, user2Auth, loginData2.user.tenants[0]);
+
+      let resp = await deleteRequest(
+        ApiEndpoints.DeleteTasks,
+        [...personalTaskIdsForUser1, ...tenantTaskIdsForUser1],
+        user1Auth
+      );
+      expect(resp.status).toBe(200);
+      expect(resp.body.message).toBe(LocaleEn.deleteSuccessful);
+
+      await checkTaskList(0, user1Auth);
+      await checkTaskList(0, user1Auth, loginData1.user.tenants[0]);
+      await checkTaskList(10, user2Auth);
+      await checkTaskList(10, user2Auth, loginData2.user.tenants[0]);
+
+      resp = await deleteRequest(
+        ApiEndpoints.DeleteTasks,
+        [...personalTaskIdsForUser2, ...tenantTaskIdsForUser2],
+        user1Auth
+      );
+      expect(resp.status).toBe(403);
+      expect(resp.body.message).toBe(LocaleEn.forbidden);
+
+      await checkTaskList(10, user2Auth);
+      await checkTaskList(10, user2Auth, loginData2.user.tenants[0]);
     });
   });
 
