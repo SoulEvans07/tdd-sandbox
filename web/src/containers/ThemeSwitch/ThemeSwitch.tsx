@@ -12,5 +12,13 @@ export function ThemeSwitch(): ReactElement {
   const { currentTheme, switchTheme } = useTheme();
   const icon = themeIcons[currentTheme];
 
-  return <Icon className="theme-switch" icon={icon} onClick={switchTheme} />;
+  return (
+    <Icon
+      className="theme-switch"
+      icon={icon}
+      onClick={switchTheme}
+      role="checkbox"
+      aria-checked={currentTheme === 'dark'}
+    />
+  );
 }

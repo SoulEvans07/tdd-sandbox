@@ -4,7 +4,7 @@ import { persistentStorage } from './services/storage/persistentStorage';
 import { AuthProvider, AuthState, clearedState, User } from './contexts/AuthContext';
 import { ThemeName, ThemeProvider } from './contexts/ThemeContext';
 import { StoreProvider } from './contexts/store/StoreContext';
-import { ThemeSetter } from './containers/ThemeSetter/ThemeSetter';
+import { ThemeSetter } from './containers/ThemeSwitch/ThemeSetter';
 import { Router } from './router/Router';
 import { secureStorage } from './services/storage/secureStorage';
 
