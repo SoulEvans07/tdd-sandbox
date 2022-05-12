@@ -6,7 +6,7 @@ type HtmlButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>
 export interface ButtonProps extends HtmlButtonProps {
   size?: 'small' | 'big' | 'wide';
   fill?: 'fill' | 'border' | 'text';
-  color?: 'primary'; // | 'error';
+  color?: 'primary' | 'secondary' | 'error';
   active?: boolean;
 }
 
