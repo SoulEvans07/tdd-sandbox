@@ -46,7 +46,7 @@ describe('tasks behavior', () => {
   describe('create task', () => {
     it('has empty list message  if no data found on store or retreived from server', () => {
       setupTaskPage();
-      const emptyListMessage = screen.getByText('There is nothing to do!');
+      const emptyListMessage = screen.getByText('There is nothing here!');
       expect(emptyListMessage).toBeInTheDocument();
     });
 
