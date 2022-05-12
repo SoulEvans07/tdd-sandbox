@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import './SignupScreen.scss';
 import { userController } from '../../controllers/UserController';
 import { useAuth } from '../../contexts/AuthContext';
-import { minMaxValidator } from '../../validators/string-validators';
+import { minMaxValidator } from '../../validators/stringValidators';
 import { Page } from '../../components/layout/Page/Page';
 import { TextInput } from '../../components/control/TextInput/TextInput';
 import { ValidatedInput } from '../../components/control/TextInput/ValidatedInput';

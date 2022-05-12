@@ -5,7 +5,7 @@ import { TaskItem } from './TaskItem/TaskItem';
 import { Button } from '../../components/control/Button/Button';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
 
-interface TaskListProps {
+export interface TaskListProps {
   list: Task[];
   onRemove: (task: Task) => void;
 }

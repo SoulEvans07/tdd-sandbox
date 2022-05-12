@@ -44,7 +44,7 @@ describe('tasks behavior', () => {
   });
 
   describe('create task', () => {
-    it('has an empty list message at first', () => {
+    it('has empty list message  if no data found on store or retreived from server', () => {
       setupTaskPage();
       const emptyListMessage = screen.getByText('There is nothing to do!');
       expect(emptyListMessage).toBeInTheDocument();
@@ -81,7 +81,7 @@ describe('tasks behavior', () => {
       const taskItem = screen.getByText(task.title);
       expect(taskItem).toBeInTheDocument();
 
-      const removeBtn = screen.getByRole('button', { name: /remove-task/i });
+      const removeBtn = screen.getByRole('button', { name: /remove/i });
       expect(removeBtn).toBeInTheDocument();
 
       userEvent.click(removeBtn);
