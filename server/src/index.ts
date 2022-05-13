@@ -4,18 +4,16 @@ import sequelize from './DAL/database';
 import config from './config/config';
 import User from './DAL/models/User';
 import { mockUser } from './tests/mocks';
-import SecurityHelper from './utils/SecurityHelper';
+import { UserManager } from './BLL/UserManager';
 
 try {
   sequelize.sync({ force: true }).then(() => {
-    SecurityHelper.hashPassword(mockUser.password).then(password => {
-      User.findOne({ where: { username: mockUser.username } }).then(user => {
-        if (!user) {
-          User.create({ ...mockUser, password }).then(() => {
-            Logger.log('Default user created');
-          });
-        }
-      });
+    User.findOne({ where: { username: mockUser.username } }).then(user => {
+      if (!user) {
+        UserManager.save(mockUser).then(() => {
+          Logger.log('Default user created');
+        });
+      }
     });
   });
 
