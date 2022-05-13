@@ -24,6 +24,7 @@ type TaskStatus = 'Todo' | 'InProgress' | 'Blocked' | 'Done';
 
 export interface CreateTaskDTO {
   title: string;
+  tenantId?: number;
 }
 
 export interface CreateTaskResponseDTO {

@@ -9,6 +9,7 @@
   left: 0;
   right: 0;
   box-shadow: var(--drop-shadow-small);
+  z-index: 1;
 
   &[hidden] {
     display: none;

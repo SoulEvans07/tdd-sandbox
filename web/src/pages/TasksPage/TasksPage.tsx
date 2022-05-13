@@ -15,7 +15,7 @@ import { useAuth } from '../../contexts/AuthContext';
 export function TasksPage(): ReactElement {
   const dispatch = useDispatch();
   const { token } = useAuth();
-  const { workspace, isPersonal } = useSelector(selectActiveWorkspace);
+  const { workspace: activeWs, isPersonal } = useSelector(selectActiveWorkspace);
   const tasks = useSelector(selectWorkspaceTasks);
   const [checkAll, setCheckAll] = useState(false);
   const handleCheckAll = (checked: boolean) => setCheckAll(checked);
@@ -23,10 +23,10 @@ export function TasksPage(): ReactElement {
   useEffect(() => {
     if (token) {
       taskController
-        .list(token, isPersonal ? undefined : Number(workspace))
-        .then(list => dispatch(loadTasks(list, workspace)));
+        .list(token, isPersonal ? undefined : Number(activeWs.id))
+        .then(list => dispatch(loadTasks(list, activeWs.id)));
     }
-  }, [workspace]);
+  }, [activeWs.id]);
 
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => setNewTaskTitle(e.target.value);
@@ -36,7 +36,9 @@ export function TasksPage(): ReactElement {
 
   const handleCreate = () => {
     if (!token) return;
-    taskController.create({ title: newTaskTitle }, token).then(newTask => dispatch(createTask(newTask)));
+    taskController
+      .create({ title: newTaskTitle, tenantId: isPersonal ? undefined : Number(activeWs.id) }, token)
+      .then(newTask => dispatch(createTask(newTask)));
     setNewTaskTitle('');
   };
 

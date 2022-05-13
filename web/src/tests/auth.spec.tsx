@@ -56,7 +56,7 @@ describe('login behavior', () => {
       const taskPageHeading = await screen.findByRole('heading', { name: /todo/i });
       expect(taskPageHeading).toBeInTheDocument();
 
-      const profileImg = screen.getByTitle(mockExistingUser.username) as HTMLInputElement;
+      const profileImg = screen.getByTitle(mockExistingUser.username);
       expect(profileImg).toBeInTheDocument();
       userEvent.click(profileImg);
 

@@ -6,7 +6,7 @@ import { TasksPage } from '../pages/TasksPage/TasksPage';
 import { StoreProvider } from '../contexts/store/StoreContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
-import { StoreData, Task } from '../contexts/store/types';
+import { personalWs, StoreData, Task } from '../contexts/store/types';
 import { mockNewTask } from '../mocks/controllers/MockTaskController';
 import { mockJwtToken } from '../mocks/controllers/mockData';
 
@@ -83,9 +83,9 @@ describe('tasks behavior', () => {
     it('deletes a task when the remove button is pressed', async () => {
       const task: Task = { id: 0, title: 'Existing Task', status: 'Todo' };
       setupTaskPage({
-        activeWS: '_personal',
+        activeWS: personalWs,
         workspaces: {
-          _personal: [task],
+          [personalWs]: { id: personalWs, name: 'Personal', tasks: [task] },
         },
       });
 

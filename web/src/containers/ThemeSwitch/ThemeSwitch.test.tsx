@@ -25,7 +25,7 @@ describe('ThemeSwitch', () => {
 
     // TODO: icon change cannot be tested because of the weird way I handle svg import right now. @adam.szi
 
-    const themeSwitch = screen.getByRole('checkbox');
+    const themeSwitch = screen.getByRole('checkbox', { name: /switch theme/i });
     expect(themeSwitch).not.toBeChecked();
 
     userEvent.click(themeSwitch);
@@ -45,7 +45,7 @@ describe('ThemeSwitch', () => {
     );
 
     expect(document.body).toHaveClass('theme-dark');
-    const themeSwitch = screen.getByRole('checkbox');
+    const themeSwitch = screen.getByRole('checkbox', { name: /switch theme/i });
     userEvent.click(themeSwitch);
     expect(document.body).toHaveClass('theme-light');
   });

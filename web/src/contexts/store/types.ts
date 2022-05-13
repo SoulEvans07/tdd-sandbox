@@ -8,14 +8,20 @@ export interface Task {
 
 export const personalWs = '_personal' as const;
 
-export type Workspaces = {
-  [personalWs]: Task[];
-  [wsname: number]: Task[];
+export interface Workspace {
+  id: string;
+  name: string;
+  tasks: Task[];
+}
+
+export type WorkspaceMap = {
+  [personalWs]: Workspace;
+  [wsname: string]: Workspace;
 };
 
 export interface StoreData {
-  activeWS: keyof Workspaces;
-  workspaces: Workspaces;
+  activeWS: keyof WorkspaceMap;
+  workspaces: WorkspaceMap;
 }
 
 export type StoreSelector<T> = (store: StoreData) => T;
@@ -23,6 +29,10 @@ export type StoreSelector<T> = (store: StoreData) => T;
 export const initialStoreData: StoreData = {
   activeWS: personalWs,
   workspaces: {
-    [personalWs]: [],
+    [personalWs]: {
+      id: personalWs,
+      name: 'Personal',
+      tasks: [],
+    },
   },
 };

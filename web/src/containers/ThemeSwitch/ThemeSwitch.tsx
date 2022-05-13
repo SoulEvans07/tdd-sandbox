@@ -19,6 +19,7 @@ export function ThemeSwitch(): ReactElement {
       onClick={switchTheme}
       role="checkbox"
       aria-checked={currentTheme === 'dark'}
+      aria-label="Switch Theme"
     />
   );
 }

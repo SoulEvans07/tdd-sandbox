@@ -7,21 +7,33 @@ export function rootReducer(state: StoreData, action: ActionType<typeof actions>
   switch (action.type) {
     case 'todo.io/load-tasks':
       return produce(state, draft => {
-        draft.workspaces[action.payload.wsId] = action.payload.tasks;
+        draft.workspaces[action.payload.wsId].tasks = action.payload.tasks;
       });
     case 'todo.io/create-task':
       return produce(state, draft => {
-        draft.workspaces[draft.activeWS].push(action.payload);
+        draft.workspaces[draft.activeWS].tasks.push(action.payload);
       });
     case 'todo.io/remove-task':
       return produce(state, draft => {
-        draft.workspaces[draft.activeWS] = draft.workspaces[draft.activeWS].filter(task => task.id !== action.payload);
+        draft.workspaces[draft.activeWS].tasks = draft.workspaces[draft.activeWS].tasks.filter(
+          task => task.id !== action.payload
+        );
       });
     case 'todo.io/remove-multiple-task':
       return produce(state, draft => {
-        draft.workspaces[draft.activeWS] = draft.workspaces[draft.activeWS].filter(
+        draft.workspaces[draft.activeWS].tasks = draft.workspaces[draft.activeWS].tasks.filter(
           task => !action.payload.includes(task.id)
         );
+      });
+    case 'todo.io/load-workspaces':
+      return produce(state, draft => {
+        action.payload.forEach(ws => {
+          draft.workspaces[ws.id] = { id: String(ws.id), name: ws.name, tasks: [] };
+        });
+      });
+    case 'todo.io/change-workspace':
+      return produce(state, draft => {
+        draft.activeWS = action.payload.workspaceId;
       });
     default:
       return state;
