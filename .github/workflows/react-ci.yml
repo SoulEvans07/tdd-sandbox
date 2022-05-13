@@ -1,5 +1,11 @@
 name: React CI
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'web/**'
+  pull_request:
+    paths:
+      - 'web/**'
 jobs:
   frontend-build-and-test:
     runs-on: ubuntu-latest
