@@ -1,0 +1,16 @@
+.dropdown {
+  position: absolute;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  position: absolute;
+  bottom: 2.5rem;
+  left: 0;
+  right: 0;
+  box-shadow: var(--drop-shadow-small);
+
+  &[hidden] {
+    display: none;
+  }
+}

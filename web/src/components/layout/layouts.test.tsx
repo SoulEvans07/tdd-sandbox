@@ -1,10 +1,12 @@
+import { render, screen } from '@testing-library/react';
 import { Page } from './Page/Page';
 import { Footer } from './Footer/Footer';
-import { render, screen } from '@testing-library/react';
+import { Dropdown } from './Dropdown/Dropdown';
 
 describe.each([
   { title: 'Page', Layout: Page },
   { title: 'Footer', Layout: Footer },
+  { title: 'Dropdown', Layout: Dropdown },
 ])('layouts', ({ title, Layout }) => {
   describe(`layout ${title}`, () => {
     it('should render all children', () => {
