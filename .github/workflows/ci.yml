@@ -1,7 +1,7 @@
 name: React CI
 on: [push, pull_request]
 jobs:
-  check-bats-version:
+  Frontend build and test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -11,8 +11,8 @@ jobs:
       - name: Install dependencies
         run: |
           cd web
-          pwd
           yarn install
-      - name: Run front-end tests
+      - name: Run frontend tests
         run: |
-          pwd
+          cd web
+          yarn test
