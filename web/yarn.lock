@@ -6981,9 +6981,9 @@ jest-config@^26.6.3:
     micromatch "^4.0.2"
     pretty-format "^26.6.2"
 
-"jest-css-modules-transform@git+ssh://git@github.com:SoulEvans07/jest-scss-transform.git#v4.4.0":
+"jest-css-modules-transform@https://github.com/SoulEvans07/jest-scss-transform.git#v4.4.0":
   version "4.3.0"
-  resolved "git+ssh://git@github.com:SoulEvans07/jest-scss-transform.git#36ae3ab9426a360f022bb7815d705487365c0c81"
+  resolved "https://github.com/SoulEvans07/jest-scss-transform.git#36ae3ab9426a360f022bb7815d705487365c0c81"
   dependencies:
     camelcase "6.3.0"
     postcss "^7.0.30 || ^8.0.0"
