@@ -14,6 +14,13 @@ describe('tasks behavior', () => {
   let createTaskInput: HTMLInputElement;
   let profileImg: HTMLElement;
 
+  let spy: jest.SpyInstance;
+  beforeEach(() => {
+    spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
+  });
+  afterAll(() => spy.mockRestore());
+
   const setupTaskPage = (init?: StoreData) => {
     const user = {
       id: 0,
@@ -86,6 +93,9 @@ describe('tasks behavior', () => {
 
       userEvent.click(removeBtn);
       await waitForElementToBeRemoved(() => screen.queryByText(task.title));
+
+      // wait until last updates are done so they dont throw error when the test unmounts the components
+      await new Promise(res => setTimeout(res, 1000));
     });
   });
 });

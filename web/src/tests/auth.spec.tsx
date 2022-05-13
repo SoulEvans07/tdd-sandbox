@@ -11,7 +11,12 @@ describe('login behavior', () => {
   let passwordInput: HTMLInputElement;
   let submitButton: HTMLButtonElement;
 
+  let spy: jest.SpyInstance;
+
   beforeEach(() => {
+    spy = jest.spyOn(console, 'error');
+    spy.mockImplementation(() => {});
+
     render(
       <MemoryRouter initialEntries={[ROUTES.LOGIN]}>
         <App />
@@ -22,6 +27,10 @@ describe('login behavior', () => {
     nameInput = screen.getByRole('textbox', { name: 'username' }) as HTMLInputElement;
     passwordInput = screen.getByRole('textbox', { name: 'password' }) as HTMLInputElement;
     submitButton = screen.getByRole('button', { name: /sign in/i }) as HTMLButtonElement;
+  });
+
+  afterAll(() => {
+    spy.mockRestore();
   });
 
   it('page composition', () => {
@@ -53,6 +62,9 @@ describe('login behavior', () => {
       userEvent.click(profileImg);
       const loginPageHeading = await screen.findByRole('heading', { name: /login/i });
       expect(loginPageHeading).toBeInTheDocument();
+
+      // wait until last updates are done so they dont throw error when the test unmounts the components
+      await new Promise(res => setTimeout(res, 1000));
     });
   });
 });
