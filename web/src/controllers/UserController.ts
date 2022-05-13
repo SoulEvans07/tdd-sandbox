@@ -2,7 +2,7 @@ import { ControllerBase } from './types';
 
 class UserController extends ControllerBase {
   protected version = '1.0';
-  protected name = 'users';
+  protected name = 'user';
 
   register(data: SignupDTO) {
     return this.post<{}>(this.entityUrl, data);
