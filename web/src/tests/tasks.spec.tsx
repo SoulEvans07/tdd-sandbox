@@ -50,6 +50,10 @@ describe('tasks behavior', () => {
     expect(profileImg).toBeInTheDocument();
   });
 
+  test('clicking on the profile image opens/closes the user menu', () => {
+    // TODO: implement @adam.szi
+  });
+
   describe('create task', () => {
     it('has empty list message  if no data found on store or retreived from server', () => {
       setupTaskPage();

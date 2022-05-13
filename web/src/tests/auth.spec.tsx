@@ -58,8 +58,11 @@ describe('login behavior', () => {
 
       const profileImg = screen.getByTitle(mockExistingUser.username) as HTMLInputElement;
       expect(profileImg).toBeInTheDocument();
-
       userEvent.click(profileImg);
+
+      const logoutOption = screen.getByRole('option', { name: /logout/i });
+      userEvent.click(logoutOption);
+
       const loginPageHeading = await screen.findByRole('heading', { name: /login/i });
       expect(loginPageHeading).toBeInTheDocument();
 

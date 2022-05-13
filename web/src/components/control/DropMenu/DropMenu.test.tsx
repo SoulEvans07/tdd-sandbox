@@ -5,11 +5,13 @@ import { DropMenu } from './DropMenu';
 describe('DropMenu', () => {
   const setup = (isOpen: boolean) => {
     render(
-      <DropMenu open={isOpen} onSelect={jest.fn()}>
+      <DropMenu open={isOpen} onSelect={jest.fn()} selectedId="set">
         <span>Profile</span>
-        <span className="collide">Settings</span>
+        <span className="collide" id="set">
+          Settings
+        </span>
         <hr data-testid="hr" />
-        <span>Logout</span>
+        <span id="log">Logout</span>
       </DropMenu>
     );
   };
@@ -55,10 +57,26 @@ describe('DropMenu', () => {
     expect(settings).toHaveClass('option-item', 'collide');
 
     const hr = screen.getByTestId('hr');
-    expect(hr).toHaveClass('option-item');
+    expect(hr).not.toHaveClass('option-item');
 
     const logout = screen.getByText(/logout/i);
     expect(logout).toHaveClass('option-item');
+  });
+
+  it('aria-selected="true" to child with the selectedId', () => {
+    setup(true);
+
+    const profile = screen.getByText(/profile/i);
+    expect(profile).toHaveAttribute('aria-selected', 'false');
+
+    const settings = screen.getByText(/settings/i);
+    expect(settings).toHaveAttribute('aria-selected', 'true');
+
+    const hr = screen.getByTestId('hr');
+    expect(hr).not.toHaveAttribute('aria-selected');
+
+    const logout = screen.getByText(/logout/i);
+    expect(logout).toHaveAttribute('aria-selected', 'false');
   });
 
   it('calls onClose if any child is clicked', () => {

@@ -19,7 +19,22 @@
     margin-right: 1rem;
   }
 
-  .profile {
-    cursor: pointer;
+  .user-menu {
+    position: relative;
+
+    .profile {
+      cursor: pointer;
+    }
+
+    .drop-menu {
+      bottom: -0.5rem;
+      left: 100%;
+      transform: translate(-100%, 100%);
+
+      .option-item:first-of-type {
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+      }
+    }
   }
 }
