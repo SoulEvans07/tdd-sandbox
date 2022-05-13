@@ -1,5 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../database';
+import Task from './Task';
+import User from './User';
 
 interface TenantAttributes {
   id: number;
@@ -40,5 +42,27 @@ Tenant.init(
     paranoid: true,
   }
 );
+
+Tenant.hasMany(User, {
+  sourceKey: 'id',
+  foreignKey: 'tenantId',
+  as: 'users',
+});
+
+User.belongsTo(Tenant, {
+  foreignKey: 'tenantId',
+  as: 'tenant',
+});
+
+Tenant.hasMany(Task, {
+  sourceKey: 'id',
+  foreignKey: 'tenantId',
+  as: 'tasks',
+});
+
+Task.belongsTo(Tenant, {
+  foreignKey: 'tenantId',
+  as: 'tenant',
+});
 
 export default Tenant;

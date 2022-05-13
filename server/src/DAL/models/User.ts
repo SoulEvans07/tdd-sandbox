@@ -1,5 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../database';
+import Task from './Task';
+import Tenant from './Tenant';
 
 interface UserAttributes {
   id: number;
@@ -59,5 +61,27 @@ User.init(
     paranoid: true,
   }
 );
+
+User.hasMany(Task, {
+  sourceKey: 'id',
+  foreignKey: 'assigneeId',
+  as: 'tasks',
+});
+
+Task.belongsTo(User, {
+  foreignKey: 'assigneeId',
+  as: 'assignee',
+});
+
+Task.hasMany(Task, {
+  sourceKey: 'id',
+  foreignKey: 'parentId',
+  as: 'subtasks',
+});
+
+Task.belongsTo(Task, {
+  foreignKey: 'parentId',
+  as: 'parent',
+});
 
 export default User;

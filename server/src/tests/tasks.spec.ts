@@ -468,6 +468,44 @@ describe('Tasks', () => {
       expect(resp.status).toBe(400);
       expect(resp.body.message).toBe(LocaleEn.badTaskStatusChange);
     });
+
+    test('Change assignee', async () => {
+      const loginData = await getLoggedInUser();
+      const loginDataSameTenant = await getLoggedInUser({
+        username: 'adam.szi2',
+        email: 'adam.szi2@snapsoft.hu',
+        password: 'Password123!',
+      });
+      const loginDataOtherTenant = await getLoggedInUser({
+        username: 'adam.szi3',
+        email: 'adam.szi@snapsoftaaa.hu',
+        password: 'Password123!',
+      });
+      let resp = await postRequest(
+        ApiEndpoints.CreateTask,
+        { ...taskInputPersonal, tenantId: loginData.user.tenants[0] },
+        generateAuthorizationHeader(loginData)
+      );
+      let tenantTask: TaskOutput = resp.body;
+
+      resp = await patchTask(tenantTask.id, { ...tenantTask, assigneeId: loginData.user.id }, loginData);
+      tenantTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(tenantTask.assigneeId).toBe(loginData.user.id);
+
+      resp = await patchTask(tenantTask.id, { ...tenantTask, assigneeId: loginDataSameTenant.user.id }, loginData);
+      tenantTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(tenantTask.assigneeId).toBe(loginDataSameTenant.user.id);
+
+      resp = await patchTask(tenantTask.id, { ...tenantTask, assigneeId: loginDataOtherTenant.user.id }, loginData);
+      expect(resp.status).toBe(403);
+      expect(resp.body.message).toBe(LocaleEn.forbidden);
+
+      resp = await patchTask(tenantTask.id, { ...tenantTask, assigneeId: loginData.user.id }, loginDataOtherTenant);
+      expect(resp.status).toBe(403);
+      expect(resp.body.message).toBe(LocaleEn.forbidden);
+    });
   });
 
   describe('Validation', () => {

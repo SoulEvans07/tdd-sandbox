@@ -1,5 +1,6 @@
 import Task, { TaskInput, TaskOutput, TaskStatus } from '../DAL/models/Task';
-import { UserOutput } from '../DAL/models/User';
+import Tenant from '../DAL/models/Tenant';
+import User, { UserOutput } from '../DAL/models/User';
 import { BadRequestException } from '../types/exceptions/BadRequestException';
 import { ForbiddenException } from '../types/exceptions/ForbiddenException';
 import { TaskNotFoundException } from '../types/exceptions/TaskNotFoundException';
@@ -52,7 +53,9 @@ export class TaskManager {
   }
 
   public static async updateTask(taskId: number, task: TaskInput, user: UserOutput) {
-    const oldTask = await Task.findOne({ where: { id: taskId } });
+    const oldTask = await Task.findOne({
+      where: { id: taskId },
+    });
 
     if (!oldTask) {
       throw new TaskNotFoundException();
@@ -64,6 +67,13 @@ export class TaskManager {
 
     if (oldTask.tenantId && user.tenantId !== oldTask.tenantId) {
       throw new ForbiddenException();
+    }
+
+    if (task.assigneeId) {
+      const targetUser = await User.findOne({ where: { id: task.assigneeId } });
+      if (oldTask.tenantId && ((targetUser && targetUser.tenantId !== oldTask.tenantId) || !targetUser)) {
+        throw new ForbiddenException();
+      }
     }
 
     if (oldTask.assigneeId && !oldTask.tenantId && !task.assigneeId) {
@@ -93,6 +103,7 @@ export class TaskManager {
         title: task.title,
         description: task.description,
         status: task.status,
+        assigneeId: task.assigneeId,
       },
       { where: { id: taskId } }
     );
