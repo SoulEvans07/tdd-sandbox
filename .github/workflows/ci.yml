@@ -16,3 +16,7 @@ jobs:
         run: |
           cd web
           yarn test
+      - name: Build frontend
+        run: |
+          cd web
+          yarn build
