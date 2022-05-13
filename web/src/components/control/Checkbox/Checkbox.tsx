@@ -1,14 +1,18 @@
 import { ReactElement, useMemo, useState } from 'react';
 import './Checkbox.scss';
 import { Icon } from '../../ui/Icon/Icon';
+import classNames from 'classnames';
 
-interface CheckboxProps {
+type HTMLCheckboxProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+type ToRemove = 'checked' | 'onChange' | 'onClick' | 'aria-checked' | 'role' | 'value';
+
+interface CheckboxProps extends Omit<HTMLCheckboxProps, ToRemove> {
   checked?: boolean;
   onChange?: (checked: boolean) => void;
 }
 
 export function Checkbox(props: CheckboxProps): ReactElement {
-  const { checked, onChange } = props;
+  const { checked, onChange, className, ...restProps } = props;
   const [_checked, setChecked] = useState(false);
 
   if ((checked === undefined && onChange !== undefined) || (checked !== undefined && onChange === undefined)) {
@@ -23,7 +27,13 @@ export function Checkbox(props: CheckboxProps): ReactElement {
   const value = useMemo(() => (checked !== undefined ? checked : _checked), [checked, _checked]);
 
   return (
-    <div className="checkbox" role="checkbox" aria-checked={value} onClick={handleChange}>
+    <div
+      className={classNames('checkbox', className)}
+      role="checkbox"
+      aria-checked={value}
+      onClick={handleChange}
+      {...restProps}
+    >
       {!!value && <Icon icon="check" />}
     </div>
   );

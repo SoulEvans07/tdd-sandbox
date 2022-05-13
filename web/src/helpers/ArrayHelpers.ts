@@ -1,3 +1,5 @@
+export type ListPickTuple<LI extends Record<string, any>, P extends keyof LI> = [Array<LI>, Array<LI[P]>];
+
 export class ArrayHelpers {
   static cycle<T>(array: T[], count: number = 1): T[] {
     const cycles = count % array.length;
@@ -10,5 +12,27 @@ export class ArrayHelpers {
     const nextIndex = array.indexOf(item) + 1;
     const nextValidIndex = nextIndex % array.length;
     return array[nextValidIndex];
+  }
+
+  static filterBy<T extends Record<string, any>>(array: T[], key: keyof T, filter?: T[typeof key]): T[] {
+    return array.filter(item => !filter || item[key] === filter);
+  }
+
+  static filterPickBy<T extends Record<string, any>>(
+    array: T[],
+    pick: keyof T,
+    key: keyof T,
+    filter?: T[typeof key]
+  ): ListPickTuple<T, typeof key> {
+    return array.reduce(
+      (acc: ListPickTuple<T, typeof key>, curr: T) => {
+        if (!filter || curr[key] === filter) {
+          acc[0].push(curr);
+          acc[1].push(curr[pick]);
+        }
+        return acc;
+      },
+      [[], []]
+    );
   }
 }

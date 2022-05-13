@@ -92,4 +92,102 @@ describe('TaskList', () => {
       tasks.forEach(checkByStatus(status));
     });
   });
+
+  describe('multi select delete', () => {
+    test('clear completed btn is visible, when there are no selected items', () => {
+      const handleRemove = jest.fn();
+      render(<TaskList list={tasks} onRemove={handleRemove} />);
+
+      const clearCompleted = screen.getByRole('button', { name: /clear completed/i });
+      expect(clearCompleted).toBeInTheDocument();
+
+      selectTaskItems([2, 1, 5]);
+
+      const noClearSelected = screen.queryByRole('button', { name: /clear completed/i });
+      expect(noClearSelected).not.toBeInTheDocument();
+
+      selectTaskItems([2, 1, 5]);
+
+      const clearCompletedAgain = screen.getByRole('button', { name: /clear completed/i });
+      expect(clearCompletedAgain).toBeInTheDocument();
+    });
+
+    test('pressing clear completed will call onRemove with the completed items', () => {
+      const handleRemove = jest.fn();
+      render(<TaskList list={tasks} onRemove={handleRemove} />);
+
+      const clearCompleted = screen.getByRole('button', { name: /clear completed/i });
+      userEvent.click(clearCompleted);
+      expect(handleRemove).toBeCalledWith(tasks.filter(t => t.status === 'Done').map(t => t.id));
+    });
+
+    describe.each([
+      { title: 'there are no completed tasks in the list', currentTasks: tasks.filter(t => t.status !== 'Done') },
+      { title: 'there are no tasks in the list', currentTasks: [] },
+    ])('clear completed btn is disabled', ({ title, currentTasks }) => {
+      test(`when ${title}`, () => {
+        const handleRemove = jest.fn();
+        render(<TaskList list={currentTasks} onRemove={handleRemove} />);
+
+        const clearCompleted = screen.getByRole('button', { name: /clear completed/i });
+        expect(clearCompleted).toBeDisabled();
+      });
+    });
+
+    function selectTaskItems(toSelect: number[]) {
+      const checkboxes = screen.getAllByRole('checkbox', { name: /select/i });
+      toSelect.forEach(index => userEvent.click(checkboxes[index]));
+    }
+
+    test('clear selected btn only visible there are selected items', () => {
+      const handleRemove = jest.fn();
+      render(<TaskList list={tasks} onRemove={handleRemove} />);
+
+      const noClearSelected = screen.queryByRole('button', { name: /clear selected/i });
+      expect(noClearSelected).not.toBeInTheDocument();
+
+      selectTaskItems([2, 1, 5]);
+
+      const clearSelected = screen.getByRole('button', { name: /clear selected/i });
+      expect(clearSelected).toBeInTheDocument();
+
+      selectTaskItems([2, 1, 5]);
+
+      const noClearSelectedAgain = screen.queryByRole('button', { name: /clear selected/i });
+      expect(noClearSelectedAgain).not.toBeInTheDocument();
+    });
+
+    test('clear selected will call onRemove with the selected task ids', () => {
+      const handleRemove = jest.fn();
+      render(<TaskList list={tasks} onRemove={handleRemove} />);
+
+      const toRemove = [2, 1, 5];
+      selectTaskItems(toRemove);
+      const clearSelected = screen.getByRole('button', { name: /clear selected/i });
+      userEvent.click(clearSelected);
+      expect(handleRemove).toBeCalledWith(expect.arrayContaining(toRemove));
+    });
+
+    test('clear selected will only remove filtered/visible tasks', async () => {
+      const handleRemove = jest.fn();
+      render(<TaskList list={tasks} onRemove={handleRemove} />);
+
+      const openTasksToSelect = [1, 7];
+      const otherTasksToSelect = [2, 6];
+      const toSelect = [...otherTasksToSelect, ...openTasksToSelect];
+      selectTaskItems(toSelect);
+
+      const openFilter = screen.getByRole('button', { name: /open/i });
+      userEvent.click(openFilter);
+
+      const checkboxes = screen.getAllByRole('checkbox');
+      expect(checkboxes).toHaveLength(3);
+
+      const clearSelected = screen.getByRole('button', { name: /clear selected/i });
+      userEvent.click(clearSelected);
+
+      expect(handleRemove).toHaveBeenLastCalledWith(expect.arrayContaining(openTasksToSelect));
+      expect(handleRemove).not.toHaveBeenLastCalledWith(expect.arrayContaining(otherTasksToSelect));
+    });
+  });
 });

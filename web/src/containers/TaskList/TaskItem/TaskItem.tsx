@@ -7,15 +7,17 @@ import './TaskItem.scss';
 export interface TaskItemProps {
   task: Task;
   onRemove: VoidFunction;
+  selected: boolean;
+  onSelect: (selected: boolean) => void;
 }
 
 export function TaskItem(props: TaskItemProps): ReactElement {
-  const { task, onRemove } = props;
+  const { task, onRemove, selected, onSelect } = props;
   const testId = `task-item-${task.id}`;
 
   return (
     <div className="task-item" id={testId} data-testid={testId}>
-      <Checkbox />
+      <Checkbox title="Select" checked={selected} onChange={onSelect} />
       <span className="task-title">{task.title}</span>
       <Icon className="remove-task" icon="cross" onClick={onRemove} role="button" aria-label="Remove" />
     </div>

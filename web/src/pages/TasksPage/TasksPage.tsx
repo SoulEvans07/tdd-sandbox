@@ -8,7 +8,7 @@ import { TaskList } from '../../containers/TaskList/TaskList';
 import { useDispatch, useSelector } from '../../contexts/store/StoreContext';
 import { selectActiveWorkspace, selectWorkspaceTasks } from '../../contexts/store/selectors';
 import { Task } from '../../contexts/store/types';
-import { createTask, loadTasks, removeTask } from '../../contexts/store/actions';
+import { createTask, loadTasks, removeMultipleTask } from '../../contexts/store/actions';
 import { taskController } from '../../controllers/TaskController';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -40,9 +40,9 @@ export function TasksPage(): ReactElement {
     setNewTaskTitle('');
   };
 
-  const handleRemove = (task: Task) => {
+  const handleRemove = (taskIds: Array<Task['id']>) => {
     if (!token) return;
-    taskController.remove([task.id], token).then(() => dispatch(removeTask(task)));
+    taskController.remove(taskIds, token).then(() => dispatch(removeMultipleTask(taskIds)));
   };
 
   return (

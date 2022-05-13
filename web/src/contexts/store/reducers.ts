@@ -15,8 +15,12 @@ export function rootReducer(state: StoreData, action: ActionType<typeof actions>
       });
     case 'todo.io/remove-task':
       return produce(state, draft => {
+        draft.workspaces[draft.activeWS] = draft.workspaces[draft.activeWS].filter(task => task.id !== action.payload);
+      });
+    case 'todo.io/remove-multiple-task':
+      return produce(state, draft => {
         draft.workspaces[draft.activeWS] = draft.workspaces[draft.activeWS].filter(
-          task => task.id !== action.payload.id
+          task => !action.payload.includes(task.id)
         );
       });
     default:

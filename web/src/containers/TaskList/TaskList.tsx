@@ -1,13 +1,15 @@
-import { ReactElement, useMemo, useState } from 'react';
+import { ReactElement, useCallback, useMemo, useState } from 'react';
+import produce from 'immer';
 import './TaskList.scss';
 import { Task, TaskStatus } from '../../contexts/store/types';
 import { TaskItem } from './TaskItem/TaskItem';
 import { Button } from '../../components/control/Button/Button';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
+import { ArrayHelpers } from '../../helpers/ArrayHelpers';
 
 export interface TaskListProps {
   list: Task[];
-  onRemove: (task: Task) => void;
+  onRemove: (taskIds: Array<Task['id']>) => void;
 }
 
 export function TaskList(props: TaskListProps): ReactElement {
@@ -26,9 +28,39 @@ export function TaskList(props: TaskListProps): ReactElement {
     ];
   }, [filter]);
 
-  const filteredList = useMemo(() => {
-    return list.filter(task => !filter || task.status === filter);
-  }, [filter, list]);
+  const completedTaskIds = useMemo(() => list.filter(t => t.status === 'Done').map(t => t.id), [list]);
+  const [filteredList, filteredIdList] = useMemo(
+    () => ArrayHelpers.filterPickBy(list, 'id', 'status', filter),
+    [list, filter]
+  );
+
+  const [selectedTasks, setSelected] = useState<Record<Task['id'], boolean>>({});
+  const onTaskSelect = (id: Task['id']) => (selected: boolean) =>
+    setSelected(prev =>
+      produce(prev, draft => {
+        draft[id] = selected;
+      })
+    );
+
+  const currentSelection = useMemo(() => {
+    const curr = Object.entries(selectedTasks).reduce((acc: number[], [id, sel]) => {
+      const taskId = Number(id);
+      if (sel && filteredIdList.includes(taskId)) acc.push(taskId);
+      return acc;
+    }, []);
+    return curr;
+  }, [selectedTasks, filteredIdList]);
+
+  const hasSelection = useMemo(() => currentSelection.some(t => t), [currentSelection]);
+  const isClearDisabled = useMemo(
+    () => !hasSelection && completedTaskIds.length === 0,
+    [hasSelection, completedTaskIds]
+  );
+
+  const handleClear = useCallback(() => {
+    if (!hasSelection) onRemove(completedTaskIds);
+    else onRemove(currentSelection);
+  }, [hasSelection, completedTaskIds, currentSelection]);
 
   return (
     <section className="task-list-container">
@@ -36,14 +68,20 @@ export function TaskList(props: TaskListProps): ReactElement {
         <div className="button-group text filter">
           <ButtonGroup fill="text" size="small" buttons={buttons} />
         </div>
-        <Button fill="text" size="small" className="clear-btn">
-          Clear Selected
+        <Button fill="text" size="small" className="clear-btn" onClick={handleClear} disabled={isClearDisabled}>
+          {hasSelection ? 'Clear Selected' : 'Clear Completed'}
         </Button>
       </section>
       <section className="task-list">
         {filteredList.length === 0 && <div className="empty-list">There is nothing here!</div>}
         {filteredList.map(task => (
-          <TaskItem task={task} key={`task-${task.id}`} onRemove={() => onRemove(task)} />
+          <TaskItem
+            task={task}
+            key={`task-${task.id}`}
+            onRemove={() => onRemove([task.id])}
+            selected={!!selectedTasks[task.id]}
+            onSelect={onTaskSelect(task.id)}
+          />
         ))}
       </section>
     </section>
