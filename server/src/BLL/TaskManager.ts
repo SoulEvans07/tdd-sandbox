@@ -1,7 +1,9 @@
 import Task, { TaskInput, TaskOutput, TaskStatus } from '../DAL/models/Task';
 import { UserOutput } from '../DAL/models/User';
+import { BadRequestException } from '../types/exceptions/BadRequestException';
 import { ForbiddenException } from '../types/exceptions/ForbiddenException';
 import { TaskNotFoundException } from '../types/exceptions/TaskNotFoundException';
+import { R } from '../types/localization';
 
 export class TaskManager {
   public static async createTask(task: TaskInput, user: UserOutput): Promise<TaskOutput> {
@@ -56,14 +58,41 @@ export class TaskManager {
       throw new TaskNotFoundException();
     }
 
-    if (oldTask?.assigneeId) {
+    if (oldTask.assigneeId && !oldTask.tenantId && user.id !== oldTask.assigneeId) {
+      throw new ForbiddenException();
+    }
+
+    if (oldTask.tenantId && user.tenantId !== oldTask.tenantId) {
+      throw new ForbiddenException();
+    }
+
+    if (oldTask.assigneeId && !oldTask.tenantId && !task.assigneeId) {
+      throw new BadRequestException(R.cantUnAssignTHePersonalTask);
+    }
+
+    if (oldTask.status !== task.status) {
+      if (oldTask.status === TaskStatus.Todo && task.status !== TaskStatus.InProgress) {
+        throw new BadRequestException(R.badTaskStatusChange);
+      }
+
+      if (oldTask.status === TaskStatus.InProgress && task.status === TaskStatus.Todo) {
+        throw new BadRequestException(R.badTaskStatusChange);
+      }
+
+      if (oldTask.status === TaskStatus.Blocked && task.status === TaskStatus.Done) {
+        throw new BadRequestException(R.badTaskStatusChange);
+      }
+
+      if (oldTask.status === TaskStatus.Done && task.status !== TaskStatus.Done) {
+        throw new BadRequestException(R.badTaskStatusChange);
+      }
     }
 
     const update = await Task.update(
       {
-        // title: task.title,
-        // description: task.description,
-        ...task, // hack everything
+        title: task.title,
+        description: task.description,
+        status: task.status,
       },
       { where: { id: taskId } }
     );

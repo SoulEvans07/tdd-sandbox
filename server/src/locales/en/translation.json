@@ -22,5 +22,7 @@
   "deleteSuccessful": "Delete successful",
   "idRequiredAndMustBeNumber": "Id is required and must be number",
   "badRequest": "Bad request",
-  "taskNotFound": "Task not found"
+  "taskNotFound": "Task not found",
+  "cantUnAssignTHePersonalTask": "You can't unassign the personal task",
+  "badTaskStatusChange": "Bad task status change"
 }

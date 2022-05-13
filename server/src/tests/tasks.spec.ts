@@ -20,8 +20,6 @@ describe('Tasks', () => {
   type LoginData = AuthResponse & { tenants: TenantOutput[] };
 
   async function getLoggedInUser(userInput: UserInput = mockUser): Promise<AuthResponse & { tenants: TenantOutput[] }> {
-    const emailPostFix = userInput.email.split('@')[1];
-
     let resp = await postUser(userInput);
     expect(resp.status).toBe(200);
 
@@ -38,6 +36,14 @@ describe('Tasks', () => {
       ...resp.body,
       tenants: userTenants,
     };
+  }
+
+  async function patchTask(taskId: number | string, patch: Partial<TaskInput>, loginData: LoginData) {
+    return await patchRequest(
+      ApiEndpoints.EditTask.replace(':id', taskId.toString()),
+      patch,
+      generateAuthorizationHeader(loginData)
+    );
   }
 
   function generateAuthorizationHeader(loginData: LoginData): Record<string, string> | undefined {
@@ -318,45 +324,58 @@ describe('Tasks', () => {
   describe('Task edit', () => {
     test('Id is missing from request', async () => {
       const loginData = await getLoggedInUser();
-
-      const resp = await patchRequest(
-        ApiEndpoints.EditTask.replace(':id', 'asd1'),
-        {},
-        generateAuthorizationHeader(loginData)
-      );
+      const resp = await patchTask('asd1', {}, loginData);
       expect(resp.status).toBe(400);
       expect(resp.body.message).toBe(LocaleEn.idRequiredAndMustBeNumber);
     });
 
     test('Task ids are miss match', async () => {
       const loginData = await getLoggedInUser();
-
-      const resp = await patchRequest(
-        ApiEndpoints.EditTask.replace(':id', '1'),
-        {},
-        generateAuthorizationHeader(loginData)
-      );
-
+      const resp = await patchTask('1', {}, loginData);
       expect(resp.status).toBe(400);
       expect(resp.body.message).toBe(LocaleEn.badRequest);
     });
 
     test('Task not found', async () => {
       const loginData = await getLoggedInUser();
-
-      const resp = await patchRequest(
-        ApiEndpoints.EditTask.replace(':id', '1'),
-        { id: 1 },
-        generateAuthorizationHeader(loginData)
-      );
+      const resp = await patchTask('1', { id: 1 }, loginData);
       expect(resp.status).toBe(404);
       expect(resp.body.message).toBe(LocaleEn.taskNotFound);
     });
 
-    //${'Title and desc'} | ${taskInputPersonal}| ${{ assigneeId: null, tenantId: 1 }}                      | ${200} | ${''}
+    test('Task forbidden', async () => {
+      const loginData = await getLoggedInUser();
+      const loginData2 = await getLoggedInUser({
+        username: 'user2Name',
+        email: 'user2@email.com',
+        password: 'Password1234!',
+      });
+
+      let resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, generateAuthorizationHeader(loginData));
+      const personalTask: TaskOutput = resp.body;
+      resp = await postRequest(
+        ApiEndpoints.CreateTask,
+        { ...taskInputPersonal, tenantId: loginData.user.tenants[0] },
+        generateAuthorizationHeader(loginData)
+      );
+      const tenantTask: TaskOutput = resp.body;
+
+      resp = await patchTask(personalTask.id.toString(), { ...personalTask, title: 'asd' }, loginData2);
+      expect(resp.status).toBe(403);
+      expect(resp.body.message).toBe(LocaleEn.forbidden);
+
+      resp = await patchTask(tenantTask.id, { ...tenantTask, title: 'asd' }, loginData2);
+      expect(resp.status).toBe(403);
+      expect(resp.body.message).toBe(LocaleEn.forbidden);
+    });
+
     test.each`
-      testName            | taskFrom             | payload                                                   | status | exceptedMessage
-      ${'Title and desc'} | ${taskInputPersonal} | ${{ title: 'New title', description: 'New description' }} | ${200} | ${''}
+      testName                      | taskFrom             | payload                                                   | status | exceptedMessage
+      ${'Title and desc'}           | ${taskInputPersonal} | ${{ title: 'New title', description: 'New description' }} | ${200} | ${''}
+      ${'Personal task unassigned'} | ${taskInputPersonal} | ${{ assigneeId: null }}                                   | ${400} | ${LocaleEn.cantUnAssignTHePersonalTask}
+      ${'Todo to blocked'}          | ${taskInputPersonal} | ${{ status: TaskStatus.Blocked }}                         | ${400} | ${LocaleEn.badTaskStatusChange}
+      ${'Todo to done'}             | ${taskInputPersonal} | ${{ status: TaskStatus.Done }}                            | ${400} | ${LocaleEn.badTaskStatusChange}
+      ${'Todo to in progress'}      | ${taskInputPersonal} | ${{ status: TaskStatus.InProgress }}                      | ${200} | ${''}
     `(
       '$testName',
       async ({
@@ -381,11 +400,7 @@ describe('Tasks', () => {
           ...payload,
         };
 
-        resp = await patchRequest(
-          ApiEndpoints.EditTask.replace(':id', task.id.toString()),
-          newTaskData,
-          generateAuthorizationHeader(loginData)
-        );
+        resp = await patchTask(task.id, newTaskData, loginData);
         expect(resp.status).toBe(status);
         if (exceptedMessage) {
           expect(resp.body.message).toBe(exceptedMessage);
@@ -396,6 +411,63 @@ describe('Tasks', () => {
         }
       }
     );
+
+    test('Missing task status validation', async () => {
+      const loginData = await getLoggedInUser();
+      let resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, generateAuthorizationHeader(loginData));
+      let personalTask: TaskOutput = resp.body;
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.InProgress }, loginData);
+      personalTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(personalTask.status).toBe(TaskStatus.InProgress);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.Todo }, loginData);
+      expect(resp.status).toBe(400);
+      expect(resp.body.message).toBe(LocaleEn.badTaskStatusChange);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.Blocked }, loginData);
+      personalTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(personalTask.status).toBe(TaskStatus.Blocked);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.InProgress }, loginData);
+      personalTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(personalTask.status).toBe(TaskStatus.InProgress);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.Blocked }, loginData);
+      personalTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(personalTask.status).toBe(TaskStatus.Blocked);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.Todo }, loginData);
+      personalTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(personalTask.status).toBe(TaskStatus.Todo);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.InProgress }, loginData);
+      personalTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(personalTask.status).toBe(TaskStatus.InProgress);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.Done }, loginData);
+      personalTask = resp.body;
+      expect(resp.status).toBe(200);
+      expect(personalTask.status).toBe(TaskStatus.Done);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.Todo }, loginData);
+      expect(resp.status).toBe(400);
+      expect(resp.body.message).toBe(LocaleEn.badTaskStatusChange);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.InProgress }, loginData);
+      expect(resp.status).toBe(400);
+      expect(resp.body.message).toBe(LocaleEn.badTaskStatusChange);
+
+      resp = await patchTask(personalTask.id, { ...personalTask, status: TaskStatus.Blocked }, loginData);
+      expect(resp.status).toBe(400);
+      expect(resp.body.message).toBe(LocaleEn.badTaskStatusChange);
+    });
   });
 
   describe('Validation', () => {
