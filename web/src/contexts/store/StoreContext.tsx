@@ -11,6 +11,8 @@ export interface StoreContext {
 
 const Store = createContext<StoreContext | undefined>(undefined);
 
+export const StoreConsumer = Store.Consumer;
+
 export function useStore() {
   const context = useContext(Store);
   if (!context) throw new Error('useStore must be used within a StoreProvider');
