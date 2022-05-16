@@ -1,8 +1,5 @@
 import { createContext, PropsWithChildren, ReactElement, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { authController } from '../../controllers/AuthController';
-import { useLocation } from '../../hooks/userLocation';
-import { ROUTES } from '../../router/types';
 
 export interface User {
   id: number;
@@ -10,14 +7,17 @@ export interface User {
   email: string;
 }
 
-interface AuthContext {
+export interface AuthContext {
   currentUser: User | undefined;
   token: string | undefined;
   login: (user: User, token: string) => void;
   logout: VoidFunction;
+  refreshToken: () => Promise<void>;
 }
 
 const Auth = createContext<AuthContext | undefined>(undefined);
+
+export const AuthConsumer = Auth.Consumer;
 
 export function useAuth() {
   const context = useContext(Auth);
@@ -38,8 +38,6 @@ interface AuthProviderProps {
 export function AuthProvider(props: PropsWithChildren<AuthProviderProps>): ReactElement {
   const { initial, onLogin, onLogout } = props;
   const [userData, setState] = useState<AuthState>(initial);
-  const location = useLocation();
-  const navigate = useNavigate();
 
   const login = (currentUser: User, token: string) => {
     setState({ currentUser, token });
@@ -51,13 +49,13 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>): React
     setState(clearedState);
   };
 
-  const refreshToken = async (token: string) => {
+  const refreshToken = async (token?: string) => {
+    if (!token) return logout();
     try {
       const response = await authController.refreshToken(token);
       login(response.user, response.token);
     } catch (e) {
       logout();
-      navigate(ROUTES.LOGIN, { state: { from: location } });
     }
   };
 
@@ -67,5 +65,10 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>): React
     }
   }, [initial]);
 
-  return <Auth.Provider value={{ ...userData, login, logout }} {...props} />;
+  return (
+    <Auth.Provider
+      value={{ ...userData, login, logout, refreshToken: () => refreshToken(userData.token) }}
+      {...props}
+    />
+  );
 }
