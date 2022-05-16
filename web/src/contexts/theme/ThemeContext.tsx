@@ -14,6 +14,8 @@ interface ThemeContext {
 
 const Theme = createContext<ThemeContext | undefined>(undefined);
 
+export const ThemeConsumer = Theme.Consumer;
+
 export function useTheme() {
   const context = useContext(Theme);
   if (!context) throw new Error('useTheme must be used within a ThemeProvider');
