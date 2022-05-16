@@ -3,16 +3,16 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import './SignupScreen.scss';
 import { userController } from '../../controllers/UserController';
 import { useAuth } from '../../contexts/auth/AuthContext';
-import { minMaxValidator } from '../../validators/stringValidators';
 import { Page } from '../../components/layout/Page/Page';
 import { TextInput } from '../../components/control/TextInput/TextInput';
-import { ValidatedInput } from '../../components/control/TextInput/ValidatedInput';
+import { ValidatedInput } from '../../components/control/TextInput/ValidatedTextInput/ValidatedInput';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
 import { Button } from '../../components/control/Button/Button';
 import { TextLink } from '../../components/control/TextLink/TextLink';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { ROUTES } from '../../router/types';
 import { PasswordInput } from '../../components/control/TextInput/PasswordInput';
+import { StringValidator } from '../../validators/StringValidator';
 
 interface SignupForm {
   username: string;
@@ -55,6 +55,11 @@ export function SignupScreen(): ReactElement {
 
   if (currentUser) return <Navigate to={ROUTES.TASKS} />;
 
+  const passwordValidator = StringValidator.compose(
+    StringValidator.minLen(8, 'Password is too short'),
+    StringValidator.maxLen(32, 'Password is too long')
+  );
+
   return (
     <Page className="signup-screen">
       <main className="card">
@@ -69,7 +74,7 @@ export function SignupScreen(): ReactElement {
           />
           <TextInput type="text" id="email" placeholder="Email" value={email} onChange={handlFieldChange('email')} />
           <ValidatedInput
-            validator={minMaxValidator(6, 32)}
+            validator={passwordValidator}
             Input={PasswordInput}
             id="password"
             placeholder="Password"

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PasswordInput } from './PasswordInput';
 import { TextInput } from './TextInput';
-import { ValidatedInput } from './ValidatedInput';
+import { ValidatedInput } from './ValidatedTextInput/ValidatedInput';
 
 describe('Input', () => {
   const inputId = 'test-input-id';

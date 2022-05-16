@@ -1,8 +1,8 @@
 import { ChangeEvent, FocusEvent, ReactElement, useState } from 'react';
 import classNames from 'classnames';
 import './ValidatedInput.scss';
-import { HTMLInputProps, InputComp } from './types';
-import { InputValidator } from '../../../validators/types';
+import { HTMLInputProps, InputComp } from '../types';
+import { InputValidator } from '../../../../validators/types';
 
 export type ValidatedInputProps<ICP extends HTMLInputProps = HTMLInputProps> = ICP & {
   Input: InputComp<ICP>;

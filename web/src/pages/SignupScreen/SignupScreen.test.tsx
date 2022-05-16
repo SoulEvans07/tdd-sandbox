@@ -53,12 +53,12 @@ describe('SignupPage', () => {
   describe('validation', () => {
     it('password', async () => {
       userEvent.clear(passwordInput);
-      userEvent.type(passwordInput, Random.string(5));
+      userEvent.type(passwordInput, Random.string(7));
       const shortError = screen.getByRole('alert');
       expect(shortError).toHaveTextContent(/password is too short/i);
 
       userEvent.clear(passwordInput);
-      userEvent.type(passwordInput, Random.string(6));
+      userEvent.type(passwordInput, Random.string(8));
       const noShortError = screen.queryByRole('alert');
       expect(noShortError).not.toBeInTheDocument();
 
