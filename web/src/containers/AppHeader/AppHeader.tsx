@@ -6,7 +6,7 @@ import { ThemeSwitch } from '../ThemeSwitch/ThemeSwitch';
 import { DropMenu } from '../../components/control/DropMenu/DropMenu';
 import { userController } from '../../controllers/UserController';
 import { useDispatch, useSelector } from '../../contexts/store/StoreContext';
-import { changeWorkspace, loadWorkspaces } from '../../contexts/store/actions';
+import { changeWorkspace, clearData, loadWorkspaces } from '../../contexts/store/actions';
 import { selectActiveWorkspace, selectWorkspaces } from '../../contexts/store/selectors';
 import { personalWs, Workspace } from '../../contexts/store/types';
 
@@ -30,13 +30,16 @@ export function AppHeader(props: AppHeaderProps): ReactElement {
   const [menuOpen, setMenu] = useState(false);
   const switchMenu = () => setMenu(prev => !prev);
   const closeMenu = () => setMenu(false);
-  const onLogout = () => logout();
+  const onLogout = () => {
+    logout();
+    dispatch(clearData());
+  };
 
   useEffect(() => {
     if (token) {
       userController.getWorkspaces(token).then(ws => dispatch(loadWorkspaces(ws)));
     }
-  }, [currentUser, menuOpen]);
+  }, [currentUser]);
 
   const workspaceOptions = useMemo(() => {
     const changeWs = (id: string) => () => dispatch(changeWorkspace(id));
@@ -51,6 +54,7 @@ export function AppHeader(props: AppHeaderProps): ReactElement {
   return (
     <header className="app-header">
       <h1>{title}</h1>
+      {!!currentUser && <h2>{activeWs.name}</h2>}
       <ThemeSwitch />
       {!!currentUser && (
         <div className="user-menu">

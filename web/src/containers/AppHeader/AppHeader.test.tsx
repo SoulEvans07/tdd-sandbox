@@ -42,6 +42,7 @@ describe('AppHeader', () => {
   it('composition', () => {
     setup();
     expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /personal/i })).toBeInTheDocument();
     expect(screen.getByRole('checkbox', { name: /switch theme/i })).toBeInTheDocument();
     expect(screen.getByTitle(user.username)).toBeInTheDocument();
   });
@@ -66,5 +67,21 @@ describe('AppHeader', () => {
     );
     // wait until last updates are done so they dont throw error when the test unmounts the components
     await new Promise(res => setTimeout(res, 1000));
+  });
+
+  it('changes the subheader when workspace is changed', async () => {
+    setup();
+    expect(screen.getByRole('heading', { name: /personal/i })).toBeInTheDocument();
+
+    const profileImg = screen.getByTitle(user.username);
+    userEvent.click(profileImg);
+
+    await waitFor(async () => {
+      const workspace = await screen.findByRole('option', { name: mockWorkspace.name });
+      userEvent.click(workspace);
+
+      const subheader = await screen.findByRole('heading', { name: mockWorkspace.name });
+      expect(subheader).toBeInTheDocument();
+    });
   });
 });

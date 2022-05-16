@@ -1,6 +1,7 @@
 import { action } from 'typesafe-actions';
 import { Task, WorkspaceMap } from './types';
 
+export const clearData = () => action('todo.io/clear-data');
 export const loadTasks = (tasks: Task[], wsId: keyof WorkspaceMap) => action('todo.io/load-tasks', { tasks, wsId });
 export const createTask = (task: Task) => action('todo.io/create-task', task);
 export const removeTask = (taskId: Task['id']) => action('todo.io/remove-task', taskId);

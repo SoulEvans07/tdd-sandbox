@@ -1,6 +1,6 @@
 import { ActionType } from 'typesafe-actions';
 import { produce } from 'immer';
-import { StoreData } from './types';
+import { initialStoreData, StoreData } from './types';
 import * as actions from './actions';
 
 export function rootReducer(state: StoreData, action: ActionType<typeof actions>): StoreData {
@@ -35,6 +35,8 @@ export function rootReducer(state: StoreData, action: ActionType<typeof actions>
       return produce(state, draft => {
         draft.activeWS = action.payload.workspaceId;
       });
+    case 'todo.io/clear-data':
+      return initialStoreData;
     default:
       return state;
   }
