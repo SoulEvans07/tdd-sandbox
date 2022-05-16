@@ -82,6 +82,13 @@
     }
 
     // colors
+    &.error {
+      --color-300: var(--color-red-400);
+      --color-200: var(--color-red-300);
+      --color-100: var(--color-red-200);
+      text-shadow: 0px 2px 10px hsla(350, 60%, 60%, 0.5);
+      box-shadow: 0px 2px 8px 0px hsla(350, 60%, 60%, 0.3);
+    }
 
     // disabled
     &:disabled {

@@ -11,6 +11,8 @@ import { Task } from '../../contexts/store/types';
 import { createTask, loadTasks, removeMultipleTask } from '../../contexts/store/actions';
 import { taskController } from '../../controllers/TaskController';
 import { useAuth } from '../../contexts/auth/AuthContext';
+import { Footer } from '../../components/layout/Footer/Footer';
+import { TaskEditPanel } from '../../containers/TaskEditPanel/TaskEditPanel';
 
 export function TasksPage(): ReactElement {
   const dispatch = useDispatch();
@@ -65,6 +67,10 @@ export function TasksPage(): ReactElement {
         </section>
         <TaskList list={tasks} onRemove={handleRemove} />
       </main>
+      <Footer>
+        <span>Select a task to open it in the edit panel</span>
+      </Footer>
+      <TaskEditPanel task={tasks[0]} />
     </Page>
   );
 }

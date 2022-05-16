@@ -65,8 +65,8 @@ describe('AuthContext', () => {
         id: '11',
         name: 'Company',
         tasks: [
-          { id: 0, title: 'Task 1', status: 'Todo' },
-          { id: 1, title: 'Task 2', status: 'Todo' },
+          { id: 0, title: 'Task 1', status: 'Todo', description: '' },
+          { id: 1, title: 'Task 2', status: 'Todo', description: '' },
         ],
       },
     },
@@ -133,8 +133,8 @@ describe('AuthContext', () => {
 
     test('loadTasks([...], _personal)', () => {
       const newTasks: Task[] = [
-        { id: 0, title: 'New Task 1', status: 'Todo' },
-        { id: 1, title: 'New Task 2', status: 'Todo' },
+        { id: 0, title: 'New Task 1', status: 'Todo', description: '' },
+        { id: 1, title: 'New Task 2', status: 'Todo', description: '' },
       ];
       const actionBtn = <ActionButton action={actions.loadTasks(newTasks, personalWs)} text="Load" />;
       customRender(<StoreConsumer>{mockStoreConcumer(actionBtn)}</StoreConsumer>);
@@ -148,7 +148,7 @@ describe('AuthContext', () => {
     });
 
     test('createTask()', () => {
-      const newTask: Task = { id: 123, title: 'New Task 1', status: 'Todo' };
+      const newTask: Task = { id: 123, title: 'New Task 1', status: 'Todo', description: '' };
       const actionBtn = <ActionButton action={actions.createTask(newTask)} text="create" />;
       customRender(<StoreConsumer>{mockStoreConcumer(actionBtn)}</StoreConsumer>, mockData);
       testForMockData();

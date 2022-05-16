@@ -1,9 +1,24 @@
 export type TaskStatus = 'Todo' | 'InProgress' | 'Blocked' | 'Done';
 
+export const TaskStatusNames: Record<TaskStatus, string> = {
+  Todo: 'Open',
+  InProgress: 'In Progress',
+  Blocked: 'Blocked',
+  Done: 'Done',
+};
+
+export const TaskStatusTransitions: Record<TaskStatus, TaskStatus[]> = {
+  Todo: ['InProgress'],
+  InProgress: ['Blocked', 'Done'],
+  Blocked: ['Todo', 'InProgress'],
+  Done: [],
+};
+
 export interface Task {
   id: number;
   title: string;
   status: TaskStatus;
+  description: string;
 }
 
 export const personalWs = '_personal' as const;
