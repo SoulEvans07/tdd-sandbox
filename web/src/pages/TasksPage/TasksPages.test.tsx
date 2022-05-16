@@ -1,31 +1,25 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { ROUTES } from '../router/types';
-import { TasksPage } from '../pages/TasksPage/TasksPage';
-import { StoreProvider } from '../contexts/store/StoreContext';
-import { AuthProvider } from '../contexts/auth/AuthContext';
-import { ThemeProvider } from '../contexts/theme/ThemeContext';
-import { personalWs, StoreData, Task } from '../contexts/store/types';
-import { mockNewTask } from '../mocks/controllers/MockTaskController';
-import { mockJwtToken } from '../mocks/controllers/mockData';
-import { supressErrorMessages } from '../helpers/testHelpers';
+import { ROUTES } from '../../router/types';
+import { TasksPage } from './TasksPage';
+import { StoreProvider } from '../../contexts/store/StoreContext';
+import { AuthProvider } from '../../contexts/auth/AuthContext';
+import { ThemeProvider } from '../../contexts/theme/ThemeContext';
+import { personalWs, StoreData, Task } from '../../contexts/store/types';
+import { mockNewTask } from '../../mocks/controllers/MockTaskController';
+import { mockJwtToken, mockUser } from '../../mocks/controllers/mockData';
+import { supressErrorMessages } from '../../helpers/testHelpers';
 
-describe('tasks behavior', () => {
+describe('TasksPage', () => {
   let createTaskInput: HTMLInputElement;
   let profileImg: HTMLElement;
 
   const setupTaskPage = (init?: StoreData) => {
-    const user = {
-      id: 0,
-      username: 'adam.szi',
-      email: 'adam.szi@snapsoft.hu',
-      tenants: [1],
-    };
     render(
       <MemoryRouter initialEntries={[ROUTES.TASKS]}>
         <ThemeProvider initial="dark">
-          <AuthProvider initial={{ currentUser: user, token: mockJwtToken }}>
+          <AuthProvider initial={{ currentUser: mockUser, token: mockJwtToken }}>
             <StoreProvider initial={init}>
               <TasksPage />
             </StoreProvider>
@@ -35,7 +29,7 @@ describe('tasks behavior', () => {
     );
 
     createTaskInput = screen.getByRole('textbox', { name: /new task/i }) as HTMLInputElement;
-    profileImg = screen.getByTitle(user.username) as HTMLInputElement;
+    profileImg = screen.getByTitle(mockUser.username) as HTMLInputElement;
   };
 
   supressErrorMessages();

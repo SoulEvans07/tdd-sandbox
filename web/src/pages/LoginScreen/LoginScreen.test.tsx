@@ -1,12 +1,16 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
-import { mockExistingUser } from '../mocks/controllers/MockAuthController';
-import { ROUTES } from '../router/types';
-import App from '../App';
-import { supressErrorMessages } from '../helpers/testHelpers';
+import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { mockExistingUser } from '../../mocks/controllers/MockAuthController';
+import { supressErrorMessages } from '../../helpers/testHelpers';
+import { LoginScreen } from './LoginScreen';
+import { AuthProvider } from '../../contexts/auth/AuthContext';
+import { StoreProvider } from '../../contexts/store/StoreContext';
+import { ThemeProvider } from '../../contexts/theme/ThemeContext';
+import { ROUTES } from '../../router/types';
+import { AppHeader } from '../../containers/AppHeader/AppHeader';
 
-describe('login behavior', () => {
+describe('LoginScreen', () => {
   let titleHeading: HTMLHeadingElement;
   let nameInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
@@ -14,10 +18,27 @@ describe('login behavior', () => {
 
   supressErrorMessages();
 
+  function MockApp() {
+    const navigate = useNavigate();
+    const onLogout = () => navigate(ROUTES.LOGIN);
+    return (
+      <ThemeProvider initial="dark">
+        <AuthProvider initial={{ currentUser: undefined, token: undefined }} onLogout={onLogout}>
+          <StoreProvider>
+            <Routes>
+              <Route path={ROUTES.LOGIN} element={<LoginScreen />} />
+              <Route path={ROUTES.TASKS} element={<AppHeader title="Todo" />} />
+            </Routes>
+          </StoreProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    );
+  }
+
   beforeEach(() => {
     render(
       <MemoryRouter initialEntries={[ROUTES.LOGIN]}>
-        <App />
+        <MockApp />
       </MemoryRouter>
     );
 

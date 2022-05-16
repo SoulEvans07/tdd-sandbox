@@ -1,13 +1,16 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
-import { Random } from '../helpers/Random';
-import { mockNewUser } from '../mocks/controllers/MockUserController';
-import { ROUTES } from '../router/types';
-import App from '../App';
-import { supressErrorMessages } from '../helpers/testHelpers';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Random } from '../../helpers/Random';
+import { mockNewUser } from '../../mocks/controllers/MockUserController';
+import { supressErrorMessages } from '../../helpers/testHelpers';
+import { AuthProvider } from '../../contexts/auth/AuthContext';
+import { StoreProvider } from '../../contexts/store/StoreContext';
+import { ThemeProvider } from '../../contexts/theme/ThemeContext';
+import { SignupScreen } from './SignupScreen';
+import { ROUTES } from '../../router/types';
 
-describe('signup behavior', () => {
+describe('SignupPage', () => {
   let nameInput: HTMLInputElement;
   let emailInput: HTMLInputElement;
   let passwordInput: HTMLInputElement;
@@ -19,7 +22,16 @@ describe('signup behavior', () => {
   beforeEach(() => {
     render(
       <MemoryRouter initialEntries={[ROUTES.SIGNUP]}>
-        <App />
+        <ThemeProvider initial="dark">
+          <AuthProvider initial={{ currentUser: undefined, token: undefined }}>
+            <StoreProvider>
+              <Routes>
+                <Route path={ROUTES.SIGNUP} element={<SignupScreen />} />
+                <Route path={ROUTES.LOGIN} element={<h1>Login</h1>} />
+              </Routes>
+            </StoreProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </MemoryRouter>
     );
 

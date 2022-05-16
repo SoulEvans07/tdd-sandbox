@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from '../../contexts/auth/AuthContext';
 import { StoreProvider } from '../../contexts/store/StoreContext';
 import { StoreData } from '../../contexts/store/types';
@@ -8,7 +7,6 @@ import { ThemeProvider } from '../../contexts/theme/ThemeContext';
 import { supressErrorMessages } from '../../helpers/testHelpers';
 import { mockJwtToken, mockUser } from '../../mocks/controllers/mockData';
 import { mockWorkspace } from '../../mocks/controllers/MockUserController';
-import { ROUTES } from '../../router/types';
 import { AppHeader } from './AppHeader';
 
 describe('AppHeader', () => {
@@ -23,15 +21,13 @@ describe('AppHeader', () => {
   };
   const setup = (init?: StoreData) => {
     render(
-      <MemoryRouter initialEntries={[ROUTES.TASKS]}>
-        <ThemeProvider initial="dark">
-          <AuthProvider initial={{ currentUser: user, token: mockJwtToken }}>
-            <StoreProvider initial={init}>
-              <AppHeader title={title} />
-            </StoreProvider>
-          </AuthProvider>
-        </ThemeProvider>
-      </MemoryRouter>
+      <ThemeProvider initial="dark">
+        <AuthProvider initial={{ currentUser: user, token: mockJwtToken }}>
+          <StoreProvider initial={init}>
+            <AppHeader title={title} />
+          </StoreProvider>
+        </AuthProvider>
+      </ThemeProvider>
     );
   };
 
