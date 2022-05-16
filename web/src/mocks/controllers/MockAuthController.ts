@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { serverUrl } from '../../config';
 import { MockController } from './types';
 import { authController, LoginDTO, LoginResponseDTO, RefreshTokenResponseDTO } from '../../controllers/AuthController';
+import { mockJwtToken, mockPassword, mockRefreshedToken, mockUser } from './mockData';
 
 export const mockAuthController: MockController<typeof authController> = {
   login: rest.post<LoginDTO, {}, LoginResponseDTO>(serverUrl + '/api/1.0/auth/login', (req, res, ctx) => {
@@ -17,23 +18,25 @@ export const mockAuthController: MockController<typeof authController> = {
   }),
 };
 
-const user = {
-  id: 0,
-  username: 'adam.szi',
-  email: 'adam.szi@snapsoft.hu',
-};
-
 export const mockExistingUser: LoginDTO = {
-  username: user.username,
-  password: '123456',
+  username: mockUser.username,
+  password: mockPassword,
 };
 
 export const mockLoginResponse: LoginResponseDTO = {
-  user,
-  token: 'randomJwtToken',
+  user: {
+    id: mockUser.id,
+    username: mockUser.username,
+    email: mockUser.email,
+  },
+  token: mockJwtToken,
 };
 
 export const mockRefreshTokenResponse: RefreshTokenResponseDTO = {
-  user,
-  token: 'newRandomJwtToken',
+  user: {
+    id: mockUser.id,
+    username: mockUser.username,
+    email: mockUser.email,
+  },
+  token: mockRefreshedToken,
 };

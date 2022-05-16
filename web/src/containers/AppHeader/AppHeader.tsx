@@ -36,7 +36,7 @@ export function AppHeader(props: AppHeaderProps): ReactElement {
     if (token) {
       userController.getWorkspaces(token).then(ws => dispatch(loadWorkspaces(ws)));
     }
-  }, [currentUser]);
+  }, [currentUser, menuOpen]);
 
   const workspaceOptions = useMemo(() => {
     const changeWs = (id: string) => () => dispatch(changeWorkspace(id));

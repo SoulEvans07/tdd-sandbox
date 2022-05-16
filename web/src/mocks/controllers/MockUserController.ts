@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { serverUrl } from '../../config';
 import { MockController } from './types';
 import { GetWorkspacesResponseDTO, SignupDTO, userController } from '../../controllers/UserController';
+import { mockPassword, mockTenant, mockUser } from './mockData';
 
 export const mockUserController: MockController<typeof userController> = {
   register: rest.post<SignupDTO, {}, {}>(serverUrl + '/api/1.0/user', (req, res, ctx) => {
@@ -16,12 +17,12 @@ export const mockUserController: MockController<typeof userController> = {
 };
 
 export const mockNewUser: SignupDTO = {
-  username: 'adam.szi',
-  email: 'adam.szi@snapsoft.hu',
-  password: '123456',
+  username: mockUser.username,
+  email: mockUser.email,
+  password: mockPassword,
 };
 
 export const mockWorkspace: GetWorkspacesResponseDTO = {
-  id: 0,
-  name: 'snapsoft.hu',
+  id: mockTenant.id,
+  name: mockTenant.name,
 };
