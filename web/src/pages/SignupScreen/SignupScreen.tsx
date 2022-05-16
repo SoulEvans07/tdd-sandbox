@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, ReactElement, useMemo, useState } from 'react';
+import { ChangeEvent, FormEvent, ReactElement, useCallback, useMemo, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import './SignupScreen.scss';
 import { userController } from '../../controllers/UserController';
@@ -13,6 +13,7 @@ import { Footer } from '../../components/layout/Footer/Footer';
 import { ROUTES } from '../../router/types';
 import { PasswordInput } from '../../components/control/TextInput/PasswordInput';
 import { StringValidator } from '../../validators/StringValidator';
+import { strongPasswordRegEx } from '../../validators/types';
 
 interface SignupForm {
   username: string;
@@ -53,11 +54,14 @@ export function SignupScreen(): ReactElement {
       .catch(e => setError(true));
   };
 
+  const confirmValidator = useCallback(StringValidator.match(password, "Password doesn't match"), [password]);
+
   if (currentUser) return <Navigate to={ROUTES.TASKS} />;
 
   const passwordValidator = StringValidator.compose(
     StringValidator.minLen(8, 'Password is too short'),
-    StringValidator.maxLen(32, 'Password is too long')
+    StringValidator.maxLen(32, 'Password is too long'),
+    StringValidator.match(strongPasswordRegEx, 'Password is too weak')
   );
 
   return (
@@ -82,9 +86,10 @@ export function SignupScreen(): ReactElement {
             onChange={handlFieldChange('password')}
             enableShow
           />
-          <TextInput
+          <ValidatedInput
+            validator={confirmValidator}
+            Input={PasswordInput}
             id="confirm-password"
-            type="password"
             placeholder="Confirm password"
             value={confirmPassword}
             onChange={handlFieldChange('confirmPassword')}

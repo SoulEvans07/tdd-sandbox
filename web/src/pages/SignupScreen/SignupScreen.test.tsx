@@ -59,6 +59,11 @@ describe('SignupPage', () => {
 
       userEvent.clear(passwordInput);
       userEvent.type(passwordInput, Random.string(8));
+      const strengthError = screen.queryByRole('alert');
+      expect(strengthError).toHaveTextContent(/password is too weak/i);
+
+      userEvent.clear(passwordInput);
+      userEvent.type(passwordInput, 'Random12345!');
       const noShortError = screen.queryByRole('alert');
       expect(noShortError).not.toBeInTheDocument();
 
@@ -68,7 +73,7 @@ describe('SignupPage', () => {
       expect(longError).toHaveTextContent(/password is too long/i);
 
       userEvent.clear(passwordInput);
-      userEvent.type(passwordInput, Random.string(32));
+      userEvent.type(passwordInput, '32char-really-long-Password12345');
       const noLongError = screen.queryByRole('alert');
       expect(noLongError).not.toBeInTheDocument();
     });
