@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider } from '../../contexts/ThemeContext';
+import { ThemeProvider } from '../../contexts/theme/ThemeContext';
 import { ThemeSetter } from './ThemeSetter';
 import { ThemeSwitch } from './ThemeSwitch';
 

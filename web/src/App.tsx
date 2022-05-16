@@ -1,8 +1,8 @@
 import { ReactElement, useEffect, useState } from 'react';
 import './root.scss';
 import { persistentStorage } from './services/storage/persistentStorage';
-import { AuthProvider, AuthState, clearedState, User } from './contexts/AuthContext';
-import { ThemeName, ThemeProvider } from './contexts/ThemeContext';
+import { AuthProvider, AuthState, clearedState, User } from './contexts/auth/AuthContext';
+import { ThemeName, ThemeProvider } from './contexts/theme/ThemeContext';
 import { StoreProvider } from './contexts/store/StoreContext';
 import { ThemeSetter } from './containers/ThemeSwitch/ThemeSetter';
 import { Router } from './router/Router';

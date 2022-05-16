@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, ReactElement, useContext, useMemo, useState } from 'react';
-import { ArrayHelpers } from '../helpers/ArrayHelpers';
+import { ArrayHelpers } from '../../helpers/ArrayHelpers';
 
 export const themes = ['dark', 'light'] as const;
 

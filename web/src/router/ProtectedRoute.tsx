@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactElement } from 'react';
 import { Navigate, PathRouteProps, Route, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/auth/AuthContext';
 import { ROUTES } from './types';
 
 interface ProtectedRouteProps {

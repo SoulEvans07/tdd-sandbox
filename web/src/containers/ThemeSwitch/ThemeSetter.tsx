@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactElement, useEffect } from 'react';
-import { ThemeName, useTheme } from '../../contexts/ThemeContext';
+import { ThemeName, useTheme } from '../../contexts/theme/ThemeContext';
 
 const themePrefix = 'theme-';
 

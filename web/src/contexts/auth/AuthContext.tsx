@@ -1,8 +1,8 @@
 import { createContext, PropsWithChildren, ReactElement, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authController } from '../controllers/AuthController';
-import { useLocation } from '../hooks/userLocation';
-import { ROUTES } from '../router/types';
+import { authController } from '../../controllers/AuthController';
+import { useLocation } from '../../hooks/userLocation';
+import { ROUTES } from '../../router/types';
 
 export interface User {
   id: number;

@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useMemo, useState } from 'react';
 import './AppHeader.scss';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/auth/AuthContext';
 import { ProfileImg } from '../../components/ui/ProfileImg/ProfileImg';
 import { ThemeSwitch } from '../ThemeSwitch/ThemeSwitch';
 import { DropMenu } from '../../components/control/DropMenu/DropMenu';

@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import './ThemeSwitch.scss';
 import { Icon } from '../../components/ui/Icon/Icon';
-import { ThemeName, useTheme } from '../../contexts/ThemeContext';
+import { ThemeName, useTheme } from '../../contexts/theme/ThemeContext';
 
 const themeIcons: Record<ThemeName, string> = {
   dark: 'sun',

@@ -2,7 +2,7 @@ import { FormEvent, ChangeEvent, ReactElement, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import './LoginScreen.scss';
 import { useLocation } from '../../hooks/userLocation';
-import { useAuth, User } from '../../contexts/AuthContext';
+import { useAuth, User } from '../../contexts/auth/AuthContext';
 import { authController } from '../../controllers/AuthController';
 import { ROUTES } from '../../router/types';
 import { Page } from '../../components/layout/Page/Page';

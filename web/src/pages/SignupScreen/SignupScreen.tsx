@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, ReactElement, useMemo, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import './SignupScreen.scss';
 import { userController } from '../../controllers/UserController';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/auth/AuthContext';
 import { minMaxValidator } from '../../validators/stringValidators';
 import { Page } from '../../components/layout/Page/Page';
 import { TextInput } from '../../components/control/TextInput/TextInput';

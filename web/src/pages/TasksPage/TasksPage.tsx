@@ -10,7 +10,7 @@ import { selectActiveWorkspace, selectWorkspaceTasks } from '../../contexts/stor
 import { Task } from '../../contexts/store/types';
 import { createTask, loadTasks, removeMultipleTask } from '../../contexts/store/actions';
 import { taskController } from '../../controllers/TaskController';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts/auth/AuthContext';
 
 export function TasksPage(): ReactElement {
   const dispatch = useDispatch();

@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/auth/AuthContext';
 import { ROUTES } from './types';
 import { protectedRoute } from './ProtectedRoute';
 import { LoginScreen } from '../pages/LoginScreen/LoginScreen';
