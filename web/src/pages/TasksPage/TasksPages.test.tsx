@@ -71,7 +71,7 @@ describe('TasksPage', () => {
     });
 
     it('deletes a task when the remove button is pressed', async () => {
-      const task: Task = { id: 0, title: 'Existing Task', status: 'Todo' };
+      const task: Task = { id: 0, title: 'Existing Task', status: 'Todo', description: '' };
       setupTaskPage({
         activeWS: personalWs,
         workspaces: {
