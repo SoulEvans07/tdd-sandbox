@@ -9,17 +9,11 @@ import { ThemeProvider } from '../contexts/theme/ThemeContext';
 import { personalWs, StoreData, Task } from '../contexts/store/types';
 import { mockNewTask } from '../mocks/controllers/MockTaskController';
 import { mockJwtToken } from '../mocks/controllers/mockData';
+import { supressErrorMessages } from '../helpers/testHelpers';
 
 describe('tasks behavior', () => {
   let createTaskInput: HTMLInputElement;
   let profileImg: HTMLElement;
-
-  let spy: jest.SpyInstance;
-  beforeEach(() => {
-    spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
-  });
-  afterAll(() => spy.mockRestore());
 
   const setupTaskPage = (init?: StoreData) => {
     const user = {
@@ -43,6 +37,8 @@ describe('tasks behavior', () => {
     createTaskInput = screen.getByRole('textbox', { name: /new task/i }) as HTMLInputElement;
     profileImg = screen.getByTitle(user.username) as HTMLInputElement;
   };
+
+  supressErrorMessages();
 
   it('page composition', () => {
     setupTaskPage();

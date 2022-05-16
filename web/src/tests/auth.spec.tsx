@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { mockExistingUser } from '../mocks/controllers/MockAuthController';
 import { ROUTES } from '../router/types';
 import App from '../App';
+import { supressErrorMessages } from '../helpers/testHelpers';
 
 describe('login behavior', () => {
   let titleHeading: HTMLHeadingElement;
@@ -11,12 +12,9 @@ describe('login behavior', () => {
   let passwordInput: HTMLInputElement;
   let submitButton: HTMLButtonElement;
 
-  let spy: jest.SpyInstance;
+  supressErrorMessages();
 
   beforeEach(() => {
-    spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
-
     render(
       <MemoryRouter initialEntries={[ROUTES.LOGIN]}>
         <App />
@@ -27,10 +25,6 @@ describe('login behavior', () => {
     nameInput = screen.getByRole('textbox', { name: 'username' }) as HTMLInputElement;
     passwordInput = screen.getByRole('textbox', { name: 'password' }) as HTMLInputElement;
     submitButton = screen.getByRole('button', { name: /sign in/i }) as HTMLButtonElement;
-  });
-
-  afterAll(() => {
-    spy.mockRestore();
   });
 
   it('page composition', () => {

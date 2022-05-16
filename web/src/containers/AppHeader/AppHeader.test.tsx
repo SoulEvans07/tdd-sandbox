@@ -5,18 +5,14 @@ import { AuthProvider } from '../../contexts/auth/AuthContext';
 import { StoreProvider } from '../../contexts/store/StoreContext';
 import { StoreData } from '../../contexts/store/types';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
+import { supressErrorMessages } from '../../helpers/testHelpers';
 import { mockJwtToken, mockUser } from '../../mocks/controllers/mockData';
 import { mockWorkspace } from '../../mocks/controllers/MockUserController';
 import { ROUTES } from '../../router/types';
 import { AppHeader } from './AppHeader';
 
 describe('AppHeader', () => {
-  let spy: jest.SpyInstance;
-  beforeEach(() => {
-    spy = jest.spyOn(console, 'error');
-    spy.mockImplementation(() => {});
-  });
-  afterAll(() => spy.mockRestore());
+  supressErrorMessages();
 
   const title = 'TEST TITLE';
   const user = {

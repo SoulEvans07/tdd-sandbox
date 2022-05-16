@@ -5,6 +5,7 @@ import { Random } from '../helpers/Random';
 import { mockNewUser } from '../mocks/controllers/MockUserController';
 import { ROUTES } from '../router/types';
 import App from '../App';
+import { supressErrorMessages } from '../helpers/testHelpers';
 
 describe('signup behavior', () => {
   let nameInput: HTMLInputElement;
@@ -12,6 +13,8 @@ describe('signup behavior', () => {
   let passwordInput: HTMLInputElement;
   let confirmInput: HTMLInputElement;
   let submitButton: HTMLButtonElement;
+
+  supressErrorMessages();
 
   beforeEach(() => {
     render(

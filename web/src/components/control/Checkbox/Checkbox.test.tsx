@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReactElement, useState } from 'react';
+import { supressErrorMessages } from '../../../helpers/testHelpers';
 import { Checkbox, UncontrolledInputChangeError } from './Checkbox';
 
 function MockControlledCheckbox(): ReactElement {
@@ -10,22 +11,14 @@ function MockControlledCheckbox(): ReactElement {
 
 describe('Checkbox', () => {
   describe('error handling', () => {
+    supressErrorMessages();
+
     it('throws an error when only checked is set but not the onChange prop', () => {
-      const spy = jest.spyOn(console, 'error');
-      spy.mockImplementation(() => {});
-
       expect(() => render(<Checkbox checked={true} />)).toThrowType(UncontrolledInputChangeError);
-
-      spy.mockRestore();
     });
 
     it('throws an error when only onChange is set but not the checked prop', () => {
-      const spy = jest.spyOn(console, 'error');
-      spy.mockImplementation(() => {});
-
       expect(() => render(<Checkbox onChange={() => {}} />)).toThrowType(UncontrolledInputChangeError);
-
-      spy.mockRestore();
     });
   });
 
