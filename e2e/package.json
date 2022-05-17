@@ -5,11 +5,13 @@
   "license": "BEERWARE",
   "private": "true",
   "scripts": {
-    "test": "cypress open"
+    "serve": "cross-env NODE_ENV=test concurrently \"cd ../server && yarn serve:test\" \"cd ../web && yarn start\"",
+    "test": "cypress open",
+    "test:serve": "concurrently \"yarn serve\" \"yarn test\""
   },
   "devDependencies": {
     "@testing-library/cypress": "^8.0.2",
-    "concurrent": "^0.3.2",
+    "concurrently": "^7.2.0",
     "cross-env": "^7.0.3",
     "cypress": "^9.6.1",
     "dotenv-safe": "^8.2.0",

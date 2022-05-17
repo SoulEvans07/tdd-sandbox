@@ -9,6 +9,7 @@
     "build": "rimraf build && tsc --project tsconfig.build.json",
     "preserve": "yarn build",
     "serve": "cross-env NODE_ENV=development concurrently \"tsc --project tsconfig.build.json --watch\" \"nodemon -q dist/index.js\"",
+    "serve:test": "cross-env NODE_ENV=test concurrently \"tsc --project tsconfig.build.json --watch\" \"nodemon -q dist/index.js\"",
     "prestart": "yarn build",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "test": "jest",
