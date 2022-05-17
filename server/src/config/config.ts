@@ -4,6 +4,8 @@ const isTestMode = process.env.NODE_ENV === 'test';
 
 if (!isTestMode) {
   dotenv.config();
+} else {
+  dotenv.config({ path: '.env.test' });
 }
 
 function tryParseInt(value?: string): number | undefined {
