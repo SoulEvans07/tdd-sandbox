@@ -1,7 +1,7 @@
 describe('Configuration', () => {
   test.each`
     config                       | value
-    ${process.env.PORT}          | ${'6001'}
+    ${process.env.PORT}          | ${'3001'}
     ${process.env.JWT_TOKEN_KEY} | ${'gMHW2GKPNJVEjudyFF2UJ31GT5y2f17R019ryHdrOnxTjtRblKll7tq3Eur3pEOlx1iotKzxbe6dFR1S'}
     ${process.env.DB_NAME}       | ${'todododooo'}
     ${process.env.DB_USER}       | ${'todo-user'}
