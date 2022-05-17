@@ -1,0 +1,10 @@
+{
+  "plugins": ["prettier", "testing-library", "cypress"],
+  "rules": {
+    "prettier/prettier": "error",
+    "react-hooks/exhaustive-deps": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/no-redundant-roles": "off",
+    "default-case": "off"
+  }
+}
