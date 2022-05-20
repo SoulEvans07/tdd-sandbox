@@ -1,6 +1,6 @@
 import { Task } from '../../contexts/store/types';
 
-export const mockPassword = 'StrongP4$$';
+export const mockPassword = 'Pass123!';
 
 export interface MockTenantData {
   id: number;

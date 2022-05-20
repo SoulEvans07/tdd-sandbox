@@ -1,1 +1,1 @@
-export const mockUser = { username: 'adam.szi', email: 'adam.szi@snapsoft.hu', password: 'Pass123!' };
+export const mockUser = { username: 'test.user', email: 'test.user@snapsoft.hu', password: 'Pass123!' };
