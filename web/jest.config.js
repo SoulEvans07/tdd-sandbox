@@ -14,7 +14,8 @@ module.exports = {
   transform: {
     '^.+\\.(js|jsx|mjs|cjs|ts|tsx)$': '<rootDir>/config/jest/babelTransform.js',
     // '^.+\\.css$': '<rootDir>/config/jest/cssTransform.js',
-    '^.+\\.(css|styl|less|sass|scss)$': 'jest-css-modules-transform',
+    // '^.+\\.(css|styl|less|sass|scss)$': 'jest-css-modules-transform',
+    '^.+\\.(css|styl|less|sass|scss)$': '<rootDir>/config/jest/cssTransform.js',
     '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)': '<rootDir>/config/jest/fileTransform.js',
   },
   transformIgnorePatterns: [
