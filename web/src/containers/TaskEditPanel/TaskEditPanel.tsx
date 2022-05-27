@@ -1,6 +1,6 @@
 import { ChangeEvent, ReactElement, useEffect, useMemo, useState } from 'react';
 import './TaskEditPanel.scss';
-import { Task, TaskStatusNames, TaskStatusTransitions } from '../../contexts/store/types';
+import { Task, TaskStatus, TaskStatusNames, TaskStatusTransitions } from '../../contexts/store/types';
 import { TextInput } from '../../components/control/TextInput/TextInput';
 import { SidePanel } from '../../components/layout/SidePanel/SidePanel';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
@@ -13,7 +13,8 @@ interface TaskEditPanelProps {
 
 export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
   const { task, onClose } = props;
-  const status = task?.status || 'Todo';
+
+  const [status, setStatus] = useState<TaskStatus>('Todo');
 
   const transitions = useMemo((): ButtonProps[] => {
     return TaskStatusTransitions[status].map(option => ({
@@ -30,10 +31,15 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
 
   useEffect(() => {
     if (task) {
+      setStatus(task.status);
       setTitle(task.title);
       setDescription(task.description);
     }
   }, [task]);
+
+  const hasChanges = useMemo(() => {
+    return task?.title !== title || task.description !== description;
+  }, [status, title, description, task]);
 
   return (
     <SidePanel className="task-edit-panel right" hidden={!task} onClose={onClose} label="Edit Panel">
@@ -46,6 +52,9 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
         <TextInput title="Title" className="task-title" value={title} onChange={onTitleChange} />
         <textarea title="Description" className="task-description" value={description} onChange={onDescriptionChange} />
         <div className="action-row">
+          <Button fill={hasChanges ? 'fill' : 'border'} size="wide" color="primary" disabled={!hasChanges}>
+            Save Changes
+          </Button>
           <Button fill="border" size="wide" color="error">
             Delete Task
           </Button>
