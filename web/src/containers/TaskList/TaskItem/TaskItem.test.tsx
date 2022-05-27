@@ -14,7 +14,7 @@ function MockControlledTaskItem({ task, spyFn }: MockTaskItemProps): ReactElemen
     spyFn(s);
     setSelected(s);
   };
-  return <TaskItem task={task} onRemove={jest.fn()} selected={selected} onSelect={handleSelect} />;
+  return <TaskItem task={task} onRemove={jest.fn()} selected={selected} onSelect={handleSelect} onEdit={jest.fn()} />;
 }
 
 describe('TaskItem', () => {
@@ -24,16 +24,21 @@ describe('TaskItem', () => {
     id: 0,
     title: 'Test task item',
     status: 'Todo',
+    description: 'Simple description',
   };
 
   it('shows the title', () => {
-    render(<TaskItem task={task} onRemove={removeHandler} selected={false} onSelect={selectHandler} />);
+    render(
+      <TaskItem task={task} onRemove={removeHandler} selected={false} onSelect={selectHandler} onEdit={jest.fn()} />
+    );
     const title = screen.getByText(task.title);
     expect(title).toBeInTheDocument();
   });
 
   it('has a remove button', () => {
-    render(<TaskItem task={task} onRemove={removeHandler} selected={false} onSelect={selectHandler} />);
+    render(
+      <TaskItem task={task} onRemove={removeHandler} selected={false} onSelect={selectHandler} onEdit={jest.fn()} />
+    );
     const removeBtn = screen.getByRole('button', { name: /remove/i });
     userEvent.click(removeBtn);
     expect(removeHandler).toBeCalled();
