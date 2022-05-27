@@ -34,7 +34,7 @@ describe('TaskEditPanel', () => {
     const openBtn = screen.getByRole('button', { name: /open task/i });
     userEvent.click(openBtn);
 
-    const closeBtn = screen.getByRole('button', { name: 'Close' });
+    const closeBtn = screen.getByRole('button', { name: /close/i });
     expect(closeBtn).toBeInTheDocument();
   });
 
