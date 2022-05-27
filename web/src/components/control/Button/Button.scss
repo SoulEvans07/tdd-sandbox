@@ -34,17 +34,20 @@
     --color-200: var(--color-dark-200);
     --color-100: var(--color-light-300);
 
-    border: none;
+    border: 1px solid;
     background: var(--color-300);
+    border-color: var(--color-300);
     color: var(--color-100);
 
     &:hover {
       background-color: var(--color-200);
+      border-color: var(--color-200);
     }
 
     &.active,
     &:active {
       background-color: var(--color-400);
+      border-color: var(--color-400);
     }
 
     // colors
@@ -86,14 +89,24 @@
       --color-300: var(--color-red-400);
       --color-200: var(--color-red-300);
       --color-100: var(--color-red-200);
-      text-shadow: 0px 2px 10px hsla(350, 60%, 60%, 0.5);
+      // text-shadow: 0px 2px 10px hsla(350, 60%, 60%, 0.5);
       box-shadow: 0px 2px 8px 0px hsla(350, 60%, 60%, 0.3);
+    }
+
+    &.primary {
+      --color-300: var(--color-primary-400);
+      --color-200: var(--color-primary-300);
+      --color-100: var(--color-primary-200);
+      // text-shadow: 0px 2px 10px hsla(220, 60%, 60%, 0.5);
+      box-shadow: 0px 2px 8px 0px hsla(220, 60%, 60%, 0.3);
     }
 
     // disabled
     &:disabled {
       --color-300: var(--color-dark-400);
       --color-100: var(--color-dark-300);
+      text-shadow: none;
+      box-shadow: var(--drop-shadow-small);
     }
   }
 

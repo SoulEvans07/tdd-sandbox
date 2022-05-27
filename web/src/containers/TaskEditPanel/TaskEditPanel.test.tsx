@@ -52,6 +52,44 @@ describe('TaskEditPanel', () => {
 
     const deleteBtn = screen.getByRole('button', { name: /delete/i });
     expect(deleteBtn).toBeInTheDocument();
+
+    const saveBtn = screen.getByRole('button', { name: /save/i });
+    expect(saveBtn).toBeInTheDocument();
+  });
+
+  describe('changing any value of the task makes the save button enabled', () => {
+    let saveBtn: HTMLButtonElement;
+
+    beforeEach(() => {
+      render(<MockTaskPage task={mockTask} open />);
+      saveBtn = screen.getByRole('button', { name: /save/i }) as HTMLButtonElement;
+      expect(saveBtn).toBeDisabled();
+    });
+
+    function testInputField(input: HTMLElement) {
+      userEvent.type(input, 'a');
+      expect(saveBtn).toBeEnabled();
+
+      userEvent.type(input, '{backspace}');
+      expect(saveBtn).toBeDisabled();
+
+      const count = 5;
+      userEvent.type(input, 'b'.repeat(count));
+      expect(saveBtn).toBeEnabled();
+
+      userEvent.type(input, '{backspace}'.repeat(count));
+      expect(saveBtn).toBeDisabled();
+    }
+
+    test('title', () => {
+      const titleInput = screen.getByRole('textbox', { name: /title/i });
+      testInputField(titleInput);
+    });
+
+    test('description', () => {
+      const descriptionTA = screen.getByRole('textbox', { name: /description/i });
+      testInputField(descriptionTA);
+    });
   });
 
   describe.each<{ status: TaskStatus; options: TaskStatus[] }>([
