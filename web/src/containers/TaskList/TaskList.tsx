@@ -10,10 +10,11 @@ import { ArrayHelpers } from '../../helpers/ArrayHelpers';
 export interface TaskListProps {
   list: Task[];
   onRemove: (taskIds: Array<Task['id']>) => void;
+  onEdit: (selectedId: Task['id']) => void;
 }
 
 export function TaskList(props: TaskListProps): ReactElement {
-  const { list, onRemove } = props;
+  const { list, onRemove, onEdit } = props;
   const [filter, setFilter] = useState<TaskStatus | undefined>(undefined);
 
   const changeFilterTo = (filter?: TaskStatus) => () => setFilter(filter);
@@ -81,6 +82,7 @@ export function TaskList(props: TaskListProps): ReactElement {
             onRemove={() => onRemove([task.id])}
             selected={!!selectedTasks[task.id]}
             onSelect={onTaskSelect(task.id)}
+            onEdit={() => onEdit(task.id)}
           />
         ))}
       </section>

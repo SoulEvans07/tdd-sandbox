@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, ReactElement, useEffect, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
 import './TasksPage.scss';
 import { Page } from '../../components/layout/Page/Page';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
@@ -49,6 +49,13 @@ export function TasksPage(): ReactElement {
     taskController.remove(taskIds, token).then(() => dispatch(removeMultipleTask(taskIds)));
   };
 
+  const [editTaskId, setEditedTask] = useState<Task['id'] | null>(null);
+  const handleOpenEdit = (taskId: Task['id']) => setEditedTask(taskId);
+  const handleCloseEdit = () => setEditedTask(null);
+  const editedTask = useMemo(() => {
+    return tasks.find(task => task.id === editTaskId);
+  }, [editTaskId, tasks]);
+
   return (
     <Page className="tasks-page">
       <main>
@@ -65,12 +72,12 @@ export function TasksPage(): ReactElement {
             onKeyDown={handleKeyEvent}
           />
         </section>
-        <TaskList list={tasks} onRemove={handleRemove} />
+        <TaskList list={tasks} onRemove={handleRemove} onEdit={handleOpenEdit} />
       </main>
       <Footer>
         <span>Select a task to open it in the edit panel</span>
       </Footer>
-      <TaskEditPanel task={tasks[0]} />
+      <TaskEditPanel task={editedTask} onClose={handleCloseEdit} />
     </Page>
   );
 }

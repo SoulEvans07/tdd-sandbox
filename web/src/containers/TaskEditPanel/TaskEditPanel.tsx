@@ -36,7 +36,7 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
   }, [task]);
 
   return (
-    <SidePanel className="task-edit-panel right" hidden={!task} onClose={onClose}>
+    <SidePanel className="task-edit-panel right" hidden={!task} onClose={onClose} label="Edit Panel">
       <section className="task-details">
         <div className="assignee-row"></div>
         <div className="status-row">

@@ -9,14 +9,15 @@ export interface TaskItemProps {
   onRemove: VoidFunction;
   selected: boolean;
   onSelect: (selected: boolean) => void;
+  onEdit: () => void;
 }
 
 export function TaskItem(props: TaskItemProps): ReactElement {
-  const { task, onRemove, selected, onSelect } = props;
+  const { task, onRemove, selected, onSelect, onEdit } = props;
   const testId = `task-item-${task.id}`;
 
   return (
-    <div className="task-item" id={testId} data-testid={testId}>
+    <div className="task-item" id={testId} data-testid={testId} onClick={onEdit}>
       <Checkbox title="Select" checked={selected} onChange={onSelect} />
       <span className="task-title">{task.title}</span>
       <Icon className="remove-task" icon="cross" onClick={onRemove} role="button" aria-label="Remove" />

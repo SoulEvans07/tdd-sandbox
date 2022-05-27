@@ -3,17 +3,32 @@ import userEvent from '@testing-library/user-event';
 import { TaskList, TaskListProps } from './TaskList';
 
 describe('TaskList', () => {
+  const tasks: TaskListProps['list'] = [
+    { id: 0, title: 'Open Task 1', description: '', status: 'Todo' },
+    { id: 1, title: 'Open Task 2', description: '', status: 'Todo' },
+    { id: 2, title: 'Done Task 1', description: '', status: 'Done' },
+    { id: 3, title: 'WIP Task 1', description: '', status: 'InProgress' },
+    { id: 4, title: 'WIP Task 2', description: '', status: 'InProgress' },
+    { id: 5, title: 'Blocked Task 1', description: '', status: 'Blocked' },
+    { id: 6, title: 'WIP Task 3', description: '', status: 'InProgress' },
+    { id: 7, title: 'Open Task 3', description: '', status: 'Todo' },
+    { id: 8, title: 'Done Task 2', description: '', status: 'Done' },
+    { id: 9, title: 'Done Task 3', description: '', status: 'Done' },
+  ];
+
+  function setupTaskList(tasks: TaskListProps['list'], props?: Partial<Omit<TaskListProps, 'list'>>) {
+    render(<TaskList list={tasks} onRemove={jest.fn()} onEdit={jest.fn()} {...props} />);
+  }
+
   it('shows an empty list message when there are no tasks', () => {
-    render(<TaskList list={[]} onRemove={jest.fn()} />);
+    setupTaskList([]);
+
     const emptyListMsg = screen.getByText('There is nothing here!');
     expect(emptyListMsg).toBeInTheDocument();
   });
 
   it('shows all task inside it', () => {
-    const tasks: TaskListProps['list'] = Array(5)
-      .fill(null)
-      .map((_, i) => ({ id: i, title: `Task ${i}`, status: 'Todo' }));
-    render(<TaskList list={tasks} onRemove={jest.fn()} />);
+    setupTaskList(tasks);
 
     tasks.forEach(task => {
       const taskItem = screen.getByText(task.title);
@@ -22,11 +37,8 @@ describe('TaskList', () => {
   });
 
   it('calls the onRemove with the proper data when a remove button on a task is clicked', () => {
-    const tasks: TaskListProps['list'] = Array(5)
-      .fill(null)
-      .map((_, i) => ({ id: i, title: `Task ${i}`, status: 'Todo' }));
     const handleRemove = jest.fn();
-    render(<TaskList list={tasks} onRemove={handleRemove} />);
+    setupTaskList(tasks, { onRemove: handleRemove });
 
     const removeButtons = screen.getAllByRole('button', { name: /remove/i });
     userEvent.click(removeButtons[3]);
@@ -34,15 +46,16 @@ describe('TaskList', () => {
   });
 
   test('filter All is selected at start', () => {
-    render(<TaskList list={[]} onRemove={jest.fn()} />);
+    setupTaskList([]);
+
     const allFilter = screen.getByRole('button', { name: /all/i });
     expect(allFilter).toBeInTheDocument();
     expect(allFilter).toHaveClass('active');
   });
 
   it('shows an empty list message when there are no tasks by the selected filter', () => {
-    const tasks = [{ id: 0, title: 'Blocked Task 1', status: 'Blocked' as const }];
-    render(<TaskList list={tasks} onRemove={jest.fn()} />);
+    const tasks = [{ id: 0, title: 'Blocked Task 1', description: '', status: 'Blocked' as const }];
+    setupTaskList(tasks);
 
     const noEmptyMsg = screen.queryByText('There is nothing here!');
     expect(noEmptyMsg).not.toBeInTheDocument();
@@ -53,19 +66,6 @@ describe('TaskList', () => {
     const emptyListMsg = screen.getByText('There is nothing here!');
     expect(emptyListMsg).toBeInTheDocument();
   });
-
-  const tasks: TaskListProps['list'] = [
-    { id: 0, title: 'Open Task 1', status: 'Todo' },
-    { id: 1, title: 'Open Task 2', status: 'Todo' },
-    { id: 2, title: 'Done Task 1', status: 'Done' },
-    { id: 3, title: 'WIP Task 1', status: 'InProgress' },
-    { id: 4, title: 'WIP Task 2', status: 'InProgress' },
-    { id: 5, title: 'Blocked Task 1', status: 'Blocked' },
-    { id: 6, title: 'WIP Task 3', status: 'InProgress' },
-    { id: 7, title: 'Open Task 3', status: 'Todo' },
-    { id: 8, title: 'Done Task 2', status: 'Done' },
-    { id: 9, title: 'Done Task 3', status: 'Done' },
-  ];
 
   function checkByStatus(status?: TaskListProps['list'][number]['status']) {
     return (task: TaskListProps['list'][number]) => {
@@ -84,7 +84,7 @@ describe('TaskList', () => {
   ])('should filter tasks based on the selected filter button', ({ title, selector, status }) => {
     test(`${title} filter`, () => {
       const handleRemove = jest.fn();
-      render(<TaskList list={tasks} onRemove={handleRemove} />);
+      setupTaskList(tasks, { onRemove: handleRemove });
 
       const filter = screen.getByRole('button', { name: selector });
       expect(filter).toBeInTheDocument();
@@ -96,7 +96,7 @@ describe('TaskList', () => {
   describe('multi select delete', () => {
     test('clear completed btn is visible, when there are no selected items', () => {
       const handleRemove = jest.fn();
-      render(<TaskList list={tasks} onRemove={handleRemove} />);
+      setupTaskList(tasks, { onRemove: handleRemove });
 
       const clearCompleted = screen.getByRole('button', { name: /clear completed/i });
       expect(clearCompleted).toBeInTheDocument();
@@ -114,7 +114,7 @@ describe('TaskList', () => {
 
     test('pressing clear completed will call onRemove with the completed items', () => {
       const handleRemove = jest.fn();
-      render(<TaskList list={tasks} onRemove={handleRemove} />);
+      setupTaskList(tasks, { onRemove: handleRemove });
 
       const clearCompleted = screen.getByRole('button', { name: /clear completed/i });
       userEvent.click(clearCompleted);
@@ -127,7 +127,7 @@ describe('TaskList', () => {
     ])('clear completed btn is disabled', ({ title, currentTasks }) => {
       test(`when ${title}`, () => {
         const handleRemove = jest.fn();
-        render(<TaskList list={currentTasks} onRemove={handleRemove} />);
+        setupTaskList(currentTasks, { onRemove: handleRemove });
 
         const clearCompleted = screen.getByRole('button', { name: /clear completed/i });
         expect(clearCompleted).toBeDisabled();
@@ -141,7 +141,7 @@ describe('TaskList', () => {
 
     test('clear selected btn only visible there are selected items', () => {
       const handleRemove = jest.fn();
-      render(<TaskList list={tasks} onRemove={handleRemove} />);
+      setupTaskList(tasks, { onRemove: handleRemove });
 
       const noClearSelected = screen.queryByRole('button', { name: /clear selected/i });
       expect(noClearSelected).not.toBeInTheDocument();
@@ -159,7 +159,7 @@ describe('TaskList', () => {
 
     test('clear selected will call onRemove with the selected task ids', () => {
       const handleRemove = jest.fn();
-      render(<TaskList list={tasks} onRemove={handleRemove} />);
+      setupTaskList(tasks, { onRemove: handleRemove });
 
       const toRemove = [2, 1, 5];
       selectTaskItems(toRemove);
@@ -170,7 +170,7 @@ describe('TaskList', () => {
 
     test('clear selected will only remove filtered/visible tasks', async () => {
       const handleRemove = jest.fn();
-      render(<TaskList list={tasks} onRemove={handleRemove} />);
+      setupTaskList(tasks, { onRemove: handleRemove });
 
       const openTasksToSelect = [1, 7];
       const otherTasksToSelect = [2, 6];
