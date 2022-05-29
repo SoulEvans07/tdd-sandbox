@@ -154,6 +154,37 @@ describe('Tasks', () => {
       task = resp.body;
       validatePersonalTask(task, loginData, taskInputPersonal, 2);
     });
+
+    describe('Validation', () => {
+      test.each`
+        testName          | property   | value              | exceptedMessage
+        ${'required'}     | ${'title'} | ${undefined}       | ${LocaleEn.titleRequiredForTask}
+        ${'length short'} | ${'title'} | ${'s'}             | ${LocaleEn.titleLengthForTask}
+        ${'length short'} | ${'title'} | ${'ss'}            | ${LocaleEn.titleLengthForTask}
+        ${'length long'}  | ${'title'} | ${'s'.repeat(201)} | ${LocaleEn.titleLengthForTask}
+      `(
+        '$property $testName',
+        async ({
+          property,
+          value,
+          exceptedMessage,
+        }: {
+          testName: string;
+          property: string;
+          value: any;
+          exceptedMessage: string;
+        }) => {
+          const loginData = await getLoggedInUser();
+          const resp = await postRequest(
+            ApiEndpoints.CreateTask,
+            { ...taskInputPersonal, [property]: value },
+            generateAuthorizationHeader(loginData)
+          );
+          expect(resp.status).toBe(400);
+          expect(resp.body.validationErrors[property]).toBe(exceptedMessage);
+        }
+      );
+    });
   });
 
   describe('Task bulk actions', () => {
@@ -322,16 +353,9 @@ describe('Tasks', () => {
   });
 
   describe('Task edit', () => {
-    test('Id is missing from request', async () => {
+    test('URL param.id !== body.id', async () => {
       const loginData = await getLoggedInUser();
-      const resp = await patchTask('asd1', {}, loginData);
-      expect(resp.status).toBe(400);
-      expect(resp.body.message).toBe(LocaleEn.idRequiredAndMustBeNumber);
-    });
-
-    test('Task ids are miss match', async () => {
-      const loginData = await getLoggedInUser();
-      const resp = await patchTask('1', {}, loginData);
+      const resp = await patchTask('1', { id: 2 }, loginData);
       expect(resp.status).toBe(400);
       expect(resp.body.message).toBe(LocaleEn.badRequest);
     });
@@ -369,50 +393,78 @@ describe('Tasks', () => {
       expect(resp.body.message).toBe(LocaleEn.forbidden);
     });
 
+    interface PositiveBehaviorTestData {
+      testName: string;
+      taskFrom: TaskInput;
+      payload: Partial<TaskInput>;
+    }
     test.each`
-      testName                      | taskFrom             | payload                                                   | status | exceptedMessage
-      ${'Title and desc'}           | ${taskInputPersonal} | ${{ title: 'New title', description: 'New description' }} | ${200} | ${''}
-      ${'Personal task unassigned'} | ${taskInputPersonal} | ${{ assigneeId: null }}                                   | ${400} | ${LocaleEn.cantUnAssignTHePersonalTask}
-      ${'Todo to blocked'}          | ${taskInputPersonal} | ${{ status: TaskStatus.Blocked }}                         | ${400} | ${LocaleEn.badTaskStatusChange}
-      ${'Todo to done'}             | ${taskInputPersonal} | ${{ status: TaskStatus.Done }}                            | ${400} | ${LocaleEn.badTaskStatusChange}
-      ${'Todo to in progress'}      | ${taskInputPersonal} | ${{ status: TaskStatus.InProgress }}                      | ${200} | ${''}
-    `(
-      '$testName',
-      async ({
-        payload,
-        status,
-        taskFrom,
-        exceptedMessage,
-      }: {
-        testName: string;
-        payload: any;
-        status: number;
-        taskFrom: TaskInput;
-        exceptedMessage: string;
-      }) => {
+      testName              | taskFrom             | payload
+      ${'No change'}        | ${taskInputPersonal} | ${{}}
+      ${'Only title'}       | ${taskInputPersonal} | ${{ title: 'New title' }}
+      ${'Only desc'}        | ${taskInputPersonal} | ${{ description: 'New description' }}
+      ${'Title and desc'}   | ${taskInputPersonal} | ${{ title: 'New title', description: 'New description' }}
+      ${'Todo -> progress'} | ${taskInputPersonal} | ${{ status: TaskStatus.InProgress }}
+      ${'Full update'}      | ${taskInputPersonal} | ${{ title: 'New title', description: 'New description', status: TaskStatus.InProgress }}
+    `('$testName', async ({ payload, taskFrom }: PositiveBehaviorTestData) => {
+      const loginData = await getLoggedInUser();
+      const creatureRes = await postRequest(ApiEndpoints.CreateTask, taskFrom, generateAuthorizationHeader(loginData));
+      const originalTask: TaskOutput = creatureRes.body;
+      validatePersonalTask(originalTask, loginData, taskFrom, 1);
+
+      const patchRes = await patchTask(originalTask.id, payload, loginData);
+      expect(patchRes.body.message).toBeUndefined();
+      expect(patchRes.status).toBe(200);
+
+      const expectedTask = { ...originalTask, ...payload };
+
+      const patchedTask = patchRes.body;
+      compareTasks(patchedTask, expectedTask);
+      expect(new Date(patchedTask.updatedAt).getTime()).toBeGreaterThanOrEqual(
+        new Date(originalTask.updatedAt).getTime()
+      );
+    });
+
+    interface NegativeBehaviorTestData {
+      title: string;
+      from: TaskInput;
+      payload: Partial<TaskInput>;
+      error: string;
+    }
+
+    describe.each<NegativeBehaviorTestData>([
+      {
+        title: 'Unassigning Personal task',
+        from: taskInputPersonal,
+        payload: { assigneeId: null }, // NOTE: undefiend field value wont go through http
+        error: LocaleEn.cantUnAssignTHePersonalTask,
+      },
+      {
+        title: 'Todo -> Blocked',
+        from: taskInputPersonal,
+        payload: { status: TaskStatus.Blocked },
+        error: LocaleEn.badTaskStatusChange,
+      },
+      {
+        title: 'Todo -> Done',
+        from: taskInputPersonal,
+        payload: { status: TaskStatus.Done },
+        error: LocaleEn.badTaskStatusChange,
+      },
+    ])('Negative behavior', ({ title, from, payload, error }) => {
+      test(`${title}`, async () => {
         const loginData = await getLoggedInUser();
-        let resp = await postRequest(ApiEndpoints.CreateTask, taskFrom, generateAuthorizationHeader(loginData));
-        let task: TaskOutput = resp.body;
-        validatePersonalTask(task, loginData, taskFrom, 1);
+        const creatureRes = await postRequest(ApiEndpoints.CreateTask, from, generateAuthorizationHeader(loginData));
+        const originalTask: TaskOutput = creatureRes.body;
+        validatePersonalTask(originalTask, loginData, from, 1);
 
-        const newTaskData = {
-          ...task,
-          ...payload,
-        };
+        const patchRes = await patchTask(originalTask.id, payload, loginData);
+        expect(patchRes.status).toBe(400);
+        expect(patchRes.body.message).toBe(error);
+      });
+    });
 
-        resp = await patchTask(task.id, newTaskData, loginData);
-        expect(resp.status).toBe(status);
-        if (exceptedMessage) {
-          expect(resp.body.message).toBe(exceptedMessage);
-        } else {
-          task = resp.body;
-          compareTasks(task, newTaskData);
-          expect(new Date(task.updatedAt).getTime()).toBeGreaterThan(new Date(newTaskData.updatedAt).getTime());
-        }
-      }
-    );
-
-    test('Missing task status validation', async () => {
+    test('Task status validation', async () => {
       const loginData = await getLoggedInUser();
       let resp = await postRequest(ApiEndpoints.CreateTask, taskInputPersonal, generateAuthorizationHeader(loginData));
       let personalTask: TaskOutput = resp.body;
@@ -506,36 +558,5 @@ describe('Tasks', () => {
       expect(resp.status).toBe(403);
       expect(resp.body.message).toBe(LocaleEn.forbidden);
     });
-  });
-
-  describe('Validation', () => {
-    test.each`
-      testName          | property   | value              | exceptedMessage
-      ${'required'}     | ${'title'} | ${undefined}       | ${LocaleEn.titleRequiredForTask}
-      ${'length short'} | ${'title'} | ${'s'}             | ${LocaleEn.titleLengthForTask}
-      ${'length short'} | ${'title'} | ${'ss'}            | ${LocaleEn.titleLengthForTask}
-      ${'length long'}  | ${'title'} | ${'s'.repeat(201)} | ${LocaleEn.titleLengthForTask}
-    `(
-      '$property $testName',
-      async ({
-        property,
-        value,
-        exceptedMessage,
-      }: {
-        testName: string;
-        property: string;
-        value: any;
-        exceptedMessage: string;
-      }) => {
-        const loginData = await getLoggedInUser();
-        const resp = await postRequest(
-          ApiEndpoints.CreateTask,
-          { ...taskInputPersonal, [property]: value },
-          generateAuthorizationHeader(loginData)
-        );
-        expect(resp.status).toBe(400);
-        expect(resp.body.validationErrors[property]).toBe(exceptedMessage);
-      }
-    );
   });
 });
