@@ -52,7 +52,7 @@ export class TaskManager {
     await Task.destroy({ where: { id: taskIds } });
   }
 
-  public static async updateTask(taskId: number, task: TaskInput, user: UserOutput) {
+  public static async updateTask(taskId: number, patch: Partial<TaskInput>, user: UserOutput) {
     const oldTask = await Task.findOne({
       where: { id: taskId },
     });
@@ -69,41 +69,45 @@ export class TaskManager {
       throw new ForbiddenException();
     }
 
-    if (task.assigneeId) {
-      const targetUser = await User.findOne({ where: { id: task.assigneeId } });
-      if (oldTask.tenantId && ((targetUser && targetUser.tenantId !== oldTask.tenantId) || !targetUser)) {
-        throw new ForbiddenException();
+    if (patch.hasOwnProperty('assigneeId')) {
+      if (patch.assigneeId) {
+        const targetUser = await User.findOne({ where: { id: patch.assigneeId } });
+        if (oldTask.tenantId && ((targetUser && targetUser.tenantId !== oldTask.tenantId) || !targetUser)) {
+          throw new ForbiddenException();
+        }
+      }
+
+      if (oldTask.assigneeId && !oldTask.tenantId && patch.assigneeId == null) {
+        throw new BadRequestException(R.cantUnAssignTHePersonalTask);
       }
     }
 
-    if (oldTask.assigneeId && !oldTask.tenantId && !task.assigneeId) {
-      throw new BadRequestException(R.cantUnAssignTHePersonalTask);
-    }
-
-    if (oldTask.status !== task.status) {
-      if (oldTask.status === TaskStatus.Todo && task.status !== TaskStatus.InProgress) {
+    if (patch.hasOwnProperty('status') && oldTask.status !== patch.status) {
+      if (oldTask.status === TaskStatus.Todo && patch.status !== TaskStatus.InProgress) {
         throw new BadRequestException(R.badTaskStatusChange);
       }
 
-      if (oldTask.status === TaskStatus.InProgress && task.status === TaskStatus.Todo) {
+      if (oldTask.status === TaskStatus.InProgress && patch.status === TaskStatus.Todo) {
         throw new BadRequestException(R.badTaskStatusChange);
       }
 
-      if (oldTask.status === TaskStatus.Blocked && task.status === TaskStatus.Done) {
+      if (oldTask.status === TaskStatus.Blocked && patch.status === TaskStatus.Done) {
         throw new BadRequestException(R.badTaskStatusChange);
       }
 
-      if (oldTask.status === TaskStatus.Done && task.status !== TaskStatus.Done) {
+      if (oldTask.status === TaskStatus.Done && patch.status !== TaskStatus.Done) {
         throw new BadRequestException(R.badTaskStatusChange);
       }
     }
 
-    const update = await Task.update(
+    const merged = { ...oldTask, ...patch };
+
+    await Task.update(
       {
-        title: task.title,
-        description: task.description,
-        status: task.status,
-        assigneeId: task.assigneeId,
+        title: merged.title,
+        description: merged.description,
+        status: merged.status,
+        assigneeId: merged.assigneeId,
       },
       { where: { id: taskId } }
     );

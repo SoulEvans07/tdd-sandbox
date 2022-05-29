@@ -100,11 +100,11 @@ export default class TaskController extends ControllerBase {
 
       const taskId = req.params.id ? parseInt(req.params.id, 10) : undefined;
 
-      if (!taskId) {
+      if (taskId == null) {
         throw new BadRequestException(req.t(R.idRequiredAndMustBeNumber));
       }
 
-      if (taskId !== req.body.id) {
+      if (req.body.id !== undefined && taskId !== req.body.id) {
         throw new BadRequestException();
       }
 
