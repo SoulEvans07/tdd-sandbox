@@ -20,7 +20,14 @@ export function TaskItem(props: TaskItemProps): ReactElement {
     <div className="task-item" id={testId} data-testid={testId} onClick={onEdit}>
       <Checkbox title="Select" checked={selected} onChange={onSelect} />
       <span className="task-title">{task.title}</span>
-      <Icon className="remove-task" icon="cross" onClick={onRemove} role="button" aria-label="Remove" />
+      <Icon
+        className="remove-task"
+        icon="cross"
+        onClick={onRemove}
+        role="button"
+        aria-label="Remove"
+        data-testid={`remove-task-${task.id}`}
+      />
     </div>
   );
 }

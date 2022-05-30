@@ -4,16 +4,16 @@ import { TaskList, TaskListProps } from './TaskList';
 
 describe('TaskList', () => {
   const tasks: TaskListProps['list'] = [
-    { id: 0, title: 'Open Task 1', description: '', status: 'Todo' },
-    { id: 1, title: 'Open Task 2', description: '', status: 'Todo' },
-    { id: 2, title: 'Done Task 1', description: '', status: 'Done' },
-    { id: 3, title: 'WIP Task 1', description: '', status: 'InProgress' },
-    { id: 4, title: 'WIP Task 2', description: '', status: 'InProgress' },
-    { id: 5, title: 'Blocked Task 1', description: '', status: 'Blocked' },
-    { id: 6, title: 'WIP Task 3', description: '', status: 'InProgress' },
-    { id: 7, title: 'Open Task 3', description: '', status: 'Todo' },
-    { id: 8, title: 'Done Task 2', description: '', status: 'Done' },
-    { id: 9, title: 'Done Task 3', description: '', status: 'Done' },
+    { id: 0, order: 0, title: 'Open Task 1', description: '', status: 'Todo' },
+    { id: 1, order: 1, title: 'Open Task 2', description: '', status: 'Todo' },
+    { id: 2, order: 2, title: 'Done Task 1', description: '', status: 'Done' },
+    { id: 3, order: 3, title: 'WIP Task 1', description: '', status: 'InProgress' },
+    { id: 4, order: 4, title: 'WIP Task 2', description: '', status: 'InProgress' },
+    { id: 5, order: 5, title: 'Blocked Task 1', description: '', status: 'Blocked' },
+    { id: 6, order: 6, title: 'WIP Task 3', description: '', status: 'InProgress' },
+    { id: 7, order: 7, title: 'Open Task 3', description: '', status: 'Todo' },
+    { id: 8, order: 8, title: 'Done Task 2', description: '', status: 'Done' },
+    { id: 9, order: 9, title: 'Done Task 3', description: '', status: 'Done' },
   ];
 
   function setupTaskList(tasks: TaskListProps['list'], props?: Partial<Omit<TaskListProps, 'list'>>) {
@@ -54,7 +54,7 @@ describe('TaskList', () => {
   });
 
   it('shows an empty list message when there are no tasks by the selected filter', () => {
-    const tasks = [{ id: 0, title: 'Blocked Task 1', description: '', status: 'Blocked' as const }];
+    const tasks = [{ id: 0, order: 0, title: 'Blocked Task 1', description: '', status: 'Blocked' as const }];
     setupTaskList(tasks);
 
     const noEmptyMsg = screen.queryByText('There is nothing here!');

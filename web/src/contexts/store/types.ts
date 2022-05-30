@@ -21,6 +21,7 @@ export interface Task {
   description: string;
   assigneeId?: number;
   tenantId?: number;
+  order: number;
 }
 
 export const personalWs = '_personal' as const;

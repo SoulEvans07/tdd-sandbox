@@ -2,7 +2,6 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Random } from '../../helpers/Random';
-import { mockNewUser } from '../../mocks/controllers/MockUserController';
 import { supressErrorMessages } from '../../helpers/testHelpers';
 import { AuthProvider } from '../../contexts/auth/AuthContext';
 import { StoreProvider } from '../../contexts/store/StoreContext';
@@ -82,6 +81,12 @@ describe('SignupPage', () => {
   describe('submit', () => {
     test('submit works', async () => {
       expect(submitButton).toBeDisabled();
+
+      const mockNewUser = {
+        username: 'new.user',
+        email: 'new.user',
+        password: 'StrongP4$$',
+      };
 
       userEvent.clear(nameInput);
       userEvent.type(nameInput, mockNewUser.username);

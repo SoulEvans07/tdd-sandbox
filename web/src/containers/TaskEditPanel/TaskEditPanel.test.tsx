@@ -10,6 +10,7 @@ describe('TaskEditPanel', () => {
     title: 'Task 1',
     status: 'InProgress',
     description: 'Detailed description',
+    order: 0,
   };
 
   interface MockTaskPageProps {
