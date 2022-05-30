@@ -113,5 +113,28 @@ describe('TasksPage', () => {
 
       await waitFor(() => expect(editor).not.toBeVisible());
     });
+
+    describe('submit change', () => {
+      const newTitle = 'Changed Task Title';
+      // const newDescription = 'Changed Task Description';
+
+      test('title change', async () => {
+        setupTaskPage(mockStore);
+
+        const taskItem = screen.getByText(mockExistingTask.title);
+        userEvent.click(taskItem);
+
+        const titleInput = screen.getByRole('textbox', { name: /title/i });
+        userEvent.clear(titleInput);
+        userEvent.type(titleInput, newTitle);
+
+        const saveBtn = screen.getByRole('button', { name: /save/i });
+        expect(saveBtn).toBeEnabled();
+        userEvent.click(saveBtn);
+
+        await waitFor(() => expect(saveBtn).toBeDisabled());
+        expect(screen.getByTestId(`task-item-${mockExistingTask.id}`)).toHaveTextContent(newTitle);
+      });
+    });
   });
 });

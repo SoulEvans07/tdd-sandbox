@@ -1,6 +1,6 @@
 import { ActionType } from 'typesafe-actions';
 import { produce } from 'immer';
-import { initialStoreData, StoreData } from './types';
+import { initialStoreData, personalWs, StoreData } from './types';
 import * as actions from './actions';
 
 export function rootReducer(state: StoreData, action: ActionType<typeof actions>): StoreData {
@@ -24,6 +24,20 @@ export function rootReducer(state: StoreData, action: ActionType<typeof actions>
         draft.workspaces[draft.activeWS].tasks = draft.workspaces[draft.activeWS].tasks.filter(
           task => !action.payload.includes(task.id)
         );
+      });
+    case 'todo.io/update-task':
+      return produce(state, draft => {
+        const task = action.payload;
+        const isTaskPersonal = task.tenantId === undefined;
+        const isTaskCurrentWs = draft.activeWS === personalWs ? isTaskPersonal : task.tenantId === draft.activeWS;
+        const taskIndex = draft.workspaces[draft.activeWS].tasks.findIndex(t => t.id === task.id);
+        if (taskIndex !== -1) {
+          if (isTaskCurrentWs) {
+            draft.workspaces[draft.activeWS].tasks[taskIndex] = task;
+          } else {
+            draft.workspaces[draft.activeWS].tasks.splice(taskIndex, 1);
+          }
+        }
       });
     case 'todo.io/load-workspaces':
       return produce(state, draft => {

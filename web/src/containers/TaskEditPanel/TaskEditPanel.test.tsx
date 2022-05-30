@@ -12,8 +12,14 @@ describe('TaskEditPanel', () => {
     description: 'Detailed description',
   };
 
-  function MockTaskPage(props: { open?: boolean; task: Task }) {
-    const { open, task } = props;
+  interface MockTaskPageProps {
+    open?: boolean;
+    task: Task;
+    onSubmit?: (taskId: number, patch: Partial<Task>) => void;
+  }
+
+  function MockTaskPage(props: MockTaskPageProps) {
+    const { open, task, onSubmit = jest.fn() } = props;
     const [visible, setVisibility] = useState(!!open);
 
     const onOpen = () => setVisibility(true);
@@ -22,7 +28,7 @@ describe('TaskEditPanel', () => {
     return (
       <>
         <button onClick={onOpen}>Open Task</button>
-        <TaskEditPanel task={visible ? task : undefined} onClose={onClose} />
+        <TaskEditPanel task={visible ? task : undefined} onClose={onClose} onSubmit={onSubmit} />
       </>
     );
   }

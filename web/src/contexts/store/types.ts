@@ -19,6 +19,8 @@ export interface Task {
   title: string;
   status: TaskStatus;
   description: string;
+  assigneeId?: number;
+  tenantId?: number;
 }
 
 export const personalWs = '_personal' as const;

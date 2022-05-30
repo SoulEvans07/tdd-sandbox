@@ -30,6 +30,10 @@ export abstract class ControllerBase {
     return request.post<R>(url, body, headers);
   }
 
+  protected async patch<R extends ResponseBody>(url: string, body?: RequestBody, headers?: RequestHeaders): Promise<R> {
+    return request.patch<R>(url, body, headers);
+  }
+
   protected async delete<R extends ResponseBody>(
     url: string,
     body?: RequestBody,

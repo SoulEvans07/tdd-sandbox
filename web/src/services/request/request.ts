@@ -41,6 +41,19 @@ async function post<R extends ResponseBody>(url: string, body?: RequestBody, hea
   );
 }
 
+async function patch<R extends ResponseBody>(url: string, body?: RequestBody, headers?: RequestHeaders): Promise<R> {
+  return new Promise<R>((resolve, reject) =>
+    fetch(url, {
+      method: 'PATCH', // for some reason it will only work with uppercase
+      headers: { 'content-type': 'application/json', ...headers },
+      body: JSON.stringify(body),
+    }).then(
+      response => resolve(handleResponse(response)),
+      err => reject(err) // fetch error, i.e: no internet
+    )
+  );
+}
+
 async function del<R extends ResponseBody>(url: string, body?: RequestBody, headers?: RequestHeaders): Promise<R> {
   return new Promise<R>((resolve, reject) =>
     fetch(url, {
@@ -49,9 +62,9 @@ async function del<R extends ResponseBody>(url: string, body?: RequestBody, head
       body: JSON.stringify(body),
     }).then(
       response => resolve(handleResponse(response)),
-      err => reject(err)
+      err => reject(err) // fetch error, i.e: no internet
     )
   );
 }
 
-export const request: IRequest = { get, post, delete: del } as const;
+export const request: IRequest = { get, post, patch, delete: del } as const;
