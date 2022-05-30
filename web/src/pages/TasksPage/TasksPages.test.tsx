@@ -115,7 +115,7 @@ describe('TasksPage', () => {
 
     describe('submit change', () => {
       const newTitle = 'Changed Task Title';
-      // const newDescription = 'Changed Task Description';
+      const newDescription = 'Changed Task Description';
 
       test('title change', async () => {
         const user = mockUsers[0];
@@ -136,6 +136,42 @@ describe('TasksPage', () => {
         await waitFor(() => expect(saveBtn).toBeDisabled());
         expect(screen.getByTestId(`task-item-${task.id}`)).toHaveTextContent(newTitle);
       });
+
+      test('description change', async () => {
+        const user = mockUsers[0];
+        setupTaskPage(user);
+        const task = user.tasks[0];
+
+        const taskItem = await screen.findByText(task.title);
+        userEvent.click(taskItem);
+
+        const descriptionTA = screen.getByRole('textbox', { name: /description/i });
+        userEvent.clear(descriptionTA);
+        userEvent.type(descriptionTA, newDescription);
+
+        const saveBtn = screen.getByRole('button', { name: /save/i });
+        expect(saveBtn).toBeEnabled();
+        userEvent.click(saveBtn);
+
+        await waitFor(() => expect(saveBtn).toBeDisabled());
+      });
+
+      // describe.each<{ status: TaskStatus; options: TaskStatus[] }>([
+      //   { status: 'Todo', options: ['InProgress'] },
+      //   { status: 'InProgress', options: ['Blocked', 'Done'] },
+      //   { status: 'Blocked', options: ['Todo', 'InProgress'] },
+      // ])('status transitions', ({ status, options }) => {
+      //   test.each(options)(`${status} => %s`, async option => {
+      //     const task = { ...mockTask, status };
+      //     render(<MockTaskPage task={task} open />);
+      //     const statusLabel = await screen.findByText(TaskStatusNames[status]);
+
+      //     const nextStatusBtn = screen.getByRole('button', { name: TaskStatusNames[option] });
+      //     userEvent.click(nextStatusBtn);
+
+      //     await waitFor(() => expect(statusLabel).toHaveTextContent(TaskStatusNames[option]));
+      //   });
+      // });
     });
   });
 });
