@@ -6,29 +6,19 @@ import { TasksPage } from './TasksPage';
 import { StoreProvider } from '../../contexts/store/StoreContext';
 import { AuthProvider } from '../../contexts/auth/AuthContext';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
-import { personalWs, StoreData, Task } from '../../contexts/store/types';
-import { mockNewTask } from '../../mocks/controllers/MockTaskController';
-import { mockJwtToken, mockUser } from '../../mocks/controllers/mockData';
 import { supressErrorMessages } from '../../helpers/testHelpers';
-
-const mockExistingTask: Task = { id: 0, title: 'Existing Task', status: 'Todo', description: '' };
-const mockStore: StoreData = {
-  activeWS: personalWs,
-  workspaces: {
-    [personalWs]: { id: personalWs, name: 'Personal', tasks: [mockExistingTask] },
-  },
-};
+import { MockUserData, mockUsers } from '../../mocks/controllers/mockData';
 
 describe('TasksPage', () => {
   let createTaskInput: HTMLInputElement;
   let profileImg: HTMLElement;
 
-  const setupTaskPage = (init?: StoreData) => {
+  const setupTaskPage = (user: MockUserData) => {
     render(
       <MemoryRouter initialEntries={[ROUTES.TASKS]}>
         <ThemeProvider initial="dark">
-          <AuthProvider initial={{ currentUser: mockUser, token: mockJwtToken }}>
-            <StoreProvider initial={init}>
+          <AuthProvider initial={{ currentUser: user.data, token: user.token }}>
+            <StoreProvider>
               <TasksPage />
             </StoreProvider>
           </AuthProvider>
@@ -37,13 +27,13 @@ describe('TasksPage', () => {
     );
 
     createTaskInput = screen.getByRole('textbox', { name: /new task/i }) as HTMLInputElement;
-    profileImg = screen.getByTitle(mockUser.username) as HTMLInputElement;
+    profileImg = screen.getByTitle(user.data.username) as HTMLInputElement;
   };
 
   supressErrorMessages();
 
   it('page composition', () => {
-    setupTaskPage();
+    setupTaskPage(mockUsers[0]);
     expect(createTaskInput).toBeInTheDocument();
     expect(profileImg).toBeInTheDocument();
   });
@@ -53,42 +43,49 @@ describe('TasksPage', () => {
   });
 
   describe('create task', () => {
-    it('has empty list message  if no data found on store or retreived from server', () => {
-      setupTaskPage();
+    it('has empty list message if no data found on store or retreived from server', () => {
+      setupTaskPage(mockUsers[2]);
       const emptyListMessage = screen.getByText('There is nothing here!');
       expect(emptyListMessage).toBeInTheDocument();
     });
 
     it('doesnt add item when input is empty but enter is pressed', () => {
-      setupTaskPage();
+      setupTaskPage(mockUsers[2]);
+
       userEvent.clear(createTaskInput);
       userEvent.type(createTaskInput, '{enter}');
+
       const taskItem = screen.queryByTestId(/task-item-/i);
       expect(taskItem).not.toBeInTheDocument();
     });
 
     it('clears input and adds item to list when enter is pressed', async () => {
-      setupTaskPage();
+      setupTaskPage(mockUsers[2]);
+
+      const title = 'New Task Title';
       userEvent.clear(createTaskInput);
-      userEvent.type(createTaskInput, mockNewTask.title);
+      userEvent.type(createTaskInput, title);
       userEvent.type(createTaskInput, '{enter}');
+
       expect(createTaskInput).toHaveValue('');
       const taskItem = await screen.findByTestId(/task-item-/i);
       expect(taskItem).toBeInTheDocument();
-      expect(taskItem).toHaveTextContent(mockNewTask.title);
+      expect(taskItem).toHaveTextContent(title);
     });
 
     it('deletes a task when the remove button is pressed', async () => {
-      setupTaskPage(mockStore);
+      const user = mockUsers[1];
+      setupTaskPage(user);
+      const task = user.tasks[0];
 
-      const taskItem = screen.getByText(mockExistingTask.title);
+      const taskItem = await screen.findByText(task.title);
       expect(taskItem).toBeInTheDocument();
 
-      const removeBtn = screen.getByRole('button', { name: /remove/i });
+      const removeBtn = screen.getByTestId(`remove-task-${task.id}`);
       expect(removeBtn).toBeInTheDocument();
 
       userEvent.click(removeBtn);
-      await waitForElementToBeRemoved(() => screen.queryByText(mockExistingTask.title));
+      await waitForElementToBeRemoved(() => screen.queryByText(task.title));
 
       // wait until last updates are done so they dont throw error when the test unmounts the components
       await new Promise(res => setTimeout(res, 1000));
@@ -97,12 +94,14 @@ describe('TasksPage', () => {
 
   describe('edit task', () => {
     it('opens the edit panel when you click on a task, closes when close btn pressed', async () => {
-      setupTaskPage(mockStore);
+      const user = mockUsers[0];
+      setupTaskPage(user);
+      const task = user.tasks[0];
 
       const noEditor = screen.queryByRole('complementary', { name: /edit panel/i });
       expect(noEditor).not.toBeInTheDocument();
 
-      const taskItem = screen.getByText(mockExistingTask.title);
+      const taskItem = await screen.findByText(task.title);
       userEvent.click(taskItem);
 
       const editor = screen.getByRole('complementary', { name: /edit panel/i });
@@ -119,9 +118,11 @@ describe('TasksPage', () => {
       // const newDescription = 'Changed Task Description';
 
       test('title change', async () => {
-        setupTaskPage(mockStore);
+        const user = mockUsers[0];
+        setupTaskPage(user);
+        const task = user.tasks[0];
 
-        const taskItem = screen.getByText(mockExistingTask.title);
+        const taskItem = await screen.findByText(task.title);
         userEvent.click(taskItem);
 
         const titleInput = screen.getByRole('textbox', { name: /title/i });
@@ -133,7 +134,7 @@ describe('TasksPage', () => {
         userEvent.click(saveBtn);
 
         await waitFor(() => expect(saveBtn).toBeDisabled());
-        expect(screen.getByTestId(`task-item-${mockExistingTask.id}`)).toHaveTextContent(newTitle);
+        expect(screen.getByTestId(`task-item-${task.id}`)).toHaveTextContent(newTitle);
       });
     });
   });

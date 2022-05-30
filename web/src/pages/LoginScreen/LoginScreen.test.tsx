@@ -1,7 +1,6 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import { mockExistingUser } from '../../mocks/controllers/MockAuthController';
 import { supressErrorMessages } from '../../helpers/testHelpers';
 import { LoginScreen } from './LoginScreen';
 import { AuthProvider } from '../../contexts/auth/AuthContext';
@@ -9,6 +8,7 @@ import { StoreProvider } from '../../contexts/store/StoreContext';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
 import { ROUTES } from '../../router/types';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
+import { mockUsers } from '../../mocks/controllers/mockData';
 
 describe('LoginScreen', () => {
   let titleHeading: HTMLHeadingElement;
@@ -57,9 +57,11 @@ describe('LoginScreen', () => {
 
   describe('submit', () => {
     test('login and logout works', async () => {
+      const mockExistingUser = mockUsers[0];
+
       userEvent.clear(nameInput);
-      userEvent.type(nameInput, mockExistingUser.username);
-      expect(nameInput).toHaveValue(mockExistingUser.username);
+      userEvent.type(nameInput, mockExistingUser.data.username);
+      expect(nameInput).toHaveValue(mockExistingUser.data.username);
 
       userEvent.clear(passwordInput);
       userEvent.type(passwordInput, mockExistingUser.password);
@@ -71,7 +73,7 @@ describe('LoginScreen', () => {
       const taskPageHeading = await screen.findByRole('heading', { name: /todo/i });
       expect(taskPageHeading).toBeInTheDocument();
 
-      const profileImg = screen.getByTitle(mockExistingUser.username);
+      const profileImg = screen.getByTitle(mockExistingUser.data.username);
       expect(profileImg).toBeInTheDocument();
       userEvent.click(profileImg);
 

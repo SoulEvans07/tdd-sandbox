@@ -5,24 +5,20 @@ import { StoreProvider } from '../../contexts/store/StoreContext';
 import { StoreData } from '../../contexts/store/types';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
 import { supressErrorMessages } from '../../helpers/testHelpers';
-import { mockJwtToken, mockUser } from '../../mocks/controllers/mockData';
-import { mockWorkspace } from '../../mocks/controllers/MockUserController';
+import { mockUsers } from '../../mocks/controllers/mockData';
 import { AppHeader } from './AppHeader';
 
 describe('AppHeader', () => {
   supressErrorMessages();
 
   const title = 'TEST TITLE';
-  const user = {
-    id: mockUser.id,
-    username: mockUser.username,
-    email: mockUser.email,
-    tenants: mockUser.tenants,
-  };
+  const mockUser = mockUsers[0];
+  const mockWorkspace = mockUsers[0].tenants[0];
+
   const setup = (init?: StoreData) => {
     render(
       <ThemeProvider initial="dark">
-        <AuthProvider initial={{ currentUser: user, token: mockJwtToken }}>
+        <AuthProvider initial={{ currentUser: mockUser.data, token: mockUser.token }}>
           <StoreProvider initial={init}>
             <AppHeader title={title} />
           </StoreProvider>
@@ -36,12 +32,12 @@ describe('AppHeader', () => {
     expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /personal/i })).toBeInTheDocument();
     expect(screen.getByRole('checkbox', { name: /switch theme/i })).toBeInTheDocument();
-    expect(screen.getByTitle(user.username)).toBeInTheDocument();
+    expect(screen.getByTitle(mockUser.data.username)).toBeInTheDocument();
   });
 
   it('when profile img is clicked a menu opens with the workspaces and a logout btn', async () => {
     setup();
-    const profileImg = screen.getByTitle(user.username);
+    const profileImg = screen.getByTitle(mockUser.data.username);
     userEvent.click(profileImg);
 
     const logout = await screen.findByRole('option', { name: /logout/i });
@@ -65,7 +61,7 @@ describe('AppHeader', () => {
     setup();
     expect(screen.getByRole('heading', { name: /personal/i })).toBeInTheDocument();
 
-    const profileImg = screen.getByTitle(user.username);
+    const profileImg = screen.getByTitle(mockUser.data.username);
     userEvent.click(profileImg);
 
     await waitFor(async () => {
