@@ -8,11 +8,12 @@ import { Button, ButtonProps } from '../../components/control/Button/Button';
 
 interface TaskEditPanelProps {
   task?: Task;
-  onClose?: VoidFunction;
+  onClose: VoidFunction;
+  onSubmit: (taskId: number, patch: Partial<Task>) => void;
 }
 
 export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
-  const { task, onClose } = props;
+  const { task, onClose, onSubmit } = props;
 
   const [status, setStatus] = useState<TaskStatus>('Todo');
 
@@ -41,6 +42,11 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
     return task?.title !== title || task.description !== description;
   }, [status, title, description, task]);
 
+  const handleSubmit = () => {
+    if (!task) return;
+    onSubmit(task.id, { title });
+  };
+
   return (
     <SidePanel className="task-edit-panel right" hidden={!task} onClose={onClose} label="Edit Panel">
       <section className="task-details">
@@ -52,7 +58,13 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
         <TextInput title="Title" className="task-title" value={title} onChange={onTitleChange} />
         <textarea title="Description" className="task-description" value={description} onChange={onDescriptionChange} />
         <div className="action-row">
-          <Button fill={hasChanges ? 'fill' : 'border'} size="wide" color="primary" disabled={!hasChanges}>
+          <Button
+            fill={hasChanges ? 'fill' : 'border'}
+            size="wide"
+            color="primary"
+            disabled={!hasChanges}
+            onClick={handleSubmit}
+          >
             Save Changes
           </Button>
           <Button fill="border" size="wide" color="error">

@@ -8,7 +8,7 @@ import { TaskList } from '../../containers/TaskList/TaskList';
 import { useDispatch, useSelector } from '../../contexts/store/StoreContext';
 import { selectActiveWorkspace, selectWorkspaceTasks } from '../../contexts/store/selectors';
 import { Task } from '../../contexts/store/types';
-import { createTask, loadTasks, removeMultipleTask } from '../../contexts/store/actions';
+import { createTask, loadTasks, removeMultipleTask, updateTask } from '../../contexts/store/actions';
 import { taskController } from '../../controllers/TaskController';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import { Footer } from '../../components/layout/Footer/Footer';
@@ -56,6 +56,12 @@ export function TasksPage(): ReactElement {
     return tasks.find(task => task.id === editTaskId);
   }, [editTaskId, tasks]);
 
+  const handleUpdateSubmit = async (taskId: number, patch: Partial<Task>) => {
+    if (!token) return;
+    const afterUpdate = await taskController.update(taskId, patch, token);
+    dispatch(updateTask(afterUpdate));
+  };
+
   return (
     <Page className="tasks-page">
       <main>
@@ -77,7 +83,7 @@ export function TasksPage(): ReactElement {
       <Footer>
         <span>Select a task to open it in the edit panel</span>
       </Footer>
-      <TaskEditPanel task={editedTask} onClose={handleCloseEdit} />
+      <TaskEditPanel task={editedTask} onClose={handleCloseEdit} onSubmit={handleUpdateSubmit} />
     </Page>
   );
 }
