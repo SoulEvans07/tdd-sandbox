@@ -17,10 +17,15 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
 
   const [status, setStatus] = useState<TaskStatus>('Todo');
 
+  const handleStatusChange = (status: TaskStatus) => {
+    if (!task) return;
+    onSubmit(task.id, { status });
+  };
+
   const transitions = useMemo((): ButtonProps[] => {
     return TaskStatusTransitions[status].map(option => ({
       children: TaskStatusNames[option],
-      onClick: () => {},
+      onClick: () => handleStatusChange(option),
     }));
   }, [status]);
 
@@ -44,7 +49,12 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
 
   const handleSubmit = () => {
     if (!task) return;
-    onSubmit(task.id, { title });
+
+    const patch: Partial<Task> = {};
+    if (title !== task.title) patch.title = title;
+    if (description !== task.description) patch.description = description;
+
+    if (Object.keys(patch).length > 0) onSubmit(task.id, patch);
   };
 
   return (
