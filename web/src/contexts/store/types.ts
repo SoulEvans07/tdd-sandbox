@@ -7,6 +7,14 @@ export const TaskStatusNames: Record<TaskStatus, string> = {
   Done: 'Done',
 };
 
+type colors = 'green' | 'red' | 'purple' | 'grey';
+export const TaskStatusColors: Record<TaskStatus, colors> = {
+  Todo: 'grey',
+  InProgress: 'green',
+  Blocked: 'red',
+  Done: 'purple',
+};
+
 export const TaskStatusTransitions: Record<TaskStatus, TaskStatus[]> = {
   Todo: ['InProgress'],
   InProgress: ['Blocked', 'Done'],

@@ -1,8 +1,9 @@
 import { ReactElement } from 'react';
+import './TaskItem.scss';
 import { Checkbox } from '../../../components/control/Checkbox/Checkbox';
 import { Icon } from '../../../components/ui/Icon/Icon';
-import { Task } from '../../../contexts/store/types';
-import './TaskItem.scss';
+import { TagLabel } from '../../../components/ui/TagLabel/TagLabel';
+import { Task, TaskStatusColors, TaskStatusNames } from '../../../contexts/store/types';
 
 export interface TaskItemProps {
   task: Task;
@@ -20,6 +21,9 @@ export function TaskItem(props: TaskItemProps): ReactElement {
     <div className="task-item" id={testId} data-testid={testId} onClick={onEdit}>
       <Checkbox title="Select" checked={selected} onChange={onSelect} />
       <span className="task-title">{task.title}</span>
+      {task.status !== 'Todo' && (
+        <TagLabel className="status-label" name={TaskStatusNames[task.status]} color={TaskStatusColors[task.status]} />
+      )}
       <Icon
         className="remove-task"
         icon="cross"
