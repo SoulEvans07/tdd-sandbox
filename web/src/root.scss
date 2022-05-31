@@ -49,12 +49,12 @@ body.theme-light {
   --color-light-300: hsl(235, 19%, 35%);
   --color-light-200: hsl(236, 33%, 8%);
 
-  --color-inprogress-light: hsl(165, 71%, 95%);
-  --color-inprogress-dark: hsl(165, 31%, 60%);
-  --color-blocked-light: hsl(350, 100%, 95%);
-  --color-blocked-dark: hsl(350, 60%, 60%);
-  --color-done-light: hsl(249, 84%, 95%);
-  --color-done-dark: hsl(249, 44%, 60%);
+  --color-tl-green-light: hsl(165, 71%, 95%);
+  --color-tl-green-dark: hsl(165, 31%, 60%);
+  --color-tl-red-light: hsl(350, 100%, 95%);
+  --color-tl-red-dark: hsl(350, 60%, 60%);
+  --color-tl-purple-light: hsl(249, 84%, 95%);
+  --color-tl-purple-dark: hsl(249, 44%, 60%);
 
   --drop-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.15);
   --drop-shadow-small: 0px 3px 5px 0px rgba(0, 0, 0, 0.15);
@@ -72,12 +72,12 @@ body.theme-dark {
   --color-light-300: hsl(234, 39%, 85%);
   --color-light-200: hsl(236, 33%, 92%);
 
-  --color-inprogress-light: hsl(165, 31%, 60%);
-  --color-inprogress-dark: hsl(165, 71%, 95%);
-  --color-blocked-light: hsl(350, 60%, 60%);
-  --color-blocked-dark: hsl(350, 100%, 95%);
-  --color-done-light: hsl(249, 44%, 60%);
-  --color-done-dark: hsl(249, 84%, 95%);
+  --color-tl-green-light: hsl(165, 31%, 60%);
+  --color-tl-green-dark: hsl(165, 71%, 95%);
+  --color-tl-red-light: hsl(350, 60%, 60%);
+  --color-tl-red-dark: hsl(350, 100%, 95%);
+  --color-tl-purple-light: hsl(249, 44%, 60%);
+  --color-tl-purple-dark: hsl(249, 84%, 95%);
 
   --drop-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.3);
   --drop-shadow-small: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);

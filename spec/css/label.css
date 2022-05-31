@@ -11,11 +11,6 @@
   user-select: none;
 }
 
-.status-label.open {
-  /* background-color: var(--color-inprogress-light);
-  color: var(--color-inprogress-dark); */
-}
-
 .status-label.in-progress {
   background-color: var(--color-inprogress-light);
   color: var(--color-inprogress-dark);

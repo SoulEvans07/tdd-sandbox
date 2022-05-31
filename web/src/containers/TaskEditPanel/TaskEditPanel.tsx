@@ -1,10 +1,11 @@
 import { ChangeEvent, ReactElement, useEffect, useMemo, useState } from 'react';
 import './TaskEditPanel.scss';
-import { Task, TaskStatus, TaskStatusNames, TaskStatusTransitions } from '../../contexts/store/types';
+import { Task, TaskStatus, TaskStatusColors, TaskStatusNames, TaskStatusTransitions } from '../../contexts/store/types';
 import { TextInput } from '../../components/control/TextInput/TextInput';
 import { SidePanel } from '../../components/layout/SidePanel/SidePanel';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
 import { Button, ButtonProps } from '../../components/control/Button/Button';
+import { TagLabel } from '../../components/ui/TagLabel/TagLabel';
 
 interface TaskEditPanelProps {
   task?: Task;
@@ -27,7 +28,7 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
       children: TaskStatusNames[option],
       onClick: () => handleStatusChange(option),
     }));
-  }, [status]);
+  }, [status, task]);
 
   const [title, setTitle] = useState('');
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
@@ -62,7 +63,7 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
       <section className="task-details">
         <div className="assignee-row"></div>
         <div className="status-row">
-          <span className="status-label in-progress">{TaskStatusNames[status]}</span>
+          <TagLabel className="status-label" name={TaskStatusNames[status]} color={TaskStatusColors[status]} />
           <ButtonGroup buttons={transitions} fill="border" />
         </div>
         <TextInput title="Title" className="task-title" value={title} onChange={onTitleChange} />
