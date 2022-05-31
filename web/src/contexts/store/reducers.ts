@@ -28,7 +28,7 @@ export function rootReducer(state: StoreData, action: ActionType<typeof actions>
     case 'todo.io/update-task':
       return produce(state, draft => {
         const task = action.payload;
-        const isTaskPersonal = task.tenantId === undefined;
+        const isTaskPersonal = task.tenantId == null;
         const isTaskCurrentWs = draft.activeWS === personalWs ? isTaskPersonal : task.tenantId === draft.activeWS;
         const taskIndex = draft.workspaces[draft.activeWS].tasks.findIndex(t => t.id === task.id);
         if (taskIndex !== -1) {
