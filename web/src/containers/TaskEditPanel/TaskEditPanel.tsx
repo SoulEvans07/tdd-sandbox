@@ -36,7 +36,9 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
   const [description, setDescription] = useState('');
   const onDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value);
 
+  const [dirty, setDirty] = useState(false);
   useEffect(() => {
+    setDirty(false);
     if (task) {
       setStatus(task.status);
       setTitle(task.title);
@@ -44,9 +46,10 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
     }
   }, [task]);
 
-  const hasChanges = useMemo(() => {
-    return task?.title !== title || task.description !== description;
-  }, [status, title, description, task]);
+  useEffect(() => {
+    if (!task) setDirty(false);
+    else setDirty(task.title !== title || task.description !== description);
+  }, [status, title, description]);
 
   const handleSubmit = () => {
     if (!task) return;
@@ -69,13 +72,7 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
         <TextInput title="Title" className="task-title" value={title} onChange={onTitleChange} />
         <textarea title="Description" className="task-description" value={description} onChange={onDescriptionChange} />
         <div className="action-row">
-          <Button
-            fill={hasChanges ? 'fill' : 'border'}
-            size="wide"
-            color="primary"
-            disabled={!hasChanges}
-            onClick={handleSubmit}
-          >
+          <Button fill={dirty ? 'fill' : 'border'} size="wide" color="primary" disabled={!dirty} onClick={handleSubmit}>
             Save Changes
           </Button>
           <Button fill="border" size="wide" color="error">
