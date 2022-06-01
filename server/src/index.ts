@@ -7,7 +7,7 @@ import { mockUser } from './tests/mocks';
 import { UserManager } from './BLL/UserManager';
 
 try {
-  sequelize.sync({ force: true }).then(() => {
+  sequelize.sync().then(() => {
     User.findOne({ where: { username: mockUser.username } }).then(user => {
       if (!user) {
         UserManager.save(mockUser).then(() => {
