@@ -1,4 +1,4 @@
-import { ReactElement, useMemo, useState } from 'react';
+import { ReactElement, SyntheticEvent, useMemo, useState } from 'react';
 import './Checkbox.scss';
 import { Icon } from '../../ui/Icon/Icon';
 import classNames from 'classnames';
@@ -19,7 +19,8 @@ export function Checkbox(props: CheckboxProps): ReactElement {
     throw new UncontrolledInputChangeError();
   }
 
-  const handleChange = () => {
+  const handleChange = (event: SyntheticEvent) => {
+    event.stopPropagation();
     if (onChange) return onChange(!checked);
     setChecked(prev => !prev);
   };
