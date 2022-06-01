@@ -62,6 +62,11 @@ export function TasksPage(): ReactElement {
     dispatch(updateTask(afterUpdate));
   };
 
+  const handleDelete = (taskId: number) => {
+    setEditedTask(null);
+    handleRemove([taskId]);
+  };
+
   return (
     <Page className="tasks-page">
       <main>
@@ -83,7 +88,12 @@ export function TasksPage(): ReactElement {
       <Footer>
         <span>Select a task to open it in the edit panel</span>
       </Footer>
-      <TaskEditPanel task={editedTask} onClose={handleCloseEdit} onSubmit={handleUpdateSubmit} />
+      <TaskEditPanel
+        task={editedTask}
+        onClose={handleCloseEdit}
+        onSubmit={handleUpdateSubmit}
+        onDelete={handleDelete}
+      />
     </Page>
   );
 }

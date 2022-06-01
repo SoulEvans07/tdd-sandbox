@@ -194,5 +194,26 @@ describe('TasksPage', () => {
       //   });
       // });
     });
+
+    it('deletes a task when the delete button is pressed on edit panel', async () => {
+      const user = mockUsers[1];
+      setupTaskPage(user);
+      const task = user.tasks[0];
+
+      const taskItem = await screen.findByText(task.title);
+      userEvent.click(taskItem);
+
+      const deleteBtn = screen.getByRole('button', { name: /delete task/i });
+      expect(deleteBtn).toBeInTheDocument();
+
+      userEvent.click(deleteBtn);
+      await waitForElementToBeRemoved(() => screen.queryByTestId(`task-item-${task.id}`));
+
+      const noEditorAfterSelect = screen.queryByRole('complementary', { name: /edit panel/i });
+      expect(noEditorAfterSelect).not.toBeInTheDocument();
+
+      // wait until last updates are done so they dont throw error when the test unmounts the components
+      // await new Promise(res => setTimeout(res, 1000));
+    });
   });
 });
