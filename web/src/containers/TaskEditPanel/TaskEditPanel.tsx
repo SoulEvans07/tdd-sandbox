@@ -11,10 +11,11 @@ interface TaskEditPanelProps {
   task?: Task;
   onClose: VoidFunction;
   onSubmit: (taskId: number, patch: Partial<Task>) => void;
+  onDelete: (taskId: number) => void;
 }
 
 export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
-  const { task, onClose, onSubmit } = props;
+  const { task, onClose, onSubmit, onDelete } = props;
 
   const [status, setStatus] = useState<TaskStatus>('Todo');
 
@@ -61,6 +62,11 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
     if (Object.keys(patch).length > 0) onSubmit(task.id, patch);
   };
 
+  const handleDelete = () => {
+    if (!task) return;
+    onDelete(task.id);
+  };
+
   return (
     <SidePanel className="task-edit-panel right" hidden={!task} onClose={onClose} label="Edit Panel">
       <section className="task-details">
@@ -75,7 +81,7 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
           <Button fill={dirty ? 'fill' : 'border'} size="wide" color="primary" disabled={!dirty} onClick={handleSubmit}>
             Save Changes
           </Button>
-          <Button fill="border" size="wide" color="error">
+          <Button fill="border" size="wide" color="error" onClick={handleDelete}>
             Delete Task
           </Button>
         </div>

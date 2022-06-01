@@ -17,10 +17,11 @@ describe('TaskEditPanel', () => {
     open?: boolean;
     task: Task;
     onSubmit?: (taskId: number, patch: Partial<Task>) => void;
+    onDelete?: (taskId: number) => void;
   }
 
   function MockTaskPage(props: MockTaskPageProps) {
-    const { open, task, onSubmit = jest.fn() } = props;
+    const { open, task, onSubmit = jest.fn(), onDelete = jest.fn() } = props;
     const [visible, setVisibility] = useState(!!open);
 
     const onOpen = () => setVisibility(true);
@@ -29,7 +30,7 @@ describe('TaskEditPanel', () => {
     return (
       <>
         <button onClick={onOpen}>Open Task</button>
-        <TaskEditPanel task={visible ? task : undefined} onClose={onClose} onSubmit={onSubmit} />
+        <TaskEditPanel task={visible ? task : undefined} onClose={onClose} onSubmit={onSubmit} onDelete={onDelete} />
       </>
     );
   }
@@ -202,5 +203,15 @@ describe('TaskEditPanel', () => {
         expect(submit).toBeCalledWith(task.id, { status: option });
       });
     });
+  });
+
+  test('delete interface', () => {
+    const onDelete = jest.fn();
+    render(<MockTaskPage task={mockTask} open onDelete={onDelete} />);
+
+    const deleteBtn = screen.getByRole('button', { name: /delete task/i });
+    userEvent.click(deleteBtn);
+
+    expect(onDelete).toBeCalledWith(mockTask.id);
   });
 });
