@@ -1,20 +1,19 @@
 import { Model, DataTypes, Optional } from 'sequelize';
+import { EntityTimestamps } from '../../types/model';
 import sequelize from '../database';
 import Task from './Task';
 
-interface UserAttributes {
+interface UserAttributes extends EntityTimestamps {
   id: number;
   username: string;
   email: string;
   password: string;
   tenantId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date;
 }
 
 export interface UserInput extends Optional<UserAttributes, 'id' | 'tenantId'> {}
 export interface UserOutput extends Required<UserAttributes> {}
+export type RestrictedUserOutput = Omit<UserAttributes, 'password' | 'tenantId' | keyof EntityTimestamps>;
 
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
   public id!: number;

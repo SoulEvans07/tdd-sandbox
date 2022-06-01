@@ -1,9 +1,11 @@
 import request from 'supertest';
 import { app } from '../app';
 import { UserInput } from '../DAL/models/User';
+import { AuthResponse } from '../types/api';
 
 export enum ApiEndpoints {
   CreateUser = '/api/1.0/user',
+  GetUsersForTenant = '/api/1.0/users/tenant/:tenantId',
   Login = '/api/1.0/auth/login',
   GetToken = '/api/1.0/auth/token',
   CreateTask = '/api/1.0/task',
@@ -24,6 +26,9 @@ export const postRequest = async (path: string, body?: any, headers?: Record<str
   }
   return req.send(body);
 };
+
+export const getUsers = async (tenantId: number, headers?: Record<string, string>) =>
+  await getRequest(ApiEndpoints.GetUsersForTenant.replace(':tenantId', tenantId.toString()), headers);
 
 export const getRequest = async (path: string, headers?: Record<string, string>) => {
   const req = request(app).get(path);
@@ -68,3 +73,12 @@ export const validateTokenResponse = (user: UserInput, response: request.Respons
   expect(response.body.user.tenants).toStrictEqual([1]);
   expect(response.body).toHaveProperty('token');
 };
+
+export async function loginUser(userInput: UserInput): Promise<AuthResponse> {
+  const resp = await postRequest(ApiEndpoints.Login, { username: userInput.username, password: userInput.password });
+  return resp.body;
+}
+
+export function generateAuthorizationHeader(loginData: AuthResponse): Record<string, string> | undefined {
+  return { authorization: 'Bearer ' + loginData.token };
+}

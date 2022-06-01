@@ -1,14 +1,12 @@
 import { Model, DataTypes, Optional } from 'sequelize';
+import { EntityTimestamps } from '../../types/model';
 import sequelize from '../database';
 import Task from './Task';
 import User from './User';
 
-interface TenantAttributes {
+interface TenantAttributes extends EntityTimestamps {
   id: number;
   name: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date;
 }
 
 export interface TenantInput extends Optional<TenantAttributes, 'id'> {}

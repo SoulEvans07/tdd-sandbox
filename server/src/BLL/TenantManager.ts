@@ -1,5 +1,5 @@
 import Tenant, { TenantOutput } from '../DAL/models/Tenant';
-import { UserOutput } from '../DAL/models/User';
+import User, { UserOutput } from '../DAL/models/User';
 
 export class TenantManager {
   public static async getTenantsForUser(user: UserOutput): Promise<TenantOutput[]> {
@@ -9,5 +9,9 @@ export class TenantManager {
       },
     });
     return tenant ? [tenant] : [];
+  }
+
+  public static async getUsersByTenant(tenantId: number): Promise<UserOutput[]> {
+    return await User.findAll({ where: { tenantId } });
   }
 }

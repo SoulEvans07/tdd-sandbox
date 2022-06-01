@@ -1,9 +1,11 @@
 import { NextFunction, Response } from 'express';
 import { check } from 'express-validator';
+import { TenantManager } from '../BLL/TenantManager';
 import { UserManager } from '../BLL/UserManager';
-import { UserInput } from '../DAL/models/User';
+import { RestrictedUserOutput, UserInput } from '../DAL/models/User';
 import { epMeta } from '../decorators/api.decorators';
-import { ControllerBase, ValidatedRequest } from '../types/api';
+import { AuthorizedRequest, ControllerBase, ValidatedRequest } from '../types/api';
+import { ForbiddenException } from '../types/exceptions/ForbiddenException';
 import { R } from '../types/localization';
 
 export default class UserController extends ControllerBase {
@@ -16,6 +18,30 @@ export default class UserController extends ControllerBase {
   public async register(req: ValidatedRequest<UserInput>, res: Response, _: NextFunction) {
     await UserManager.save(req.body);
     return res.status(200).send({ message: req.t(R.userCreated) });
+  }
+
+  @epMeta({
+    method: 'get',
+    version: '1.0',
+    path: 'users/tenant/:tenantId',
+  })
+  public async list(
+    req: AuthorizedRequest<{ tenantId?: string }>,
+    res: Response<RestrictedUserOutput[]>,
+    next: NextFunction
+  ) {
+    try {
+      if (!req.user) throw new ForbiddenException();
+
+      const tenantId = req.params.tenantId ? parseInt(req.params.tenantId) : undefined;
+      if (!tenantId || req.user.tenantId !== tenantId) throw new ForbiddenException();
+
+      const users = await TenantManager.getUsersByTenant(tenantId);
+      const strippedUsers = users.map(u => ({ id: u.id, username: u.username, email: u.email }));
+      return res.send(strippedUsers);
+    } catch (err) {
+      next(err);
+    }
   }
 
   private static validateUsername(req: ValidatedRequest<UserInput>, res: Response, next: () => void) {
