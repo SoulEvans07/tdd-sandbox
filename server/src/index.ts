@@ -2,20 +2,10 @@ import { Logger } from './utils/Logger';
 import { app } from './app';
 import sequelize from './DAL/database';
 import config from './config/config';
-import User from './DAL/models/User';
-import { mockUser } from './tests/mocks';
-import { UserManager } from './BLL/UserManager';
+import { seed } from './seeder';
 
 try {
-  sequelize.sync().then(() => {
-    User.findOne({ where: { username: mockUser.username } }).then(user => {
-      if (!user) {
-        UserManager.save(mockUser).then(() => {
-          Logger.log('Default user created');
-        });
-      }
-    });
-  });
+  sequelize.sync().then(() => seed());
 
   app.listen(config.server.port, () => {
     Logger.log(`Server is running at https://localhost:${config.server.port}`);
