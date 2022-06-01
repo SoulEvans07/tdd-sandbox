@@ -25,6 +25,7 @@ export interface LoginResponseDTO {
     id: number;
     username: string;
     email: string;
+    tenants: number[];
   };
   token: string;
 }

@@ -11,6 +11,7 @@ function tokenResponseFrom(user: MockUserData, token?: string) {
       id: user.data.id,
       username: user.data.username,
       email: user.data.email,
+      tenants: user.data.tenants,
     },
     token: token || user.token,
   };

@@ -5,6 +5,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
+  tenants: number[];
 }
 
 export interface AuthContext {

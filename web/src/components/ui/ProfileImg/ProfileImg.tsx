@@ -21,7 +21,12 @@ export function ProfileImg(props: ProfileImgProps): ReactElement {
 
   if (!img) {
     return (
-      <span className={classNames('profile-img', className)} title={username} style={colors} onClick={onClick}>
+      <span
+        className={classNames('profile-img', 'placeholder', className)}
+        title={username}
+        style={colors}
+        onClick={onClick}
+      >
         {username[0]}
       </span>
     );

@@ -2,10 +2,19 @@
   display: flex;
   user-select: none;
 
+  .profile-img {
+    margin-right: 0.5rem;
+  }
+
   .name {
     flex: 1;
     font-size: 1rem;
     padding-top: 0.25rem;
-    margin-left: 0.5rem;
+  }
+
+  &.unassigned {
+    .name {
+      color: var(--color-dark-200);
+    }
   }
 }

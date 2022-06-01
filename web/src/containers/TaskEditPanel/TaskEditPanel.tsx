@@ -6,17 +6,21 @@ import { SidePanel } from '../../components/layout/SidePanel/SidePanel';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
 import { Button, ButtonProps } from '../../components/control/Button/Button';
 import { TagLabel } from '../../components/ui/TagLabel/TagLabel';
+import { RestrictedUserDTO } from '../../controllers/UserController';
+import { NameTag } from '../../components/ui/NameTag/NameTag';
 
 interface TaskEditPanelProps {
   task?: Task;
+  users: RestrictedUserDTO[];
   onClose: VoidFunction;
   onSubmit: (taskId: number, patch: Partial<Task>) => void;
   onDelete: (taskId: number) => void;
 }
 
 export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
-  const { task, onClose, onSubmit, onDelete } = props;
+  const { task, users, onClose, onSubmit, onDelete } = props;
 
+  const [assignee, setAssignee] = useState<RestrictedUserDTO | undefined>(undefined);
   const [status, setStatus] = useState<TaskStatus>('Todo');
 
   const handleStatusChange = (status: TaskStatus) => {
@@ -44,8 +48,11 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
       setStatus(task.status);
       setTitle(task.title);
       setDescription(task.description);
+
+      if (task.assigneeId == null) setAssignee(undefined);
+      else setAssignee(users.find(u => u.id === task.assigneeId));
     }
-  }, [task]);
+  }, [task, users]);
 
   useEffect(() => {
     if (!task) setDirty(false);
@@ -70,7 +77,9 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
   return (
     <SidePanel className="task-edit-panel right" hidden={!task} onClose={onClose} label="Edit Panel">
       <section className="task-details">
-        <div className="assignee-row"></div>
+        <div className="assignee-row">
+          <NameTag name={assignee?.username} />
+        </div>
         <div className="status-row">
           <TagLabel className="status-label" name={TaskStatusNames[status]} color={TaskStatusColors[status]} />
           <ButtonGroup buttons={transitions} fill="border" />

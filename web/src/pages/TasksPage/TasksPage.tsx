@@ -13,20 +13,25 @@ import { taskController } from '../../controllers/TaskController';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { TaskEditPanel } from '../../containers/TaskEditPanel/TaskEditPanel';
+import { RestrictedUserDTO, userController } from '../../controllers/UserController';
 
 export function TasksPage(): ReactElement {
   const dispatch = useDispatch();
-  const { token } = useAuth();
+  const { currentUser, token } = useAuth();
   const { workspace: activeWs, isPersonal } = useSelector(selectActiveWorkspace);
   const tasks = useSelector(selectWorkspaceTasks);
   const [checkAll, setCheckAll] = useState(false);
   const handleCheckAll = (checked: boolean) => setCheckAll(checked);
 
+  const [users, setUsers] = useState<RestrictedUserDTO[]>();
   useEffect(() => {
-    if (token) {
+    if (currentUser && token) {
       taskController
         .list(token, isPersonal ? undefined : Number(activeWs.id))
         .then(list => dispatch(loadTasks(list, activeWs.id)));
+
+      if (isPersonal) setUsers([currentUser]);
+      else userController.list(Number(activeWs.id), token).then(list => setUsers(list));
     }
   }, [activeWs.id]);
 
@@ -88,12 +93,15 @@ export function TasksPage(): ReactElement {
       <Footer>
         <span>Select a task to open it in the edit panel</span>
       </Footer>
-      <TaskEditPanel
-        task={editedTask}
-        onClose={handleCloseEdit}
-        onSubmit={handleUpdateSubmit}
-        onDelete={handleDelete}
-      />
+      {!!users && (
+        <TaskEditPanel
+          task={editedTask}
+          users={users}
+          onClose={handleCloseEdit}
+          onSubmit={handleUpdateSubmit}
+          onDelete={handleDelete}
+        />
+      )}
     </Page>
   );
 }

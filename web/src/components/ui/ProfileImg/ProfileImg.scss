@@ -19,12 +19,15 @@
   width: var(--size);
   height: var(--size);
   border-radius: 100%;
-  background-color: var(--color-bg);
-  color: var(--color-fg);
-  font-weight: 700;
-  font-size: calc(var(--size) / 3 * 2);
-  padding-top: calc(var(--size) / 6 * 0.75);
-  text-align: center;
-  text-transform: uppercase;
   user-select: none;
+
+  &.placeholder {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-weight: 700;
+    font-size: calc(var(--size) / 3 * 2);
+    padding-top: calc(var(--size) / 6 * 0.75);
+    text-align: center;
+    text-transform: uppercase;
+  }
 }

@@ -1,11 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
+import { User } from '../../contexts/auth/AuthContext';
 import { Task, TaskStatus, TaskStatusNames } from '../../contexts/store/types';
+import { mockTenants, mockUsers } from '../../mocks/controllers/mockData';
 import { TaskEditPanel } from './TaskEditPanel';
 
 describe('TaskEditPanel', () => {
-  const mockTask: Task = {
+  const tenantUsers = mockUsers.filter(u => u.data.email.endsWith(mockTenants[0].name)).map(u => u.data);
+  const testUser = tenantUsers[0];
+  const otherUser = tenantUsers[1];
+
+  const mockTaskBase: Task = {
     id: 0,
     title: 'Task 1',
     status: 'InProgress',
@@ -13,15 +19,34 @@ describe('TaskEditPanel', () => {
     order: 0,
   };
 
+  const mockPersonalTask: Task = {
+    ...mockTaskBase,
+    tenantId: undefined,
+    assigneeId: testUser.id,
+  };
+
+  const mockUnassignedTask: Task = {
+    ...mockTaskBase,
+    tenantId: testUser.tenants[0],
+    assigneeId: undefined,
+  };
+
+  const mockAssignedTask: Task = {
+    ...mockTaskBase,
+    tenantId: testUser.tenants[0],
+    assigneeId: otherUser.id,
+  };
+
   interface MockTaskPageProps {
     open?: boolean;
     task: Task;
+    users?: User[];
     onSubmit?: (taskId: number, patch: Partial<Task>) => void;
     onDelete?: (taskId: number) => void;
   }
 
   function MockTaskPage(props: MockTaskPageProps) {
-    const { open, task, onSubmit = jest.fn(), onDelete = jest.fn() } = props;
+    const { open, task, users = [testUser], onSubmit = jest.fn(), onDelete = jest.fn() } = props;
     const [visible, setVisibility] = useState(!!open);
 
     const onOpen = () => setVisibility(true);
@@ -30,14 +55,21 @@ describe('TaskEditPanel', () => {
     return (
       <>
         <button onClick={onOpen}>Open Task</button>
-        <TaskEditPanel task={visible ? task : undefined} onClose={onClose} onSubmit={onSubmit} onDelete={onDelete} />
+        <TaskEditPanel
+          task={visible ? task : undefined}
+          users={users}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          onDelete={onDelete}
+        />
       </>
     );
   }
+  const setupDefault = () => render(<MockTaskPage task={mockPersonalTask} open />);
 
   test('hidden until Task given to it', () => {
-    render(<MockTaskPage task={mockTask} />);
-    expect(screen.queryByText(mockTask.title)).not.toBeInTheDocument();
+    render(<MockTaskPage task={mockPersonalTask} />);
+    expect(screen.queryByText(mockPersonalTask.title)).not.toBeInTheDocument();
 
     const openBtn = screen.getByRole('button', { name: /open task/i });
     userEvent.click(openBtn);
@@ -47,23 +79,21 @@ describe('TaskEditPanel', () => {
   });
 
   describe('panel composition', () => {
-    const setup = () => render(<MockTaskPage task={mockTask} open />);
-
     test('title', () => {
-      setup();
+      setupDefault();
       const titleInput = screen.getByRole('textbox', { name: /title/i });
-      expect(titleInput).toHaveValue(mockTask.title);
+      expect(titleInput).toHaveValue(mockPersonalTask.title);
     });
 
     test('description', () => {
-      setup();
+      setupDefault();
       const descriptionTA = screen.getByRole('textbox', { name: /description/i });
-      expect(descriptionTA).toHaveValue(mockTask.description);
+      expect(descriptionTA).toHaveValue(mockPersonalTask.description);
     });
 
     test('status label', () => {
-      setup();
-      const statusLabel = screen.getByText(TaskStatusNames[mockTask.status]);
+      setupDefault();
+      const statusLabel = screen.getByText(TaskStatusNames[mockPersonalTask.status]);
       expect(statusLabel).toBeInTheDocument();
     });
 
@@ -74,7 +104,7 @@ describe('TaskEditPanel', () => {
       { status: 'Done', options: [] },
     ])('transitions buttons', ({ status, options }) => {
       test(`${status} => ${!options.length ? '<None>' : options.join(', ')}`, () => {
-        const task = { ...mockTask, status };
+        const task = { ...mockPersonalTask, status };
         render(<MockTaskPage task={task} open />);
 
         const statusLabel = screen.getByText(TaskStatusNames[status]);
@@ -88,7 +118,7 @@ describe('TaskEditPanel', () => {
     });
 
     test('action buttons', () => {
-      setup();
+      setupDefault();
       const deleteBtn = screen.getByRole('button', { name: /delete/i });
       expect(deleteBtn).toBeInTheDocument();
 
@@ -97,11 +127,31 @@ describe('TaskEditPanel', () => {
     });
   });
 
+  describe.only('assignee', () => {
+    test('personal task assignee', () => {
+      render(<MockTaskPage task={mockPersonalTask} open />);
+      const assignee = screen.getByText(testUser.username);
+      expect(assignee).toBeInTheDocument();
+    });
+
+    test('workspace task, unassigned', () => {
+      render(<MockTaskPage task={mockUnassignedTask} users={tenantUsers} open />);
+      const unassigned = screen.getByText(/unassigned/i);
+      expect(unassigned).toBeInTheDocument();
+    });
+
+    test('workspace task, assigned', () => {
+      render(<MockTaskPage task={mockAssignedTask} users={tenantUsers} open />);
+      const assignee = screen.getByText(otherUser.username);
+      expect(assignee).toBeInTheDocument();
+    });
+  });
+
   describe('changing any value of the task makes the save button enabled', () => {
     let saveBtn: HTMLButtonElement;
 
     beforeEach(() => {
-      render(<MockTaskPage task={mockTask} open />);
+      render(<MockTaskPage task={mockPersonalTask} open />);
       saveBtn = screen.getByRole('button', { name: /save/i }) as HTMLButtonElement;
       expect(saveBtn).toBeDisabled();
     });
@@ -138,7 +188,7 @@ describe('TaskEditPanel', () => {
 
     let saveBtn: HTMLButtonElement;
     const setupTest = (submit?: jest.Mock) => {
-      render(<MockTaskPage task={mockTask} open onSubmit={submit} />);
+      render(<MockTaskPage task={mockPersonalTask} open onSubmit={submit} />);
       saveBtn = screen.getByRole('button', { name: /save/i }) as HTMLButtonElement;
     };
 
@@ -151,7 +201,7 @@ describe('TaskEditPanel', () => {
       userEvent.type(titleInput, newTitle);
       userEvent.click(saveBtn);
 
-      expect(submit).toBeCalledWith(mockTask.id, { title: newTitle });
+      expect(submit).toBeCalledWith(mockPersonalTask.id, { title: newTitle });
     });
 
     test('description', () => {
@@ -163,7 +213,7 @@ describe('TaskEditPanel', () => {
       userEvent.type(descriptionTA, newDescription);
       userEvent.click(saveBtn);
 
-      expect(submit).toBeCalledWith(mockTask.id, { description: newDescription });
+      expect(submit).toBeCalledWith(mockPersonalTask.id, { description: newDescription });
     });
 
     test('title & description', () => {
@@ -180,7 +230,7 @@ describe('TaskEditPanel', () => {
 
       userEvent.click(saveBtn);
 
-      expect(submit).toBeCalledWith(mockTask.id, { title: newTitle, description: newDescription });
+      expect(submit).toBeCalledWith(mockPersonalTask.id, { title: newTitle, description: newDescription });
     });
 
     describe.each<{ status: TaskStatus; options: TaskStatus[] }>([
@@ -189,7 +239,7 @@ describe('TaskEditPanel', () => {
       { status: 'Blocked', options: ['Todo', 'InProgress'] },
     ])('status transitions', ({ status, options }) => {
       test.each(options)(`${status} => %s`, async option => {
-        const task = { ...mockTask, status };
+        const task = { ...mockPersonalTask, status };
         const submit = jest.fn();
         render(<MockTaskPage task={task} open onSubmit={submit} />);
 
@@ -207,11 +257,11 @@ describe('TaskEditPanel', () => {
 
   test('delete interface', () => {
     const onDelete = jest.fn();
-    render(<MockTaskPage task={mockTask} open onDelete={onDelete} />);
+    render(<MockTaskPage task={mockPersonalTask} open onDelete={onDelete} />);
 
     const deleteBtn = screen.getByRole('button', { name: /delete task/i });
     userEvent.click(deleteBtn);
 
-    expect(onDelete).toBeCalledWith(mockTask.id);
+    expect(onDelete).toBeCalledWith(mockPersonalTask.id);
   });
 });
