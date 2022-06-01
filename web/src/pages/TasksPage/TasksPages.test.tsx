@@ -113,6 +113,27 @@ describe('TasksPage', () => {
       await waitFor(() => expect(editor).not.toBeVisible());
     });
 
+    test('clicking on the checkbox or the remove button doesnt open the edit panel', async () => {
+      const user = mockUsers[0];
+      setupTaskPage(user);
+      const task = user.tasks[0];
+
+      const noEditor = screen.queryByRole('complementary', { name: /edit panel/i });
+      expect(noEditor).not.toBeInTheDocument();
+
+      const taskSelectCh = await screen.findByTestId(`select-task-${task.id}`);
+      userEvent.click(taskSelectCh);
+
+      const noEditorAfterSelect = screen.queryByRole('complementary', { name: /edit panel/i });
+      expect(noEditorAfterSelect).not.toBeInTheDocument();
+
+      const taskRemoveBtn = await screen.findByTestId(`remove-task-${task.id}`);
+      userEvent.click(taskRemoveBtn);
+
+      const noEditorAfterRemove = screen.queryByRole('complementary', { name: /edit panel/i });
+      expect(noEditorAfterRemove).not.toBeInTheDocument();
+    });
+
     describe('submit change', () => {
       const newTitle = 'Changed Task Title';
       const newDescription = 'Changed Task Description';

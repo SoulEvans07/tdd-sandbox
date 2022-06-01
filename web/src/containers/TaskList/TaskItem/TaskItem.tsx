@@ -4,6 +4,7 @@ import { Checkbox } from '../../../components/control/Checkbox/Checkbox';
 import { Icon } from '../../../components/ui/Icon/Icon';
 import { TagLabel } from '../../../components/ui/TagLabel/TagLabel';
 import { Task, TaskStatusColors, TaskStatusNames } from '../../../contexts/store/types';
+import { stopPropagation } from '../../../helpers/eventHelpers';
 
 export interface TaskItemProps {
   task: Task;
@@ -19,7 +20,7 @@ export function TaskItem(props: TaskItemProps): ReactElement {
 
   return (
     <div className="task-item" id={testId} data-testid={testId} onClick={onEdit}>
-      <Checkbox title="Select" checked={selected} onChange={onSelect} />
+      <Checkbox title="Select" checked={selected} onChange={onSelect} data-testid={`select-task-${task.id}`} />
       <span className="task-title">{task.title}</span>
       {task.status !== 'Todo' && (
         <TagLabel className="status-label" name={TaskStatusNames[task.status]} color={TaskStatusColors[task.status]} />
@@ -27,7 +28,7 @@ export function TaskItem(props: TaskItemProps): ReactElement {
       <Icon
         className="remove-task"
         icon="cross"
-        onClick={onRemove}
+        onClick={stopPropagation(onRemove)}
         role="button"
         aria-label="Remove"
         data-testid={`remove-task-${task.id}`}
