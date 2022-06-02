@@ -127,7 +127,7 @@ describe('TaskEditPanel', () => {
     });
   });
 
-  describe.only('assignee', () => {
+  describe('assignee', () => {
     test('personal task assignee', () => {
       render(<MockTaskPage task={mockPersonalTask} open />);
       const assignee = screen.getByText(testUser.username);

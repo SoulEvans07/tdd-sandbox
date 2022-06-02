@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { DropMenu } from './DropMenu';
 
 describe('DropMenu', () => {
-  const setup = (isOpen: boolean) => {
+  const setup = (isOpen?: boolean) => {
     render(
       <DropMenu open={isOpen} onSelect={jest.fn()} selectedId="set">
         <span>Profile</span>
@@ -17,7 +17,7 @@ describe('DropMenu', () => {
   };
 
   it('starts as not visible', () => {
-    setup(false);
+    setup();
     const profile = screen.getByText(/profile/i);
     expect(profile).not.toBeVisible();
 
