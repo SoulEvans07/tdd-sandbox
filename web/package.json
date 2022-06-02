@@ -104,7 +104,8 @@
     "start": "cross-env BROWSER=none node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --watchAll=false",
-    "test:w": "node scripts/test.js"
+    "test:w": "node scripts/test.js",
+    "test:c": "node scripts/test.js --collect-coverage"
   },
   "eslintConfig": {
     "extends": [

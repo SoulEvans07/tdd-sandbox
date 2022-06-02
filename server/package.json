@@ -12,6 +12,7 @@
     "prestart": "yarn build",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "test": "jest",
+    "test:c": "jest --collect-coverage",
     "test:w": "jest --watchAll",
     "test:v": "jest --verbose",
     "format": "prettier --config .prettierrc.json --write src/**/*.ts"

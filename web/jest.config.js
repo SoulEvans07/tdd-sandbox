@@ -1,4 +1,5 @@
 module.exports = {
+  coverageReporters: ['json', 'html'],
   preset: 'ts-jest',
   roots: ['<rootDir>/src'],
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
