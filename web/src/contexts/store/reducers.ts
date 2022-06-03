@@ -4,8 +4,10 @@ import { initialStoreData, personalWs, StoreData } from './types';
 import * as actions from './actions';
 
 export function rootReducer(state: StoreData, action: ActionType<typeof actions>): StoreData {
+  console.log('[action]', action.type);
   switch (action.type) {
     case 'todo.io/load-tasks':
+      // console.log('[load-tasks]', action.payload.tasks.length);
       return produce(state, draft => {
         draft.workspaces[action.payload.wsId].tasks = action.payload.tasks;
       });
@@ -46,6 +48,7 @@ export function rootReducer(state: StoreData, action: ActionType<typeof actions>
         });
       });
     case 'todo.io/change-workspace':
+      // console.log('[change-workspace]', action.payload.workspaceId);
       return produce(state, draft => {
         draft.activeWS = action.payload.workspaceId;
       });

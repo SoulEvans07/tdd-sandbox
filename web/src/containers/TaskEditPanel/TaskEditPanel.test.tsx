@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
+import { selectedItemId } from '../../components/control/FilterSelect/FilterSelect';
 import { User } from '../../contexts/auth/AuthContext';
 import { Task, TaskStatus, TaskStatusNames } from '../../contexts/store/types';
 import { mockTenants, mockUsers } from '../../mocks/controllers/mockData';
@@ -40,13 +41,14 @@ describe('TaskEditPanel', () => {
   interface MockTaskPageProps {
     open?: boolean;
     task: Task;
+    isPersonal?: boolean;
     users?: User[];
     onSubmit?: (taskId: number, patch: Partial<Task>) => void;
     onDelete?: (taskId: number) => void;
   }
 
   function MockTaskPage(props: MockTaskPageProps) {
-    const { open, task, users = [testUser], onSubmit = jest.fn(), onDelete = jest.fn() } = props;
+    const { open, task, isPersonal, users = [testUser], onSubmit = jest.fn(), onDelete = jest.fn() } = props;
     const [visible, setVisibility] = useState(!!open);
 
     const onOpen = () => setVisibility(true);
@@ -57,6 +59,7 @@ describe('TaskEditPanel', () => {
         <button onClick={onOpen}>Open Task</button>
         <TaskEditPanel
           task={visible ? task : undefined}
+          isPersonal={!!isPersonal}
           users={users}
           onClose={onClose}
           onSubmit={onSubmit}
@@ -128,22 +131,47 @@ describe('TaskEditPanel', () => {
   });
 
   describe('assignee', () => {
-    test('personal task assignee', () => {
-      render(<MockTaskPage task={mockPersonalTask} open />);
-      const assignee = screen.getByText(testUser.username);
-      expect(assignee).toBeInTheDocument();
+    describe('in personal workspace', () => {
+      test('default task assignee', () => {
+        render(<MockTaskPage task={mockPersonalTask} isPersonal open />);
+        const assignee = screen.getByText(testUser.username);
+        expect(assignee).toBeVisible();
+      });
+
+      test('cant change assignee', () => {
+        render(<MockTaskPage task={mockPersonalTask} isPersonal open />);
+        const assignee = screen.getByText(testUser.username);
+        userEvent.click(assignee);
+
+        expect(screen.queryByRole('option')).not.toBeInTheDocument();
+      });
     });
 
-    test('workspace task, unassigned', () => {
-      render(<MockTaskPage task={mockUnassignedTask} users={tenantUsers} open />);
-      const unassigned = screen.getByText(/unassigned/i);
-      expect(unassigned).toBeInTheDocument();
-    });
+    describe('in organization workspace', () => {
+      test('task unassigned', () => {
+        render(<MockTaskPage task={mockUnassignedTask} users={tenantUsers} open />);
+        const assigneeSelector = screen.getByTestId(selectedItemId);
+        expect(assigneeSelector).toBeInTheDocument();
+        expect(assigneeSelector).toHaveTextContent(/unassigned/i);
+      });
 
-    test('workspace task, assigned', () => {
-      render(<MockTaskPage task={mockAssignedTask} users={tenantUsers} open />);
-      const assignee = screen.getByText(otherUser.username);
-      expect(assignee).toBeInTheDocument();
+      test('task assigned', () => {
+        render(<MockTaskPage task={mockAssignedTask} users={tenantUsers} open />);
+        const assigneeSelector = screen.getByTestId(selectedItemId);
+        expect(assigneeSelector).toBeInTheDocument();
+        expect(assigneeSelector).toHaveTextContent(otherUser.username);
+      });
+
+      test('change assignee', () => {
+        render(<MockTaskPage task={mockAssignedTask} users={tenantUsers} open />);
+        const assigneeSelector = screen.getByTestId(selectedItemId);
+        userEvent.click(assigneeSelector);
+
+        const other = screen.getByRole('option', { name: otherUser.username });
+        userEvent.click(other);
+
+        expect(assigneeSelector).toHaveTextContent(otherUser.username);
+      });
     });
   });
 

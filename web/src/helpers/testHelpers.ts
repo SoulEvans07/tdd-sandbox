@@ -4,5 +4,5 @@ export function supressErrorMessages() {
     spy = jest.spyOn(console, 'error');
     spy.mockImplementation(() => {});
   });
-  afterAll(() => spy.mockRestore());
+  afterEach(() => spy.mockRestore());
 }

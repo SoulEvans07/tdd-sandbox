@@ -4,7 +4,7 @@ import './NameTag.scss';
 import { ProfileImg } from '../ProfileImg/ProfileImg';
 
 interface NameTagProps {
-  name?: string;
+  name: string;
   img?: string;
 }
 
@@ -14,9 +14,8 @@ export function NameTag(props: NameTagProps): ReactElement {
 
   return (
     <div className={classNames('name-tag', { unassigned })}>
-      {!!name && <ProfileImg username={name} img={img} />}
-      {!name && <ProfileImg username="" img="img/default-avatar.png" />}
-      <span className="name">{name || 'Unassigned'}</span>
+      <ProfileImg username={name} img={img} />
+      <span className="name">{name}</span>
     </div>
   );
 }

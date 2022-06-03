@@ -21,7 +21,7 @@ export const selectedItemId = 'selected-item';
 interface FilterSelectData {
   open?: boolean;
   onOpen?: VoidFunction;
-  onChange: (value?: string) => void;
+  onChange?: (value?: string) => void;
   initial?: string;
   placeholder?: string;
 }
@@ -32,9 +32,14 @@ export function FilterSelect(props: FilterSelectProps): ReactElement {
   const { open, onOpen, onChange, initial, placeholder, children } = props;
 
   const [selected, setSelected] = useState<string | undefined>(initial);
+  const onSelect = (value?: string) => {
+    setSelected(value);
+    if (onChange) onChange(value);
+  };
+
   useEffect(() => {
-    if (onChange) onChange(selected);
-  }, [selected]);
+    setSelected(initial);
+  }, [initial]);
 
   const [searchText, setSearchText] = useState('');
   const handleSearchChange = (evt: ChangeEvent<HTMLInputElement>) => setSearchText(evt.target.value);
@@ -71,7 +76,7 @@ export function FilterSelect(props: FilterSelectProps): ReactElement {
   }, [searchText, children]);
 
   return (
-    <SelectProvider value={selected} setValue={setSelected}>
+    <SelectProvider value={selected} setValue={onSelect}>
       <div className="filter-select" data-value={selected}>
         <SelectedElem className="selection" data-testid={selectedItemId} onClick={onOpen} />
         <TextInput

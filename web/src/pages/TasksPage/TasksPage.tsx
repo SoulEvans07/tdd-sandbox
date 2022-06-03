@@ -33,7 +33,7 @@ export function TasksPage(): ReactElement {
       if (isPersonal) setUsers([currentUser]);
       else userController.list(Number(activeWs.id), token).then(list => setUsers(list));
     }
-  }, [activeWs.id]);
+  }, [activeWs.id, isPersonal]);
 
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => setNewTaskTitle(e.target.value);
@@ -96,6 +96,7 @@ export function TasksPage(): ReactElement {
       {!!users && (
         <TaskEditPanel
           task={editedTask}
+          isPersonal={isPersonal}
           users={users}
           onClose={handleCloseEdit}
           onSubmit={handleUpdateSubmit}

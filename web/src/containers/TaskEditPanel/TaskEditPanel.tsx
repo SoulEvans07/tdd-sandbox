@@ -8,9 +8,12 @@ import { Button, ButtonProps } from '../../components/control/Button/Button';
 import { TagLabel } from '../../components/ui/TagLabel/TagLabel';
 import { RestrictedUserDTO } from '../../controllers/UserController';
 import { NameTag } from '../../components/ui/NameTag/NameTag';
+import { FilterSelect } from '../../components/control/FilterSelect/FilterSelect';
+import { SelectOption } from '../../components/control/FilterSelect/SelectOption';
 
 interface TaskEditPanelProps {
   task?: Task;
+  isPersonal: boolean;
   users: RestrictedUserDTO[];
   onClose: VoidFunction;
   onSubmit: (taskId: number, patch: Partial<Task>) => void;
@@ -18,8 +21,9 @@ interface TaskEditPanelProps {
 }
 
 export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
-  const { task, users, onClose, onSubmit, onDelete } = props;
+  const { task, isPersonal, users, onClose, onSubmit, onDelete } = props;
 
+  const [selectOpen, setSelectOpen] = useState(false);
   const [assignee, setAssignee] = useState<RestrictedUserDTO | undefined>(undefined);
   const [status, setStatus] = useState<TaskStatus>('Todo');
 
@@ -78,7 +82,25 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
     <SidePanel className="task-edit-panel right" hidden={!task} onClose={onClose} label="Edit Panel">
       <section className="task-details">
         <div className="assignee-row">
-          <NameTag name={assignee?.username} />
+          {isPersonal && !!assignee && <NameTag name={assignee.username} />}
+          {!isPersonal && (
+            <FilterSelect
+              open={selectOpen}
+              onOpen={() => setSelectOpen(true)}
+              onChange={() => setSelectOpen(false)}
+              initial={assignee?.username || 'unassigned'}
+              placeholder="Assignee..."
+            >
+              <SelectOption value="unassigned">
+                <NameTag name="Unassigned" img="img/default-avatar.png" />
+              </SelectOption>
+              {users.map(user => (
+                <SelectOption key={user.id} value={user.username}>
+                  <NameTag name={user.username} />
+                </SelectOption>
+              ))}
+            </FilterSelect>
+          )}
         </div>
         <div className="status-row">
           <TagLabel className="status-label" name={TaskStatusNames[status]} color={TaskStatusColors[status]} />

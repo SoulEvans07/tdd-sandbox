@@ -4,6 +4,13 @@
   "private": true,
   "author": "adam.szi",
   "license": "BEERWARE",
+  "scripts": {
+    "start": "cross-env BROWSER=none node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js --watchAll=false",
+    "test:w": "node scripts/test.js",
+    "test:c": "node scripts/test.js --collect-coverage"
+  },
   "dependencies": {
     "@babel/core": "7.12.3",
     "@faker-js/faker": "6.0.0-alpha.5",
@@ -99,13 +106,6 @@
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
     "react-error-overlay": "6.0.9"
-  },
-  "scripts": {
-    "start": "cross-env BROWSER=none node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js --watchAll=false",
-    "test:w": "node scripts/test.js",
-    "test:c": "node scripts/test.js --collect-coverage"
   },
   "eslintConfig": {
     "extends": [

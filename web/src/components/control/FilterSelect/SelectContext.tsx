@@ -1,9 +1,8 @@
-import { createContext, PropsWithChildren, ReactElement, RefObject, useContext } from 'react';
-import { StateSetter } from '../../../types/common';
+import { createContext, PropsWithChildren, ReactElement, useContext } from 'react';
 
 export interface SelectContext {
   selected?: string;
-  setSelected: StateSetter<string | undefined>;
+  setSelected: (value?: string) => void;
 }
 
 const Select = createContext<SelectContext | undefined>(undefined);
@@ -16,7 +15,7 @@ export function useSelect() {
 
 interface SelectProviderProps {
   value?: string;
-  setValue: StateSetter<string | undefined>;
+  setValue: (value?: string) => void;
 }
 
 export function SelectProvider(props: PropsWithChildren<SelectProviderProps>): ReactElement {

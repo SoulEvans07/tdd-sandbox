@@ -10,8 +10,12 @@
       flex-direction: row;
       align-items: center;
       margin-bottom: 1rem;
-      cursor: pointer;
       user-select: none;
+      height: 3rem;
+
+      & > .name-tag {
+        padding: 0 1rem;
+      }
     }
 
     .status-row {
