@@ -78,6 +78,13 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
     onDelete(task.id);
   };
 
+  const handleAssigneeChange = (username?: string) => {
+    setSelectOpen(false);
+    if (!task) return;
+    const assigneeUser = users.find(u => u.username === username);
+    if (assigneeUser) onSubmit(task.id, { assigneeId: assigneeUser.id });
+  };
+
   return (
     <SidePanel className="task-edit-panel right" hidden={!task} onClose={onClose} label="Edit Panel">
       <section className="task-details">
@@ -87,7 +94,7 @@ export function TaskEditPanel(props: TaskEditPanelProps): ReactElement {
             <FilterSelect
               open={selectOpen}
               onOpen={() => setSelectOpen(true)}
-              onChange={() => setSelectOpen(false)}
+              onChange={handleAssigneeChange}
               initial={assignee?.username || 'unassigned'}
               placeholder="Assignee..."
             >

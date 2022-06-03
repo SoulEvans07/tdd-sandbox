@@ -4,7 +4,7 @@ import { initialStoreData, personalWs, StoreData } from './types';
 import * as actions from './actions';
 
 export function rootReducer(state: StoreData, action: ActionType<typeof actions>): StoreData {
-  console.log('[action]', action.type);
+  // console.log('[action]', action.type);
   switch (action.type) {
     case 'todo.io/load-tasks':
       // console.log('[load-tasks]', action.payload.tasks.length);
@@ -31,8 +31,10 @@ export function rootReducer(state: StoreData, action: ActionType<typeof actions>
       return produce(state, draft => {
         const task = action.payload;
         const isTaskPersonal = task.tenantId == null;
-        const isTaskCurrentWs = draft.activeWS === personalWs ? isTaskPersonal : task.tenantId === draft.activeWS;
+        const isTaskCurrentWs =
+          draft.activeWS === personalWs ? isTaskPersonal : String(task.tenantId) === draft.activeWS;
         const taskIndex = draft.workspaces[draft.activeWS].tasks.findIndex(t => t.id === task.id);
+
         if (taskIndex !== -1) {
           if (isTaskCurrentWs) {
             draft.workspaces[draft.activeWS].tasks[taskIndex] = task;

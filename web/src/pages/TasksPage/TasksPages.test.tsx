@@ -6,9 +6,11 @@ import { TasksPage } from './TasksPage';
 import { StoreProvider } from '../../contexts/store/StoreContext';
 import { AuthProvider } from '../../contexts/auth/AuthContext';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
-import { supressErrorMessages } from '../../helpers/testHelpers';
+import { supressErrorMessages, waitForMillis } from '../../helpers/testHelpers';
 import { MockUserData, mockUsers } from '../../mocks/controllers/mockData';
 import { selectedItemId } from '../../components/control/FilterSelect/FilterSelect';
+import { userProfileId } from '../../containers/AppHeader/AppHeader';
+import { Task } from '../../contexts/store/types';
 
 describe('TasksPage', () => {
   let createTaskInput: HTMLInputElement;
@@ -28,7 +30,7 @@ describe('TasksPage', () => {
     );
 
     createTaskInput = screen.getByRole('textbox', { name: /new task/i }) as HTMLInputElement;
-    profileImg = screen.getByTitle(user.data.username) as HTMLInputElement;
+    profileImg = screen.getByTestId(userProfileId) as HTMLElement;
   };
 
   supressErrorMessages();
@@ -39,13 +41,69 @@ describe('TasksPage', () => {
     expect(profileImg).toBeInTheDocument();
   });
 
-  describe('change workspace', () => {
-    test('clicking on the profile image opens/closes the user menu', () => {
-      // TODO: implement @adam.szi
+  async function changeWorkspace(user: MockUserData, workspaceName: string) {
+    expect(profileImg).toBeInTheDocument();
+    userEvent.click(profileImg);
+
+    await waitFor(async () => {
+      const org = await screen.findByRole('option', { name: workspaceName });
+      expect(org).toBeVisible();
     });
 
-    test('Personal => Organization => Personal', () => {
-      // TODO: implement @adam.szi
+    const organization = screen.getByRole('option', { name: workspaceName });
+    userEvent.click(organization);
+
+    await waitFor(() => {
+      const organization = screen.getByRole('option', { name: workspaceName, hidden: true });
+      expect(organization).toHaveAttribute('aria-selected', 'true');
+    });
+  }
+
+  async function waitForTasksToLoad(tasks: Task[]) {
+    await waitFor(async () => {
+      const orgTask = await screen.findByText(tasks[0].title);
+      expect(orgTask).toBeInTheDocument();
+    });
+  }
+
+  describe('change workspace', () => {
+    test('clicking on the profile image opens/closes the user menu', async () => {
+      const user = mockUsers[0];
+      setupTaskPage(user);
+      userEvent.click(profileImg);
+
+      const personal = await screen.findByRole('option', { name: 'Personal' });
+      expect(personal).toBeInTheDocument();
+      expect(personal).toBeVisible();
+
+      await waitFor(async () => {
+        for await (const tenant of user.tenants) {
+          const tenantOption = await screen.findByRole('option', { name: tenant.name });
+          expect(tenantOption).toBeInTheDocument();
+          expect(tenantOption).toBeVisible();
+        }
+      });
+
+      userEvent.click(profileImg);
+      await waitFor(async () => expect(personal).not.toBeVisible());
+    });
+
+    test('Personal => Organization => Personal', async () => {
+      const user = mockUsers[0];
+      setupTaskPage(user);
+
+      const organization = user.tenants[0];
+      await changeWorkspace(user, organization.name);
+      await waitForTasksToLoad(organization.tasks);
+
+      await changeWorkspace(user, 'Personal');
+      await waitForTasksToLoad(user.tasks);
+
+      await changeWorkspace(user, organization.name);
+      await waitForTasksToLoad(organization.tasks);
+
+      // wait until last updates are done so they dont throw error when the test unmounts the components
+      await new Promise(res => setTimeout(res, 1000));
     });
   });
 
@@ -201,63 +259,69 @@ describe('TasksPage', () => {
         // });
       });
 
-      describe('assignee change', () => {
+      describe.skip('assignee change', () => {
         const user = mockUsers[0];
         const otherUser = mockUsers[1];
 
-        async function changeWorkspace() {
-          const profileImg = screen.getByTitle(user.data.username);
-          expect(profileImg).toBeInTheDocument();
-          userEvent.click(profileImg);
+        async function openTaskForEdit(task: Task) {
+          const taskItem = screen.getByTestId(`task-item-${task.id}`);
+          expect(taskItem).toBeVisible();
 
-          await waitFor(async () => {
-            const org = await screen.findByRole('option', { name: user.tenants[0].name });
-            expect(org).toBeInTheDocument();
+          userEvent.click(taskItem);
+          await waitForMillis(1000);
+
+          await waitFor(() => {
+            const taskEditPanel = screen.getByRole('complementary', { name: /edit panel/i });
+            expect(taskEditPanel).toBeVisible();
           });
 
-          const organization = screen.getByRole('option', { name: user.tenants[0].name });
-          userEvent.click(organization);
+          await waitFor(() => {
+            const titleInput = screen.getByRole('textbox', { name: /title/i, hidden: false });
+            expect(titleInput).toBeVisible();
+          });
+          // expect(titleInput).toHaveValue(task.title);
+        }
 
-          // waitfor tasks to load
-          await waitFor(async () => {
-            const orgTask = await screen.findByText(user.tenants[0].tasks[0].title);
-            expect(orgTask).toBeInTheDocument();
+        async function expectAssigneeToBe(username: string | RegExp) {
+          await waitFor(() => {
+            const assigneeSelect = screen.getByTestId(selectedItemId);
+            expect(assigneeSelect).toHaveTextContent(username);
           });
         }
 
-        test.only('unassigned => assigned', async () => {
-          // TODO: move this to end-to-end test because jest just cant handle this @adam.szi
-          expect(true).toBe(true);
+        async function changeAssignee(username: string | RegExp) {
+          const assigneeSelect = screen.getByTestId(selectedItemId);
+          expect(assigneeSelect).toBeVisible();
 
-          // setupTaskPage(user);
-          // await changeWorkspace();
-          // const task = user.tenants[0].tasks[0];
-          // const taskItem = await screen.findByTestId(`task-item-${task.id}`);
-          // expect(taskItem).toBeInTheDocument();
-          // userEvent.click(taskItem);
-          // // edit panel opened
-          // await waitFor(() => {
-          //   const titleInput = screen.getByRole('textbox', { name: /title/i });
-          //   expect(titleInput).toHaveValue(task.title);
-          // });
-          // const assigneeSelect = screen.getByTestId(selectedItemId);
-          // expect(assigneeSelect).toHaveTextContent(/unassigned/i);
-          // userEvent.click(assigneeSelect);
-          // const otherUserOption = screen.getByRole('option', { name: otherUser.data.username });
-          // expect(otherUserOption).toBeVisible();
-          // userEvent.click(otherUserOption);
-          // await waitFor(() => expect(screen.getByTestId(selectedItemId)).toHaveTextContent(otherUser.data.username));
-          // const otherTask = user.tenants[0].tasks[1];
-          // const otherTaskItem = await screen.findByTestId(`task-item-${otherTask.id}`);
-          // expect(otherTaskItem).toBeInTheDocument();
-          // userEvent.click(otherTaskItem);
-          // // edit panel opened
-          // await waitFor(() => {
-          //   const titleInput = screen.getByRole('textbox', { name: /title/i });
-          //   expect(titleInput).toHaveValue(otherTask.title);
-          // });
-          // // wait until last updates are done so they dont throw error when the test unmounts the components
-          // await new Promise(res => setTimeout(res, 1000));
+          userEvent.click(assigneeSelect);
+          const userOption = screen.getByRole('option', { name: username });
+          expect(userOption).toBeVisible();
+
+          userEvent.click(userOption);
+        }
+
+        test('unassigned => assigned', async () => {
+          // TODO: move this to end-to-end test because jest just cant handle this @adam.szi
+          // expect(true).toBe(true);
+          setupTaskPage(user);
+          const organization = user.tenants[0];
+          await changeWorkspace(user, organization.name);
+          await waitForTasksToLoad(organization.tasks);
+
+          const [task, otherTask] = organization.tasks;
+          await openTaskForEdit(task);
+
+          await expectAssigneeToBe(/unassigned/i);
+          await changeAssignee(otherUser.data.username);
+          await expectAssigneeToBe(otherUser.data.username);
+
+          await openTaskForEdit(otherTask);
+
+          await openTaskForEdit(task);
+          await expectAssigneeToBe(otherUser.data.username);
+
+          // wait until last updates are done so they dont throw error when the test unmounts the components
+          await new Promise(res => setTimeout(res, 1000));
         });
 
         // test('assigned => assigned', async () => {

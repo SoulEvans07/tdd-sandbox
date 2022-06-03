@@ -6,7 +6,7 @@ import { StoreData } from '../../contexts/store/types';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
 import { supressErrorMessages } from '../../helpers/testHelpers';
 import { mockUsers } from '../../mocks/controllers/mockData';
-import { AppHeader } from './AppHeader';
+import { AppHeader, userProfileId } from './AppHeader';
 
 describe('AppHeader', () => {
   supressErrorMessages();
@@ -32,12 +32,14 @@ describe('AppHeader', () => {
     expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /personal/i })).toBeInTheDocument();
     expect(screen.getByRole('checkbox', { name: /switch theme/i })).toBeInTheDocument();
-    expect(screen.getByTitle(mockUser.data.username)).toBeInTheDocument();
+    const userProfile = screen.getByTestId(userProfileId);
+    expect(userProfile).toBeInTheDocument();
+    expect(userProfile).toHaveAttribute('title', mockUser.data.username);
   });
 
   it('when profile img is clicked a menu opens with the workspaces and a logout btn', async () => {
     setup();
-    const profileImg = screen.getByTitle(mockUser.data.username);
+    const profileImg = screen.getByTestId(userProfileId);
     userEvent.click(profileImg);
 
     const logout = await screen.findByRole('option', { name: /logout/i });
@@ -61,7 +63,7 @@ describe('AppHeader', () => {
     setup();
     expect(screen.getByRole('heading', { name: /personal/i })).toBeInTheDocument();
 
-    const profileImg = screen.getByTitle(mockUser.data.username);
+    const profileImg = screen.getByTestId(userProfileId);
     userEvent.click(profileImg);
 
     await waitFor(async () => {

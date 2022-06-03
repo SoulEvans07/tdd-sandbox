@@ -4,3 +4,7 @@ export type PropsWithTypedChildren<T, C> = T & {
 
 export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
 export type HTMLDivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+
+export interface TestProps {
+  'data-testid'?: string;
+}

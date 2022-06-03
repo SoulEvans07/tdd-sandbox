@@ -2,8 +2,9 @@ import { ReactElement, CSSProperties, useMemo } from 'react';
 import classNames from 'classnames';
 import './ProfileImg.scss';
 import { textToHue } from '../../../helpers/color';
+import { TestProps } from '../../../types/common';
 
-interface ProfileImgProps {
+interface ProfileImgProps extends TestProps {
   img?: string;
   username: string;
   className?: string;
@@ -11,7 +12,7 @@ interface ProfileImgProps {
 }
 
 export function ProfileImg(props: ProfileImgProps): ReactElement {
-  const { img, username, className, onClick } = props;
+  const { img, username, className, onClick, ...restProps } = props;
 
   const hue = useMemo(() => textToHue(username), [username]);
   const colors = {
@@ -26,6 +27,7 @@ export function ProfileImg(props: ProfileImgProps): ReactElement {
         title={username}
         style={colors}
         onClick={onClick}
+        {...restProps}
       >
         {username[0]}
       </span>
@@ -39,6 +41,7 @@ export function ProfileImg(props: ProfileImgProps): ReactElement {
       alt={`${username}'s profile`}
       title={username}
       onClick={onClick}
+      {...restProps}
     />
   );
 }

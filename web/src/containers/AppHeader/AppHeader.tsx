@@ -20,6 +20,8 @@ interface AppHeaderProps {
   title: string;
 }
 
+export const userProfileId = 'user-profile';
+
 export function AppHeader(props: AppHeaderProps): ReactElement {
   const dispatch = useDispatch();
   const workspaces = useSelector(selectWorkspaces);
@@ -58,7 +60,12 @@ export function AppHeader(props: AppHeaderProps): ReactElement {
       <ThemeSwitch />
       {!!currentUser && (
         <div className="user-menu">
-          <ProfileImg className="profile" username={currentUser.username} onClick={switchMenu} />
+          <ProfileImg
+            className="profile"
+            username={currentUser.username}
+            onClick={switchMenu}
+            data-testid={userProfileId}
+          />
           <DropMenu open={menuOpen} onSelect={closeMenu} selectedId={activeWs.id}>
             {workspaceOptions}
             <hr />
