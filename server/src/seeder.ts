@@ -3,7 +3,7 @@ import sequelize from './DAL/database';
 import User, { UserInput } from './DAL/models/User';
 import { Logger } from './utils/Logger';
 
-const defaultUsers: UserInput[] = [
+export const defaultUsers: UserInput[] = [
   { username: 'adam.szi', email: 'adam.szi@snapsoft.hu', password: 'Pass123!' },
   { username: 'andras.balogh', email: 'andras.balogh@snapsoft.hu', password: 'Pass123!' },
   { username: 'tamas.horvath', email: 'tamas.horvath@snapsoft.hu', password: 'Pass123!' },
