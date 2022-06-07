@@ -1,1 +1,3 @@
-export const mockUser = { username: 'test.user', email: 'test.user@snapsoft.hu', password: 'Pass123!' };
+import { defaultUsers } from '../seeder';
+
+export const mockUser = defaultUsers[0];
