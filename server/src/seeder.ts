@@ -5,7 +5,7 @@ import { Logger } from './utils/Logger';
 
 const defaultUsers: UserInput[] = [
   { username: 'adam.szi', email: 'adam.szi@snapsoft.hu', password: 'Pass123!' },
-  { username: 'andrash.balogh', email: 'andrash.balogh@snapsoft.hu', password: 'Pass123!' },
+  { username: 'andras.balogh', email: 'andras.balogh@snapsoft.hu', password: 'Pass123!' },
   { username: 'tamas.horvath', email: 'tamas.horvath@snapsoft.hu', password: 'Pass123!' },
   { username: 'test.user', email: 'test.user@other.hu', password: 'Pass123!' },
   { username: 'other.user', email: 'other.user@other.hu', password: 'Pass123!' },
