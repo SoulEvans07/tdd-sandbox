@@ -19,4 +19,18 @@ describe('socket', () => {
     CommonSequence.changeWorkspace('snapsoft.hu');
     cy.findByText(newTask.body.title).should('be.visible');
   });
+
+  describe.only('gets real time update', () => {
+    it('about other user creating task', async () => {
+      CommonSequence.changeWorkspace('snapsoft.hu');
+
+      const otherUser = await DirectRequest.login(sameTenantUser.username, sameTenantUser.password);
+      const newTask = await DirectRequest.createTask(otherUser.body.token, {
+        title: `New Task: ${Date.now()}`,
+        tenantId: otherUser.body.user.tenants[0],
+      });
+
+      cy.findByText(newTask.body.title).should('be.visible');
+    });
+  });
 });
