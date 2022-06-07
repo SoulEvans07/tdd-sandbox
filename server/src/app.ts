@@ -1,4 +1,7 @@
 import express, { Express } from 'express';
+import { Server as SocketServer } from 'socket.io';
+import helmet from 'helmet';
+import cors from 'cors';
 
 import path from 'path';
 import fs from 'fs';
@@ -9,23 +12,19 @@ import middleware from 'i18next-http-middleware';
 import { epMeta, getEpMeta } from './decorators/api.decorators';
 import { Logger } from './utils/Logger';
 import { Controllers, noopMiddleware } from './types/api';
-import helmet from 'helmet';
-import cors from 'cors';
 import ApiErrorHandler from './middleware/ApiErrorHandler';
 import ValidationMiddleware from './middleware/ValidationMiddleware';
 import AuthMiddleware from './middleware/AuthMiddleware';
 import AuthorizeMiddleware from './middleware/AuthorizeMiddleware';
 import ApiEndpointLoggerMiddleware from './middleware/ApiEndpointLoggerMiddleware';
+import config from './config/config';
+import { SocketMiddleware } from './middleware/SocketMiddleware';
 
 export const baseUrl: string = '/api';
 export const app: Express = express();
 
 app.use(helmet());
-app.use(
-  cors({
-    origin: new RegExp(/http(s)?:\/\/localhost:3000/),
-  })
-);
+app.use(cors(config.server.cors));
 
 i18next
   .use(Backend)
@@ -47,9 +46,7 @@ app.use(middleware.handle(i18next));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-attachControllers(app);
-
-async function attachControllers(app: Express) {
+export async function setupRestControllers(app: Express, io?: SocketServer) {
   const controllers: Controllers = {};
 
   const controllerDir = path.join(__dirname, 'controllers');
@@ -77,6 +74,7 @@ async function attachControllers(app: Express) {
             apiMeta.isAuthorized ? AuthorizeMiddleware.handleRequest : noopMiddleware,
             ...(apiMeta.middleware && apiMeta.middleware.length > 0 ? apiMeta.middleware : [noopMiddleware]),
             ValidationMiddleware.throwValidationErrors,
+            apiMeta.hasSocketRes && io ? SocketMiddleware.attachIO(io) : noopMiddleware,
             controllerObject[methodName].bind(controllerObject)
           );
         }
