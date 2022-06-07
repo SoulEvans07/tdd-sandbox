@@ -48,6 +48,7 @@ export interface ApiEndpointMeta<T> {
   version: string;
   path: string;
   isAuthorized?: boolean;
+  hasSocketRes?: boolean;
   middleware?: (ApiMiddleware<T> | ((fields?: string | string[] | undefined, message?: any) => void))[];
 }
 
