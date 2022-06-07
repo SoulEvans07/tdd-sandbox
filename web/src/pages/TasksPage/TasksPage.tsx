@@ -1,19 +1,37 @@
 import { ChangeEvent, KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
+import socketClient, { Socket } from 'socket.io-client';
 import './TasksPage.scss';
 import { Page } from '../../components/layout/Page/Page';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
 import { TextInput } from '../../components/control/TextInput/TextInput';
 import { Checkbox } from '../../components/control/Checkbox/Checkbox';
 import { TaskList } from '../../containers/TaskList/TaskList';
-import { useDispatch, useSelector } from '../../contexts/store/StoreContext';
+import { StoreDispatch, useDispatch, useSelector } from '../../contexts/store/StoreContext';
 import { selectActiveWorkspace, selectWorkspaceTasks } from '../../contexts/store/selectors';
 import { Task } from '../../contexts/store/types';
 import { createTask, loadTasks, removeMultipleTask, updateTask } from '../../contexts/store/actions';
-import { taskController } from '../../controllers/TaskController';
+import { taskController, TaskResponseDTO } from '../../controllers/TaskController';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { TaskEditPanel } from '../../containers/TaskEditPanel/TaskEditPanel';
 import { RestrictedUserDTO, userController } from '../../controllers/UserController';
+import { serverUrl } from '../../config';
+
+const socketConnect = (token: string, dispatch: StoreDispatch): Socket => {
+  const socket = socketClient(serverUrl);
+
+  socket.on('connection', () => {
+    console.log('Hallelujah!');
+    socket.emit('auth', token);
+
+    socket.on('task-created', (task: TaskResponseDTO) => {
+      console.log('[new task]', task);
+      dispatch(createTask(task));
+    });
+  });
+
+  return socket;
+};
 
 export function TasksPage(): ReactElement {
   const dispatch = useDispatch();
@@ -25,6 +43,8 @@ export function TasksPage(): ReactElement {
 
   const [users, setUsers] = useState<RestrictedUserDTO[]>();
   useEffect(() => {
+    let socket: Socket;
+
     if (currentUser && token) {
       taskController
         .list(token, isPersonal ? undefined : Number(activeWs.id))
@@ -32,7 +52,13 @@ export function TasksPage(): ReactElement {
 
       if (isPersonal) setUsers([currentUser]);
       else userController.list(Number(activeWs.id), token).then(list => setUsers(list));
+
+      socket = socketConnect(token, dispatch);
     }
+
+    return () => {
+      if (socket) socket.disconnect();
+    };
   }, [activeWs.id, isPersonal]);
 
   const [newTaskTitle, setNewTaskTitle] = useState('');

@@ -33,6 +33,7 @@ const dbLogger = process.env.DB_LOGGER === 'true';
 const config = {
   server: {
     port,
+    cors: { origin: new RegExp(/http(s)?:\/\/localhost:3000/) },
   },
   security: {
     tokenKey,

@@ -13,7 +13,11 @@ export function rootReducer(state: StoreData, action: ActionType<typeof actions>
       });
     case 'todo.io/create-task':
       return produce(state, draft => {
-        draft.workspaces[draft.activeWS].tasks.push(action.payload);
+        const task = action.payload;
+        const tenantId = task.tenantId || personalWs;
+        const taskIndex = draft.workspaces[tenantId].tasks.findIndex(t => t.id === task.id);
+        if (taskIndex === -1) draft.workspaces[tenantId].tasks.push(task);
+        else draft.workspaces[tenantId].tasks[taskIndex] = task;
       });
     case 'todo.io/remove-task':
       return produce(state, draft => {
