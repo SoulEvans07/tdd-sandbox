@@ -148,7 +148,7 @@ describe('AuthContext', () => {
     });
 
     test('createTask()', () => {
-      const newTask: Task = { id: 123, title: 'New Task 1', status: 'Todo', description: '', order: 0 };
+      const newTask: Task = { id: 123, title: 'New Task 1', status: 'Todo', description: '', order: 0, tenantId: 11 };
       const actionBtn = <ActionButton action={actions.createTask(newTask)} text="create" />;
       customRender(<StoreConsumer>{mockStoreConcumer(actionBtn)}</StoreConsumer>, mockData);
       testForMockData();

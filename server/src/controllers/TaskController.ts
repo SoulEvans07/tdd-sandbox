@@ -4,10 +4,12 @@ import { userInfo } from 'os';
 import { TaskManager } from '../BLL/TaskManager';
 import { TaskInput } from '../DAL/models/Task';
 import { epMeta } from '../decorators/api.decorators';
+import { SocketResponse } from '../middleware/SocketMiddleware';
 import { AuthorizedRequest, ControllerBase, ValidatedAuthorizedRequest } from '../types/api';
 import { BadRequestException } from '../types/exceptions/BadRequestException';
 import { ForbiddenException } from '../types/exceptions/ForbiddenException';
 import { R } from '../types/localization';
+import { getTenantRoomId } from '../utils/idHelpers';
 
 interface A {
   tenantId?: string;
@@ -18,6 +20,7 @@ export default class TaskController extends ControllerBase {
     version: '1.0',
     path: 'task',
     isAuthorized: true,
+    hasSocketRes: true,
     middleware: [
       check('title')
         .notEmpty()
@@ -27,7 +30,7 @@ export default class TaskController extends ControllerBase {
         .withMessage(R.titleLengthForTask),
     ],
   })
-  public async createTask(req: ValidatedAuthorizedRequest<TaskInput>, res: Response, next: NextFunction) {
+  public async createTask(req: ValidatedAuthorizedRequest<TaskInput>, res: SocketResponse, next: NextFunction) {
     try {
       if (!req.user) {
         throw new Error('Unexpected error occurred');
@@ -36,6 +39,8 @@ export default class TaskController extends ControllerBase {
         req.body.description = '';
       }
       const task = await TaskManager.createTask(req.body, req.user);
+
+      if (res.io && task.tenantId) res.io.to(getTenantRoomId(task.tenantId)).emit('task-created', task);
       return res.send(task);
     } catch (err) {
       next(err);

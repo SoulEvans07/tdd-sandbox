@@ -4,9 +4,11 @@ import { rootReducer } from './reducers';
 import { StoreSelector, StoreData, initialStoreData } from './types';
 import * as actions from './actions';
 
+export type StoreDispatch = React.Dispatch<ActionType<typeof actions>>;
+
 export interface StoreContext {
   data: StoreData;
-  dispatch: React.Dispatch<ActionType<typeof actions>>;
+  dispatch: StoreDispatch;
 }
 
 const Store = createContext<StoreContext | undefined>(undefined);
@@ -25,7 +27,7 @@ export function useSelector<T>(selector: StoreSelector<T>): T {
   return selected;
 }
 
-export function useDispatch(): StoreContext['dispatch'] {
+export function useDispatch(): StoreDispatch {
   const { dispatch } = useStore();
   return dispatch;
 }
