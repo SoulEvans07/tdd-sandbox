@@ -4,7 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './.env.test' });
 
 import sequelize from './DAL/database';
+import { seed } from './seeder';
 
 beforeAll(async () => {
-  await sequelize.sync({ force: true });
+  await sequelize.sync();
+  await seed();
 });
