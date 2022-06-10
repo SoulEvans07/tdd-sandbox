@@ -11,9 +11,12 @@
     "shared/types"
   ],
   "scripts": {
-    "start-web": "npm start -w web",
-    "start-server": "npm start -w server",
-    "start": "concurrently \"npm run start-server\" \"npm run start-web\""
+    "start:web": "npm start -w web",
+    "start:server": "npm start -w server",
+    "start": "concurrently \"npm run start:server\" \"npm run start:web\"",
+    "test:web": "npm run test -w web",
+    "test:server": "npm run test -w server",
+    "test:e2e": "npm run test -w e2e"
   },
   "devDependencies": {
     "concurrently": "^7.2.1",
