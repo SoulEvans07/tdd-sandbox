@@ -1,5 +1,5 @@
 import { RestRequest } from 'msw';
-import { HttpStatusCode } from '../../types/statusCodes';
+import { HttpStatusCode } from 'tdd-sandbox-shared';
 import { MockUserData, mockUsers } from './mockData';
 
 export class AuthError extends Error {

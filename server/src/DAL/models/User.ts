@@ -1,10 +1,9 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { EntityTimestamps } from '../../types/model';
+import { EntityTimestamps, Identifiable } from 'tdd-sandbox-shared';
 import sequelize from '../database';
 import Task from './Task';
 
-interface UserAttributes extends EntityTimestamps {
-  id: number;
+interface UserAttributes extends Identifiable, EntityTimestamps {
   username: string;
   email: string;
   password: string;
