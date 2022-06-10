@@ -1,0 +1,26 @@
+{
+  "name": "storage-managers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/"
+  ],
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  },
+  "scripts": {
+    "build": "rimraf lib && tsc --project tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoulEvans07/tdd-sandbox.git"
+  },
+  "author": "adam.szi",
+  "license": "Beerware",
+  "bugs": {
+    "url": "https://github.com/SoulEvans07/tdd-sandbox/issues"
+  },
+  "homepage": "https://github.com/SoulEvans07/tdd-sandbox#readme"
+}

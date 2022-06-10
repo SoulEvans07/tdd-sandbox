@@ -1,12 +1,12 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import './root.scss';
-import { persistentStorage } from './services/storage/persistentStorage';
+
+import { persistentStorage, secureStorage } from 'storage-managers';
 import { AuthProvider, AuthState, clearedState, User } from './contexts/auth/AuthContext';
 import { ThemeName, ThemeProvider } from './contexts/theme/ThemeContext';
 import { StoreProvider } from './contexts/store/StoreContext';
 import { ThemeSetter } from './containers/ThemeSwitch/ThemeSetter';
 import { Router } from './router/Router';
-import { secureStorage } from './services/storage/secureStorage';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from './router/types';
 
