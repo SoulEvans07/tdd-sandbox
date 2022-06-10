@@ -1,7 +1,9 @@
 import request from 'supertest';
-import { app } from '../app';
+import { setupServer } from '../server';
 import { UserInput } from '../DAL/models/User';
 import { AuthResponse } from '../types/api';
+
+const server = setupServer();
 
 export enum ApiEndpoints {
   CreateUser = '/api/1.0/user',
@@ -18,7 +20,7 @@ export enum ApiEndpoints {
 export const postUser = async (body?: any) => await postRequest(ApiEndpoints.CreateUser, body);
 
 export const postRequest = async (path: string, body?: any, headers?: Record<string, string>) => {
-  const req = request(app).post(path);
+  const req = request(server).post(path);
   if (headers) {
     Object.entries(headers).forEach(entry => {
       req.set(entry[0], entry[1]);
@@ -31,7 +33,7 @@ export const getUsers = async (tenantId: number, headers?: Record<string, string
   await getRequest(ApiEndpoints.GetUsersForTenant.replace(':tenantId', tenantId.toString()), headers);
 
 export const getRequest = async (path: string, headers?: Record<string, string>) => {
-  const req = request(app).get(path);
+  const req = request(server).get(path);
   if (headers) {
     Object.entries(headers).forEach(entry => {
       req.set(entry[0], entry[1]);
@@ -41,7 +43,7 @@ export const getRequest = async (path: string, headers?: Record<string, string>)
 };
 
 export const deleteRequest = async (path: string, body?: any, headers?: Record<string, string>) => {
-  const req = request(app).delete(path);
+  const req = request(server).delete(path);
   if (headers) {
     Object.entries(headers).forEach(entry => {
       req.set(entry[0], entry[1]);
@@ -51,7 +53,7 @@ export const deleteRequest = async (path: string, body?: any, headers?: Record<s
 };
 
 export const patchRequest = async (path: string, body?: any, headers?: Record<string, string>) => {
-  const req = request(app).patch(path);
+  const req = request(server).patch(path);
   if (headers) {
     Object.entries(headers).forEach(entry => {
       req.set(entry[0], entry[1]);
