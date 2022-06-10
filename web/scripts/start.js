@@ -81,7 +81,7 @@ checkBrowsers(paths.appPath, isInteractive)
       config,
       devSocket,
       urls,
-      useYarn,
+      useYarn, // TODO: change to useNpm ??
       useTypeScript,
       tscCompileOnError,
       webpack,
