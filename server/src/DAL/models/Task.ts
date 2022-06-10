@@ -1,4 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
+import { EntityTimestamps, Identifiable } from 'tdd-sandbox-shared';
 import sequelize from '../database';
 
 export enum TaskStatus {
@@ -8,8 +9,7 @@ export enum TaskStatus {
   Done = 'Done',
 }
 
-interface TaskAttributes {
-  id: number;
+interface TaskAttributes extends Identifiable, EntityTimestamps {
   title: string;
   description: string;
   order: number;
@@ -17,9 +17,6 @@ interface TaskAttributes {
   tenantId?: number | null;
   parentId?: number | null;
   assigneeId?: number | null;
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date | null;
 }
 
 export interface TaskInput
