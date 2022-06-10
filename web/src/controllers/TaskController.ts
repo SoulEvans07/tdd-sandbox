@@ -1,4 +1,5 @@
-import { EntityTimestamps, Identifiable } from './businessTypes';
+import { Identifiable } from 'tdd-sandbox-shared';
+import { EntityTimestamps } from './businessTypes';
 import { ControllerBase } from './types';
 
 class TaskController extends ControllerBase {

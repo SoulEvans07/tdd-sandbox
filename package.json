@@ -1,0 +1,22 @@
+{
+  "name": "tdd-sandbox",
+  "version": "0.1.0",
+  "private": true,
+  "author": "adam.szi",
+  "license": "Beerware",
+  "workspaces": [
+    "server",
+    "web",
+    "e2e",
+    "shared/types"
+  ],
+  "scripts": {
+    "start-web": "npm start -w web",
+    "start-server": "npm start -w server",
+    "start": "concurrently \"npm run start-server\" \"npm run start-web\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.1",
+    "cross-env": "^7.0.3"
+  }
+}

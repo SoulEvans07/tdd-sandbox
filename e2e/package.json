@@ -5,9 +5,9 @@
   "license": "BEERWARE",
   "private": "true",
   "scripts": {
-    "serve": "cross-env NODE_ENV=test concurrently \"cd ../server && yarn serve:test\" \"cd ../web && yarn start\"",
+    "serve": "cross-env NODE_ENV=test concurrently \"cd ../server && npm run serve:test\" \"cd ../web && npm run start\"",
     "test": "cypress open",
-    "test:serve": "concurrently \"yarn serve\" \"yarn test\""
+    "test:serve": "concurrently \"npm run serve\" \"npm run test\""
   },
   "devDependencies": {
     "@testing-library/cypress": "^8.0.2",
