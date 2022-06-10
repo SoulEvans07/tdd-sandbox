@@ -1,4 +1,4 @@
-import { IStorageManager } from './types';
+import { IStorageManager } from "./types";
 
 const sessionStore = window.sessionStorage;
 

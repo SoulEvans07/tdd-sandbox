@@ -8,7 +8,8 @@
     "server",
     "web",
     "e2e",
-    "shared/types"
+    "shared/types",
+    "shared/storage-managers"
   ],
   "scripts": {
     "start:web": "npm start -w web",
