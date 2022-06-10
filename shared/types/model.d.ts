@@ -5,7 +5,7 @@ export interface Identifiable {
 }
 
 export interface EntityTimestamps {
-  createdAt?: Date | null;
-  updatedAt?: Date | null;
+  createdAt?: Date;
+  updatedAt?: Date;
   deletedAt?: Date | null;
 }
