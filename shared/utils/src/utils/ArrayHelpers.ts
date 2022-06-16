@@ -1,7 +1,7 @@
 export type ListPickTuple<LI extends Record<string, any>, P extends keyof LI> = [Array<LI>, Array<LI[P]>];
 
 export class ArrayHelpers {
-  static cycle<T>(array: T[], count: number = 1): T[] {
+  static cycle<T>(array: T[], count = 1): T[] {
     const cycles = count % array.length;
     const start = array.slice(0, cycles);
     const end = array.slice(cycles);
