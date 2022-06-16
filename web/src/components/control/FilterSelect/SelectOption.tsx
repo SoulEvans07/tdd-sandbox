@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactElement, useMemo } from 'react';
 import classNames from 'classnames';
-import { stopPropagation } from '../../../helpers/eventHelpers';
+import { stopPropagation } from 'shared-utils';
 import { HTMLDivProps } from '../../../types/common';
 import { useSelect } from './SelectContext';
 

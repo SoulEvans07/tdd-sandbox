@@ -9,20 +9,14 @@
     "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "noFallthroughCasesInSwitch": false,
+    "outDir": "lib",
+    "sourceMap": true,
+    "declaration": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["jest-polyfill"]
+    "experimentalDecorators": true,
+    "types": ["node", "jest-polyfill"]
   },
   "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "./node_modules",
-    "./node_modules/*",
-    "./node_modules/@types/node/index.d.ts",
-    "./node_modules/@faker-js/faker/index.ts"
-  ]
+  "exclude": ["node_modules", "./node_modules", "./node_modules/*"]
 }

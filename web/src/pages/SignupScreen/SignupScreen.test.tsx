@@ -1,7 +1,7 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { Random } from '../../helpers/Random';
+import { Random } from 'shared-utils';
 import { supressErrorMessages } from '../../helpers/testHelpers';
 import { AuthProvider } from '../../contexts/auth/AuthContext';
 import { StoreProvider } from '../../contexts/store/StoreContext';

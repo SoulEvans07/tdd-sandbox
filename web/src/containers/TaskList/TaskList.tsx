@@ -1,11 +1,11 @@
 import { ReactElement, useCallback, useMemo, useState } from 'react';
 import produce from 'immer';
+import { ArrayHelpers } from 'shared-utils';
 import './TaskList.scss';
 import { Task, TaskStatus } from '../../contexts/store/types';
 import { TaskItem } from './TaskItem/TaskItem';
 import { Button } from '../../components/control/Button/Button';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
-import { ArrayHelpers } from '../../helpers/ArrayHelpers';
 
 export interface TaskListProps {
   list: Task[];

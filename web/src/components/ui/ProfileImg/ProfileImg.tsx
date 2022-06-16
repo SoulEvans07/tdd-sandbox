@@ -1,7 +1,7 @@
 import { ReactElement, CSSProperties, useMemo } from 'react';
 import classNames from 'classnames';
+import { textToHue } from 'shared-utils';
 import './ProfileImg.scss';
-import { textToHue } from '../../../helpers/color';
 import { TestProps } from '../../../types/common';
 
 interface ProfileImgProps extends TestProps {

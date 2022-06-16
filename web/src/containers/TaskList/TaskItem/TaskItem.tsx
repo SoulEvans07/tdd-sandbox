@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
+import { stopPropagation } from 'shared-utils';
 import './TaskItem.scss';
 import { Checkbox } from '../../../components/control/Checkbox/Checkbox';
 import { Icon } from '../../../components/ui/Icon/Icon';
 import { TagLabel } from '../../../components/ui/TagLabel/TagLabel';
 import { Task, TaskStatusColors, TaskStatusNames } from '../../../contexts/store/types';
-import { stopPropagation } from '../../../helpers/eventHelpers';
 
 export interface TaskItemProps {
   task: Task;

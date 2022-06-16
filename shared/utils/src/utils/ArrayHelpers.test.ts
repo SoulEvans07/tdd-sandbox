@@ -68,11 +68,39 @@ describe('ArrayHelpers', () => {
 
   describe.each<FilterPickByTestCase>([
     { list, by: 'a', value: 1, pick: 'a', picked: [1, 1], filtered: [0, 1] },
-    { list, by: 'a', value: 2, pick: 'id', picked: [2, 3, 4], filtered: [2, 3, 4] },
-    { list, by: 'a', value: undefined, pick: 'id', picked: [0, 1, 2, 3, 4], filtered: [0, 1, 2, 3, 4] },
-    { list, by: 'b', value: 'A', pick: 'b', picked: ['A', 'A', 'A'], filtered: [0, 3, 4] },
+    {
+      list,
+      by: 'a',
+      value: 2,
+      pick: 'id',
+      picked: [2, 3, 4],
+      filtered: [2, 3, 4],
+    },
+    {
+      list,
+      by: 'a',
+      value: undefined,
+      pick: 'id',
+      picked: [0, 1, 2, 3, 4],
+      filtered: [0, 1, 2, 3, 4],
+    },
+    {
+      list,
+      by: 'b',
+      value: 'A',
+      pick: 'b',
+      picked: ['A', 'A', 'A'],
+      filtered: [0, 3, 4],
+    },
     { list, by: 'b', value: 'B', pick: 'id', picked: [1, 2], filtered: [1, 2] },
-    { list, by: 'b', value: undefined, pick: 'id', picked: [0, 1, 2, 3, 4], filtered: [0, 1, 2, 3, 4] },
+    {
+      list,
+      by: 'b',
+      value: undefined,
+      pick: 'id',
+      picked: [0, 1, 2, 3, 4],
+      filtered: [0, 1, 2, 3, 4],
+    },
   ])('filterBy', ({ list, by, value, pick, picked, filtered }) => {
     test(`filterPickBy ${by} = ${value}; pick: ${pick}`, () => {
       const [flist, plist] = ArrayHelpers.filterPickBy(list, pick, by, value);

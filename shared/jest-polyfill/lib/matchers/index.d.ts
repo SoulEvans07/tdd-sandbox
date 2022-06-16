@@ -1,0 +1,1 @@
+export { toThrowType } from './toThrowType';
