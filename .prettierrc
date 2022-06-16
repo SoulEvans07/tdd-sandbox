@@ -1,9 +1,9 @@
 {
   "endOfLine": "lf",
-  "singleQuote": true,
   "trailingComma": "es5",
   "arrowParens": "avoid",
   "printWidth": 120,
+  "singleQuote": true,
   "jsxSingleQuote": false,
   "overrides": [
     {
