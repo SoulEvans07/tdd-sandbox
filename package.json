@@ -8,8 +8,7 @@
     "server",
     "web",
     "e2e",
-    "shared/types",
-    "shared/storage-managers"
+    "shared/*"
   ],
   "scripts": {
     "start:web": "npm start -w web",
@@ -21,6 +20,7 @@
   },
   "devDependencies": {
     "concurrently": "^7.2.1",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "prettier": "^2.7.1"
   }
 }
