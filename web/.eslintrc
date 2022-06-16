@@ -1,11 +1,10 @@
 {
-  "plugins": ["prettier", "testing-library", "jest-dom"],
+  "root": false,
+  "plugins": ["testing-library", "jest-dom"],
   "extends": ["react-app", "react-app/jest", "plugin:testing-library/react", "plugin:jest-dom/recommended"],
   "rules": {
-    "prettier/prettier": "error",
     "react-hooks/exhaustive-deps": "off",
     "jsx-a11y/anchor-is-valid": "off",
-    "jsx-a11y/no-redundant-roles": "off",
-    "default-case": "off"
+    "jsx-a11y/no-redundant-roles": "off"
   }
 }

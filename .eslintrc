@@ -1,0 +1,13 @@
+{
+  "root": true, // https://eslint.org/docs/user-guide/configuring/configuration-files#cascading-and-hierarchy
+  "env": {
+    // https://eslint.org/docs/user-guide/configuring/language-options#specifying-environments
+    "es2021": true
+  },
+  "extends": ["eslint:recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "default-case": "off"
+  }
+}
