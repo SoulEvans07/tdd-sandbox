@@ -4,5 +4,5 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   setupFiles: [],
-  setupFilesAfterEnv: ['./node_modules/jest-extended/all.js', './src/setupTests.ts', './src/polyfills/jest/index.ts'],
+  setupFilesAfterEnv: ['jest-extended/all.js', 'jest-polyfill', './src/setupTests.ts'],
 };

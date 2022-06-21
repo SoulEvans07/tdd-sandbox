@@ -11,8 +11,7 @@
     "sourceMap": true,
     "declaration": true,
     "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "typeRoots": ["./node_modules/@types/", "./src/typings/"]
+    "experimentalDecorators": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "./node_modules", "./node_modules/*"]
