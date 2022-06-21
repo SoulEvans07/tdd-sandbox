@@ -1,0 +1,26 @@
+{
+  "name": "@tdd-sandbox/api-managers",
+  "version": "0.1.0",
+  "description": "",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build/"
+  ],
+  "scripts": {
+    "build": "rimraf build && tsc --project tsconfig.json"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoulEvans07/tdd-sandbox.git"
+  },
+  "author": "adam.szi",
+  "license": "Beerware",
+  "bugs": {
+    "url": "https://github.com/SoulEvans07/tdd-sandbox/issues"
+  },
+  "homepage": "https://github.com/SoulEvans07/tdd-sandbox#readme"
+}

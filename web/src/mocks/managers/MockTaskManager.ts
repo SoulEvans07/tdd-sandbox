@@ -1,7 +1,7 @@
 import { rest, RestHandler } from 'msw';
+import { CreateTaskDTO, TaskResponseDTO, TaskAttributes } from '@tdd-sandbox/api-managers';
 import { serverUrl } from '../../config';
 import { ErrorResponse, MockApiManager } from './types';
-import { CreateTaskDTO, TaskResponseDTO, TaskAttributes } from '../../managers/TaskManager';
 import { AuthError, authorize } from './helpers';
 import { taskManager } from '../../services/api';
 
