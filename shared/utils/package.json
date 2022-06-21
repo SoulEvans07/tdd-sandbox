@@ -2,10 +2,10 @@
   "name": "shared-utils",
   "version": "0.1.0",
   "description": "",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "files": [
-    "lib/"
+    "build/"
   ],
   "dependencies": {
     "react": "^18.2.0"
@@ -24,7 +24,7 @@
     "ts-jest": "^28.0.4"
   },
   "scripts": {
-    "build": "rimraf lib && tsc --project tsconfig.json",
+    "build": "rimraf build && tsc --project tsconfig.json",
     "test": "jest --watchAll=false"
   },
   "repository": {

@@ -2,16 +2,16 @@
   "name": "storage-managers",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "files": [
-    "lib/"
+    "build/"
   ],
   "devDependencies": {
     "rimraf": "^3.0.2"
   },
   "scripts": {
-    "build": "rimraf lib && tsc --project tsconfig.json"
+    "build": "rimraf build && tsc --project tsconfig.json"
   },
   "repository": {
     "type": "git",

@@ -5,10 +5,5 @@ export interface IStorageManager {
 }
 
 export interface ISecureStorageManager extends IStorageManager {
-  set(
-    key: string,
-    data: any,
-    expires?: Date,
-    options?: Record<string, any>
-  ): void;
+  set(key: string, data: any, expires?: Date, options?: Record<string, any>): void;
 }
