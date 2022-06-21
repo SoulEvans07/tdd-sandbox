@@ -1,16 +1,12 @@
 import { rest } from 'msw';
 import { serverUrl } from '../../config';
-import { ErrorResponse, MockController } from './types';
-import {
-  GetWorkspacesResponseDTO,
-  RestrictedUserDTO,
-  SignupDTO,
-  userController,
-} from '../../controllers/UserController';
+import { ErrorResponse, MockApiManager } from './types';
+import { GetWorkspacesResponseDTO, RestrictedUserDTO, SignupDTO } from '../../managers/UserManager';
 import { AuthError, authorize } from './helpers';
 import { mockUsers } from './mockData';
+import { userManager } from '../../services/api';
 
-export const mockUserController: MockController<typeof userController> = {
+export const mockUserManager: MockApiManager<typeof userManager> = {
   register: rest.post<SignupDTO, {}, {}>(serverUrl + '/api/1.0/user', (req, res, ctx) => {
     return res(ctx.status(200));
   }),

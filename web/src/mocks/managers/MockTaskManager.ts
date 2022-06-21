@@ -1,16 +1,17 @@
 import { rest, RestHandler } from 'msw';
 import { serverUrl } from '../../config';
-import { ErrorResponse, MockController } from './types';
-import { CreateTaskDTO, TaskResponseDTO, taskController, TaskAttributes } from '../../controllers/TaskController';
+import { ErrorResponse, MockApiManager } from './types';
+import { CreateTaskDTO, TaskResponseDTO, TaskAttributes } from '../../managers/TaskManager';
 import { AuthError, authorize } from './helpers';
+import { taskManager } from '../../services/api';
 
 let lastId = 1000;
 
-interface MockTaskController extends MockController<typeof taskController> {
+interface MockTaskManager extends MockApiManager<typeof taskManager> {
   listTenant: RestHandler;
 }
 
-export const mockTaskController: MockTaskController = {
+export const mockTaskManager: MockTaskManager = {
   create: rest.post<CreateTaskDTO, {}, TaskResponseDTO | ErrorResponse>(
     serverUrl + '/api/1.0/task',
     (req, res, ctx) => {

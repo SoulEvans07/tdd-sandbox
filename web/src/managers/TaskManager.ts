@@ -1,7 +1,7 @@
 import { Identifiable, EntityTimestamps } from 'tdd-sandbox-shared';
-import { ControllerBase } from './types';
+import { ApiManager } from './types';
 
-class TaskController extends ControllerBase {
+export class TaskManager extends ApiManager {
   protected version = '1.0';
   protected name = 'tasks';
 
@@ -22,8 +22,6 @@ class TaskController extends ControllerBase {
     return this.patch<TaskResponseDTO>(this.apiUrl + '/task/' + taskId, patch, this.toAuthHeader(token));
   }
 }
-
-export const taskController = new TaskController();
 
 type TaskStatus = 'Todo' | 'InProgress' | 'Blocked' | 'Done';
 

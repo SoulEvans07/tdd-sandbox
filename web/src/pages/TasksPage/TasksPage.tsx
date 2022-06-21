@@ -10,12 +10,13 @@ import { StoreDispatch, useDispatch, useSelector } from '../../contexts/store/St
 import { selectActiveWorkspace, selectWorkspaceTasks } from '../../contexts/store/selectors';
 import { Task } from '../../contexts/store/types';
 import { createTask, loadTasks, removeMultipleTask, updateTask } from '../../contexts/store/actions';
-import { taskController, TaskResponseDTO } from '../../controllers/TaskController';
+import { TaskResponseDTO } from '../../managers/TaskManager';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { TaskEditPanel } from '../../containers/TaskEditPanel/TaskEditPanel';
-import { RestrictedUserDTO, userController } from '../../controllers/UserController';
+import { RestrictedUserDTO } from '../../managers/UserManager';
 import { serverUrl } from '../../config';
+import { taskManager, userManager } from '../../services/api';
 
 const socketConnect = (token: string, dispatch: StoreDispatch): Socket => {
   const socket = socketClient(serverUrl);
@@ -46,12 +47,12 @@ export function TasksPage(): ReactElement {
     let socket: Socket;
 
     if (currentUser && token) {
-      taskController
+      taskManager
         .list(token, isPersonal ? undefined : Number(activeWs.id))
         .then(list => dispatch(loadTasks(list, activeWs.id)));
 
       if (isPersonal) setUsers([currentUser]);
-      else userController.list(Number(activeWs.id), token).then(list => setUsers(list));
+      else userManager.list(Number(activeWs.id), token).then(list => setUsers(list));
 
       socket = socketConnect(token, dispatch);
     }
@@ -69,7 +70,7 @@ export function TasksPage(): ReactElement {
 
   const handleCreate = () => {
     if (!token) return;
-    taskController
+    taskManager
       .create({ title: newTaskTitle, tenantId: isPersonal ? undefined : Number(activeWs.id) }, token)
       .then(newTask => dispatch(createTask(newTask)));
     setNewTaskTitle('');
@@ -77,7 +78,7 @@ export function TasksPage(): ReactElement {
 
   const handleRemove = (taskIds: Array<Task['id']>) => {
     if (!token) return;
-    taskController.remove(taskIds, token).then(() => dispatch(removeMultipleTask(taskIds)));
+    taskManager.remove(taskIds, token).then(() => dispatch(removeMultipleTask(taskIds)));
   };
 
   const [editTaskId, setEditedTask] = useState<Task['id'] | null>(null);
@@ -89,7 +90,7 @@ export function TasksPage(): ReactElement {
 
   const handleUpdateSubmit = async (taskId: number, patch: Partial<Task>) => {
     if (!token) return;
-    const afterUpdate = await taskController.update(taskId, patch, token);
+    const afterUpdate = await taskManager.update(taskId, patch, token);
     dispatch(updateTask(afterUpdate));
   };
 

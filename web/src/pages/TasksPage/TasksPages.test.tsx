@@ -7,7 +7,7 @@ import { StoreProvider } from '../../contexts/store/StoreContext';
 import { AuthProvider } from '../../contexts/auth/AuthContext';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
 import { supressErrorMessages, waitForMillis } from '../../helpers/testHelpers';
-import { MockUserData, mockUsers } from '../../mocks/controllers/mockData';
+import { MockUserData, mockUsers } from '../../mocks/managers/mockData';
 import { selectedItemId } from '../../components/control/FilterSelect/FilterSelect';
 import { userProfileId } from '../../containers/AppHeader/AppHeader';
 import { Task } from '../../contexts/store/types';

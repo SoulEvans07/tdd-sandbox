@@ -1,6 +1,6 @@
-import { ControllerBase } from './types';
+import { ApiManager } from './types';
 
-class AuthController extends ControllerBase {
+export class AuthManager extends ApiManager {
   protected version = '1.0';
   protected name = 'auth';
 
@@ -12,8 +12,6 @@ class AuthController extends ControllerBase {
     return this.post<RefreshTokenResponseDTO>(this.entityUrl + '/token', {}, this.toAuthHeader(token));
   }
 }
-
-export const authController = new AuthController();
 
 export interface LoginDTO {
   username: string;

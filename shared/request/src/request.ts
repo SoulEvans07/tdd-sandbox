@@ -1,4 +1,4 @@
-import { IRequest, QueryParams, RequestBody, RequestHeaders, ResponseBody } from './types';
+import { IRestApi, QueryParams, RequestBody, RequestHeaders, ResponseBody } from './types';
 
 function stringifyParams(query?: QueryParams): string {
   if (query === undefined) return '';
@@ -67,4 +67,4 @@ async function del<R extends ResponseBody>(url: string, body?: RequestBody, head
   );
 }
 
-export const request: IRequest = { get, post, patch, delete: del } as const;
+export const request: IRestApi = { get, post, patch, delete: del } as const;

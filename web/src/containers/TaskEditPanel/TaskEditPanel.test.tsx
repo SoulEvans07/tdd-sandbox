@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { selectedItemId } from '../../components/control/FilterSelect/FilterSelect';
 import { User } from '../../contexts/auth/AuthContext';
 import { Task, TaskStatus, TaskStatusNames } from '../../contexts/store/types';
-import { mockTenants, mockUsers } from '../../mocks/controllers/mockData';
+import { mockTenants, mockUsers } from '../../mocks/managers/mockData';
 import { TaskEditPanel } from './TaskEditPanel';
 
 describe('TaskEditPanel', () => {

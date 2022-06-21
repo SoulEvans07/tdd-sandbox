@@ -6,7 +6,7 @@ import { SidePanel } from '../../components/layout/SidePanel/SidePanel';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
 import { Button, ButtonProps } from '../../components/control/Button/Button';
 import { TagLabel } from '../../components/ui/TagLabel/TagLabel';
-import { RestrictedUserDTO } from '../../controllers/UserController';
+import { RestrictedUserDTO } from '../../managers/UserManager';
 import { NameTag } from '../../components/ui/NameTag/NameTag';
 import { FilterSelect } from '../../components/control/FilterSelect/FilterSelect';
 import { SelectOption } from '../../components/control/FilterSelect/SelectOption';

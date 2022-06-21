@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, ReactElement, useCallback, useMemo, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import './SignupScreen.scss';
-import { userController } from '../../controllers/UserController';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import { Page } from '../../components/layout/Page/Page';
 import { TextInput } from '../../components/control/TextInput/TextInput';
@@ -14,6 +13,7 @@ import { ROUTES } from '../../router/types';
 import { PasswordInput } from '../../components/control/TextInput/PasswordInput';
 import { StringValidator } from '../../validators/StringValidator';
 import { strongPasswordRegEx } from '../../validators/types';
+import { userManager } from '../../services/api';
 
 interface SignupForm {
   username: string;
@@ -48,7 +48,7 @@ export function SignupScreen(): ReactElement {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    userController
+    userManager
       .register({ username, email, password })
       .then(() => navigate(ROUTES.LOGIN))
       .catch(e => setError(true));

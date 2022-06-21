@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ReactNode } from 'react';
 import { supressErrorMessages } from '../../helpers/testHelpers';
-import { mockUsers } from '../../mocks/controllers/mockData';
+import { mockUsers } from '../../mocks/managers/mockData';
 import { AuthConsumer, AuthContext, AuthProvider, AuthState } from './AuthContext';
 
 describe('AuthContext', () => {

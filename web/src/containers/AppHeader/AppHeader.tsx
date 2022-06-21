@@ -4,11 +4,11 @@ import { useAuth } from '../../contexts/auth/AuthContext';
 import { ProfileImg } from '../../components/ui/ProfileImg/ProfileImg';
 import { ThemeSwitch } from '../ThemeSwitch/ThemeSwitch';
 import { DropMenu } from '../../components/control/DropMenu/DropMenu';
-import { userController } from '../../controllers/UserController';
 import { useDispatch, useSelector } from '../../contexts/store/StoreContext';
 import { changeWorkspace, clearData, loadWorkspaces } from '../../contexts/store/actions';
 import { selectActiveWorkspace, selectWorkspaces } from '../../contexts/store/selectors';
 import { personalWs, Workspace } from '../../contexts/store/types';
+import { userManager } from '../../services/api';
 
 function sortPersonalToTop(a: Workspace, b: Workspace): number {
   if (a.id === personalWs) return -1;
@@ -39,7 +39,7 @@ export function AppHeader(props: AppHeaderProps): ReactElement {
 
   useEffect(() => {
     if (token) {
-      userController.getWorkspaces(token).then(ws => dispatch(loadWorkspaces(ws)));
+      userManager.getWorkspaces(token).then(ws => dispatch(loadWorkspaces(ws)));
     }
   }, [currentUser]);
 
