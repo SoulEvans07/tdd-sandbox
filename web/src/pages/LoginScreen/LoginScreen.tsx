@@ -3,7 +3,6 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import './LoginScreen.scss';
 import { useLocation } from '../../hooks/userLocation';
 import { useAuth, User } from '../../contexts/auth/AuthContext';
-import { authController } from '../../controllers/AuthController';
 import { ROUTES } from '../../router/types';
 import { Page } from '../../components/layout/Page/Page';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
@@ -12,6 +11,7 @@ import { Button } from '../../components/control/Button/Button';
 import { TextLink } from '../../components/control/TextLink/TextLink';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { PasswordInput } from '../../components/control/TextInput/PasswordInput';
+import { authManager } from '../../services/api';
 
 interface LoginForm {
   username: string;
@@ -45,7 +45,7 @@ export function LoginScreen(): ReactElement {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    authController
+    authManager
       .login({ username, password })
       .then(data => handleSuccess(data.user, data.token))
       .catch(e => setError(true));

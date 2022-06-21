@@ -8,7 +8,7 @@ import { StoreProvider } from '../../contexts/store/StoreContext';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
 import { ROUTES } from '../../router/types';
 import { AppHeader } from '../../containers/AppHeader/AppHeader';
-import { mockUsers } from '../../mocks/controllers/mockData';
+import { mockUsers } from '../../mocks/managers/mockData';
 
 describe('LoginScreen', () => {
   let titleHeading: HTMLHeadingElement;

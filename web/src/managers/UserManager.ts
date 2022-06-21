@@ -1,6 +1,6 @@
-import { ControllerBase } from './types';
+import { ApiManager } from './types';
 
-class UserController extends ControllerBase {
+export class UserManager extends ApiManager {
   protected version = '1.0';
   protected name = 'user';
 
@@ -20,8 +20,6 @@ class UserController extends ControllerBase {
     );
   }
 }
-
-export const userController = new UserController();
 
 export interface SignupDTO {
   username: string;

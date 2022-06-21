@@ -5,7 +5,7 @@ import { StoreProvider } from '../../contexts/store/StoreContext';
 import { StoreData } from '../../contexts/store/types';
 import { ThemeProvider } from '../../contexts/theme/ThemeContext';
 import { supressErrorMessages } from '../../helpers/testHelpers';
-import { mockUsers } from '../../mocks/controllers/mockData';
+import { mockUsers } from '../../mocks/managers/mockData';
 import { AppHeader, userProfileId } from './AppHeader';
 
 describe('AppHeader', () => {

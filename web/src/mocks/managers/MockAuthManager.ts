@@ -1,9 +1,10 @@
 import { rest } from 'msw';
 import { serverUrl } from '../../config';
-import { ErrorResponse, MockController } from './types';
-import { authController, LoginDTO, LoginResponseDTO, RefreshTokenResponseDTO } from '../../controllers/AuthController';
+import { ErrorResponse, MockApiManager } from './types';
+import { LoginDTO, LoginResponseDTO, RefreshTokenResponseDTO } from '../../managers/AuthManager';
 import { MockUserData, mockUsers } from './mockData';
 import { AuthError, authorize } from './helpers';
+import { authManager } from '../../services/api';
 
 function tokenResponseFrom(user: MockUserData, token?: string) {
   return {
@@ -17,7 +18,7 @@ function tokenResponseFrom(user: MockUserData, token?: string) {
   };
 }
 
-export const mockAuthController: MockController<typeof authController> = {
+export const mockAuthManager: MockApiManager<typeof authManager> = {
   login: rest.post<LoginDTO, {}, LoginResponseDTO | ErrorResponse>(
     serverUrl + '/api/1.0/auth/login',
     (req, res, ctx) => {

@@ -1,9 +1,9 @@
-import { mockAuthController } from './controllers/MockAuthController';
-import { mockTaskController } from './controllers/MockTaskController';
-import { mockUserController } from './controllers/MockUserController';
+import { mockAuthManager } from './managers/MockAuthManager';
+import { mockTaskManager } from './managers/MockTaskManager';
+import { mockUserManager } from './managers/MockUserManager';
 
 export const handlers = [
-  ...Object.values(mockAuthController),
-  ...Object.values(mockUserController),
-  ...Object.values(mockTaskController),
+  ...Object.values(mockAuthManager),
+  ...Object.values(mockUserManager),
+  ...Object.values(mockTaskManager),
 ];

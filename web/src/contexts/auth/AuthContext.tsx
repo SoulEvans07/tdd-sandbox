@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, ReactElement, useContext, useEffect, useState } from 'react';
-import { authController } from '../../controllers/AuthController';
+import { authManager } from '../../services/api';
 
 export interface User {
   id: number;
@@ -53,7 +53,7 @@ export function AuthProvider(props: PropsWithChildren<AuthProviderProps>): React
   const refreshToken = async (token?: string) => {
     if (!token) return logout();
     try {
-      const response = await authController.refreshToken(token);
+      const response = await authManager.refreshToken(token);
       login(response.user, response.token);
     } catch (e) {
       logout();
