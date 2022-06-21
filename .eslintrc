@@ -8,6 +8,7 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "default-case": "off"
+    "default-case": "off",
+    "no-extra-boolean-cast": "off"
   }
 }

@@ -47,6 +47,7 @@
     "@types/i18next": "^13.0.0",
     "@types/i18next-fs-backend": "^1.1.2",
     "@types/jest": "^27.4.1",
+    "@types/jest-polyfill": "^1.0.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^16.11.9",
     "@types/supertest": "^2.0.12",
@@ -62,6 +63,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "jest": "^27.0.0",
     "jest-extended": "^2.0.0",
+    "jest-polyfill": "^1.0.0",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.3",
     "ts-jest": "^27.1.4"
