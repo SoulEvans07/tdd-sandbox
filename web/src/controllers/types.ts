@@ -1,6 +1,5 @@
-import { request } from '../services/request/request';
+import { request, QueryParams, RequestBody, RequestHeaders, ResponseBody } from '@tdd-sandbox/request';
 import { serverUrl } from '../config';
-import { QueryParams, RequestBody, RequestHeaders, ResponseBody } from '../services/request/types';
 
 interface AuthHeader extends RequestHeaders {
   authorization: string;
