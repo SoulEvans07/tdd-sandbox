@@ -1,33 +1,27 @@
-import { ISecureStorageManager } from "./types";
+import { ISecureStorageManager } from './types';
 
 export interface CookieOption {
-  "max-age"?: string;
+  'max-age'?: string;
   path?: string;
 }
 
 function set(key: string, data: any, expires?: Date, options?: CookieOption) {
   const cookieOptions = {
-    path: "/",
+    path: '/',
     ...options,
     expires: expires?.toUTCString(),
   };
-  const serializedOptions = Object.entries(cookieOptions).reduce(
-    (acc, [key, value]) => acc + `${key}=${value};`,
-    ""
-  );
-  const sameSiteOption =
-    window.location.protocol === "https:"
-      ? "; SameSite=None; Secure"
-      : "; SameSite=Lax;";
+  const serializedOptions = Object.entries(cookieOptions).reduce((acc, [key, value]) => acc + `${key}=${value};`, '');
+  const sameSiteOption = window.location.protocol === 'https:' ? '; SameSite=None; Secure' : '; SameSite=Lax;';
   const serializedData = JSON.stringify(data);
   document.cookie = `${key}=${serializedData}; ${serializedOptions} ${sameSiteOption}`;
 }
 
 function get<T>(key: string): T | undefined {
-  const keyPairs = document.cookie.split(";");
+  const keyPairs = document.cookie.split(';');
 
   const cookies = keyPairs.reduce((acc, curr) => {
-    const [key, value] = curr.trim().split("=");
+    const [key, value] = curr.trim().split('=');
     return acc.set(key, value);
   }, new Map<string, string>());
 
@@ -37,7 +31,7 @@ function get<T>(key: string): T | undefined {
 }
 
 function remove(key: string, options?: CookieOption): void {
-  set(key, "", new Date(), options);
+  set(key, '', new Date(), options);
 }
 
 export const secureStorage: ISecureStorageManager = {
