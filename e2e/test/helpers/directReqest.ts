@@ -1,84 +1,66 @@
-type Response<T> = Cypress.Response<T>;
+import { QueryParams, RequestBody, RequestHeaders, ResponseBody, RestApi } from '@tdd-sandbox/api-managers';
 
-export class DirectRequest {
-  public static async login(username: string, password: string): Promise<Response<LoginResponseDTO>> {
+class DirectRequest implements RestApi {
+  public get<R extends ResponseBody>(
+    url: string,
+    query?: QueryParams | undefined,
+    headers?: RequestHeaders | undefined
+  ): Promise<R> {
     return new Promise(resolve => {
-      cy.request({ method: 'POST', url: 'localhost:3001/api/1.0/auth/login', body: { username, password } }).then(
-        response => {
-          cy.log('login response', response);
-          resolve(response);
-        }
-      );
-    });
-  }
-
-  public static async createTask(token: string, task: CreateTaskDTO): Promise<Response<TaskResponseDTO>> {
-    return new Promise(resolve => {
-      cy.request({
-        method: 'POST',
-        url: 'localhost:3001/api/1.0/task',
-        body: task,
-        headers: this.toAuthHeader(token),
-      }).then(response => {
-        cy.log('login response', response);
-        resolve(response);
+      cy.request({ method: 'GET', url: url + this.stringifyParams(query), headers }).then(response => {
+        resolve(response.body);
       });
     });
   }
 
-  public static async getTasks(token: string, tenantId?: number): Promise<Response<TaskResponseDTO[]>> {
-    const tenant = tenantId ? '/' + tenantId : '';
+  public post<R extends ResponseBody>(
+    url: string,
+    body?: RequestBody | undefined,
+    headers?: RequestHeaders | undefined
+  ): Promise<R> {
     return new Promise(resolve => {
-      cy.request({
-        method: 'GET',
-        url: 'localhost:3001/api/1.0/tasks' + tenant,
-        headers: this.toAuthHeader(token),
-      }).then(response => {
-        cy.log(`tasks${tenant} response`, response);
-        resolve(response);
+      cy.request({ method: 'POST', url, body, headers }).then(response => {
+        resolve(response.body);
       });
     });
   }
 
-  private static toAuthHeader(token: string): Record<string, string> {
-    return { authorization: `Bearer ${token}` };
+  public patch<R extends ResponseBody>(
+    url: string,
+    body?: RequestBody | undefined,
+    headers?: RequestHeaders | undefined
+  ): Promise<R> {
+    return new Promise(resolve => {
+      cy.request({ method: 'PATCH', url, body, headers }).then(response => {
+        resolve(response.body);
+      });
+    });
+  }
+
+  public delete<R extends ResponseBody>(
+    url: string,
+    body?: RequestBody | undefined,
+    headers?: RequestHeaders | undefined
+  ): Promise<R> {
+    return new Promise(resolve => {
+      cy.request({ method: 'DELETE', url, body, headers }).then(response => {
+        resolve(response.body);
+      });
+    });
+  }
+
+  private stringifyParams(query?: QueryParams): string {
+    if (query === undefined) return '';
+
+    const keyPairs = Object.entries(query).filter(([, value]) => value !== undefined && value !== null);
+    if (keyPairs.length === 0) return '';
+
+    const stringified = Object.entries(query)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('&');
+
+    return '?' + stringified;
   }
 }
 
-export interface Identifiable {
-  id: number;
-}
-
-export interface EntityTimestamps {
-  createdAt?: Date;
-  updatedAt?: Date;
-  deletedAt?: Date;
-}
-
-interface LoginResponseDTO {
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    tenants: number[];
-  };
-  token: string;
-}
-
-interface CreateTaskDTO {
-  title: string;
-  tenantId?: number;
-}
-
-type TaskStatus = 'Todo' | 'InProgress' | 'Blocked' | 'Done';
-interface TaskAttributes extends Identifiable {
-  title: string;
-  description: string;
-  status: TaskStatus;
-  assigneeId?: number;
-  tenantId?: number;
-  order: number;
-  parentId?: number;
-}
-
-type TaskResponseDTO = TaskAttributes & EntityTimestamps;
+export const directRequest = new DirectRequest();

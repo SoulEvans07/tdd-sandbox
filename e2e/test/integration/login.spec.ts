@@ -1,5 +1,4 @@
 import { CommonSequence } from '../helpers/common';
-import { DirectRequest } from '../helpers/directReqest';
 
 describe('auth', () => {
   beforeEach(() => {

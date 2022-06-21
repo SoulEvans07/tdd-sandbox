@@ -1,5 +1,5 @@
+import { authManager, taskManager } from '../helpers/apiManagers';
 import { CommonSequence } from '../helpers/common';
-import { DirectRequest } from '../helpers/directReqest';
 
 describe('socket', () => {
   const mainUser = { username: 'adam.szi', password: 'Pass123!' };
@@ -10,27 +10,33 @@ describe('socket', () => {
   });
 
   it('sees the task created by other user', async () => {
-    const otherUser = await DirectRequest.login(sameTenantUser.username, sameTenantUser.password);
-    const newTask = await DirectRequest.createTask(otherUser.body.token, {
-      title: `New Task: ${Date.now()}`,
-      tenantId: otherUser.body.user.tenants[0],
-    });
+    const otherUser = await authManager.login(sameTenantUser);
+    const newTask = await taskManager.create(
+      {
+        title: `New Task: ${Date.now()}`,
+        tenantId: otherUser.user.tenants[0],
+      },
+      otherUser.token
+    );
 
     CommonSequence.changeWorkspace('snapsoft.hu');
-    cy.findByText(newTask.body.title).should('be.visible');
+    cy.findByText(newTask.title).should('be.visible');
   });
 
   describe.only('gets real time update', () => {
     it('about other user creating task', async () => {
       CommonSequence.changeWorkspace('snapsoft.hu');
 
-      const otherUser = await DirectRequest.login(sameTenantUser.username, sameTenantUser.password);
-      const newTask = await DirectRequest.createTask(otherUser.body.token, {
-        title: `New Task: ${Date.now()}`,
-        tenantId: otherUser.body.user.tenants[0],
-      });
+      const otherUser = await authManager.login(sameTenantUser);
+      const newTask = await taskManager.create(
+        {
+          title: `New Task: ${Date.now()}`,
+          tenantId: otherUser.user.tenants[0],
+        },
+        otherUser.token
+      );
 
-      cy.findByText(newTask.body.title).should('be.visible');
+      cy.findByText(newTask.title).should('be.visible');
     });
   });
 });
