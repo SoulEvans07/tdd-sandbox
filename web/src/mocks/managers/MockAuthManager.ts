@@ -1,7 +1,7 @@
 import { rest } from 'msw';
+import { LoginDTO, LoginResponseDTO, RefreshTokenResponseDTO } from '@tdd-sandbox/api-managers';
 import { serverUrl } from '../../config';
 import { ErrorResponse, MockApiManager } from './types';
-import { LoginDTO, LoginResponseDTO, RefreshTokenResponseDTO } from '../../managers/AuthManager';
 import { MockUserData, mockUsers } from './mockData';
 import { AuthError, authorize } from './helpers';
 import { authManager } from '../../services/api';

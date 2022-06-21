@@ -1,4 +1,5 @@
 import { ChangeEvent, KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
+import { TaskResponseDTO, RestrictedUserDTO } from '@tdd-sandbox/api-managers';
 import socketClient, { Socket } from 'socket.io-client';
 import './TasksPage.scss';
 import { Page } from '../../components/layout/Page/Page';
@@ -10,11 +11,9 @@ import { StoreDispatch, useDispatch, useSelector } from '../../contexts/store/St
 import { selectActiveWorkspace, selectWorkspaceTasks } from '../../contexts/store/selectors';
 import { Task } from '../../contexts/store/types';
 import { createTask, loadTasks, removeMultipleTask, updateTask } from '../../contexts/store/actions';
-import { TaskResponseDTO } from '../../managers/TaskManager';
 import { useAuth } from '../../contexts/auth/AuthContext';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { TaskEditPanel } from '../../containers/TaskEditPanel/TaskEditPanel';
-import { RestrictedUserDTO } from '../../managers/UserManager';
 import { serverUrl } from '../../config';
 import { taskManager, userManager } from '../../services/api';
 

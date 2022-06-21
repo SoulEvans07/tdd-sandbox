@@ -1,7 +1,7 @@
 import { rest } from 'msw';
+import { GetWorkspacesResponseDTO, RestrictedUserDTO, SignupDTO } from '@tdd-sandbox/api-managers';
 import { serverUrl } from '../../config';
 import { ErrorResponse, MockApiManager } from './types';
-import { GetWorkspacesResponseDTO, RestrictedUserDTO, SignupDTO } from '../../managers/UserManager';
 import { AuthError, authorize } from './helpers';
 import { mockUsers } from './mockData';
 import { userManager } from '../../services/api';

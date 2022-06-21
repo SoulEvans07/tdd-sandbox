@@ -1,4 +1,5 @@
 import { ChangeEvent, ReactElement, useEffect, useMemo, useState } from 'react';
+import { RestrictedUserDTO } from '@tdd-sandbox/api-managers';
 import './TaskEditPanel.scss';
 import { Task, TaskStatus, TaskStatusColors, TaskStatusNames, TaskStatusTransitions } from '../../contexts/store/types';
 import { TextInput } from '../../components/control/TextInput/TextInput';
@@ -6,7 +7,6 @@ import { SidePanel } from '../../components/layout/SidePanel/SidePanel';
 import { ButtonGroup } from '../../components/control/ButtonGroup/ButtonGroup';
 import { Button, ButtonProps } from '../../components/control/Button/Button';
 import { TagLabel } from '../../components/ui/TagLabel/TagLabel';
-import { RestrictedUserDTO } from '../../managers/UserManager';
 import { NameTag } from '../../components/ui/NameTag/NameTag';
 import { FilterSelect } from '../../components/control/FilterSelect/FilterSelect';
 import { SelectOption } from '../../components/control/FilterSelect/SelectOption';
