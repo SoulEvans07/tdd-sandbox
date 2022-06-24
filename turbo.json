@@ -1,0 +1,29 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["build/**", "dist/**"],
+      "cache": true
+    },
+    "lint": {
+      "outputs": []
+    },
+    "tdd-sandbox-server#dev": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "tdd-sandbox-web#dev": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "predev": {
+      "dependsOn": ["^build"]
+    },
+    "dev": {
+      "dependsOn": [],
+      "outputs": ["build/**", "dist/**"],
+      "cache": false
+    }
+  }
+}

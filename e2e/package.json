@@ -3,18 +3,18 @@
   "version": "0.1.0",
   "author": "adam.szi",
   "license": "BEERWARE",
-  "private": "true",
+  "private": true,
   "scripts": {
     "serve": "cross-env NODE_ENV=test concurrently \"cd ../server && npm run serve:test\" \"cd ../web && npm run start\"",
     "test": "cypress open",
     "test:serve": "concurrently \"npm run serve\" \"npm run test\""
   },
   "dependencies": {
-    "@tdd-sandbox/api-managers": "^0.1.0"
+    "@tdd-sandbox/api-managers": "*"
   },
   "devDependencies": {
     "@testing-library/cypress": "^8.0.2",
-    "@types/tdd-sandbox-shared": "^0.1.0",
+    "@types/tdd-sandbox-shared": "*",
     "concurrently": "^7.2.0",
     "cross-env": "^7.0.3",
     "cypress": "^9.6.1",
