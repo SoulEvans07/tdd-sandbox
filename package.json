@@ -17,7 +17,13 @@
     "start": "concurrently \"npm run start:server\" \"npm run start:web\"",
     "test:web": "npm run test -w web",
     "test:server": "npm run test -w server",
-    "test:e2e": "npm run test -w e2e"
+    "test:e2e": "npm run test -w e2e",
+    "----------": "echo ----------------turborepo-------------------------------",
+    "build": "turbo run build --dry",
+    "predev": "turbo run predev",
+    "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=tdd-sandbox-web",
+    "dev:server": "turbo run dev --filter=tdd-sandbox-server"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.28.0",
@@ -25,6 +31,8 @@
     "concurrently": "^7.2.1",
     "cross-env": "^7.0.3",
     "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.7.1"
-  }
+    "prettier": "^2.7.1",
+    "turbo": "^1.3.1"
+  },
+  "packageManager": "npm@8.5.5"
 }

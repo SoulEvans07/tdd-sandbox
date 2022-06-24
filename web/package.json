@@ -5,19 +5,19 @@
   "author": "adam.szi",
   "license": "Beerware",
   "scripts": {
-    "start": "cross-env BROWSER=none node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --watchAll=false",
     "test:w": "node scripts/test.js",
-    "test:c": "node scripts/test.js --collect-coverage"
+    "test:c": "node scripts/test.js --collect-coverage",
+    "dev": "cross-env BROWSER=none node scripts/start.js"
   },
   "dependencies": {
     "@babel/core": "7.12.3",
     "@faker-js/faker": "6.0.0-alpha.5",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
-    "@tdd-sandbox/request": "^0.1.0",
-    "@tdd-sandbox/api-managers": "^0.1.0",
+    "@tdd-sandbox/request": "*",
+    "@tdd-sandbox/api-managers": "*",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -100,12 +100,12 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "devDependencies": {
-    "@types/jest-polyfill": "^1.0.0",
+    "@types/jest-polyfill": "*",
     "@types/lodash": "^4.14.177",
-    "@types/tdd-sandbox-shared": "^0.1.0",
+    "@types/tdd-sandbox-shared": "*",
     "eslint-plugin-prettier": "^4.0.0",
     "jest-css-modules-transform": "https://github.com/SoulEvans07/jest-scss-transform.git#v4.4.0",
-    "jest-polyfill": "^1.0.0",
+    "jest-polyfill": "*",
     "prettier": "^2.4.1",
     "socket.io": "^4.5.1",
     "ts-jest": "^28.0.2"

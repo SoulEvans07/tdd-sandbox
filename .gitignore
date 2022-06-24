@@ -1,4 +1,5 @@
-/.vscode
+.vscode/
+.turbo/
 node_modules/
 build/
 lib/

@@ -7,7 +7,6 @@
   "main": "build/index.js",
   "scripts": {
     "build": "rimraf build && tsc --project tsconfig.build.json",
-    "preserve": "npm run build",
     "serve": "cross-env NODE_ENV=development concurrently \"tsc --project tsconfig.build.json --watch\" \"nodemon -q build/index.js\"",
     "serve:test": "cross-env NODE_ENV=test concurrently \"tsc --project tsconfig.build.json --watch\" \"nodemon -q build/index.js\"",
     "prestart": "npm run build",
@@ -16,7 +15,8 @@
     "test:c": "jest --collect-coverage",
     "test:w": "jest --watchAll",
     "test:v": "jest --verbose",
-    "format": "prettier --config .prettierrc.json --write src/**/*.ts"
+    "format": "prettier --config .prettierrc.json --write src/**/*.ts",
+    "dev": "cross-env NODE_ENV=development concurrently \"tsc --project tsconfig.build.json --watch\" \"nodemon -q build/index.js\""
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -47,11 +47,11 @@
     "@types/i18next": "^13.0.0",
     "@types/i18next-fs-backend": "^1.1.2",
     "@types/jest": "^27.4.1",
-    "@types/jest-polyfill": "^1.0.0",
+    "@types/jest-polyfill": "*",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^16.11.9",
     "@types/supertest": "^2.0.12",
-    "@types/tdd-sandbox-shared": "^0.1.0",
+    "@types/tdd-sandbox-shared": "*",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "concurrently": "^6.4.0",
@@ -63,7 +63,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "jest": "^27.0.0",
     "jest-extended": "^2.0.0",
-    "jest-polyfill": "^1.0.0",
+    "jest-polyfill": "*",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.3",
     "ts-jest": "^27.1.4"
