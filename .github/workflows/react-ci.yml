@@ -7,7 +7,7 @@ on:
     paths:
       - 'web/**'
 jobs:
-  frontend-build-and-test:
+  web-build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
