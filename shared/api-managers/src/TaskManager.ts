@@ -1,4 +1,4 @@
-import { Identifiable, EntityTimestamps } from 'tdd-sandbox-shared';
+import { Identifiable, EntityTimestamps } from 'shared-types';
 import { ApiManager } from './types';
 
 export class TaskManager extends ApiManager {

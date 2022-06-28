@@ -1,5 +1,4 @@
 import { UserManager } from './BLL/UserManager';
-import sequelize from './DAL/database';
 import User, { UserInput } from './DAL/models/User';
 import { Logger } from './utils/Logger';
 

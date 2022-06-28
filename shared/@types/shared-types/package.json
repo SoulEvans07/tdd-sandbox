@@ -1,0 +1,24 @@
+{
+  "name": "@types/shared-types",
+  "private": true,
+  "version": "0.1.0",
+  "description": "",
+  "main": "",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoulEvans07/tdd-sandbox.git"
+  },
+  "author": "adam.szi",
+  "license": "Beerware",
+  "bugs": {
+    "url": "https://github.com/SoulEvans07/tdd-sandbox/issues"
+  },
+  "homepage": "https://github.com/SoulEvans07/tdd-sandbox#readme",
+  "devDependencies": {
+    "typescript": "^4.7.3"
+  }
+}

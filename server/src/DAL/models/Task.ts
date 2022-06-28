@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { EntityTimestamps, Identifiable } from 'tdd-sandbox-shared';
+import { EntityTimestamps, Identifiable } from 'shared-types';
 import sequelize from '../database';
 
 export enum TaskStatus {

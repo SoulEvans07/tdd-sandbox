@@ -1,3 +1,4 @@
+import { StatusCode } from 'shared-types';
 import User from '../DAL/models/User';
 
 import { BadPasswordException } from '../types/exceptions/BadPasswordException';
@@ -13,7 +14,7 @@ export default class AuthManager {
     });
 
     if (!user) {
-      throw new UserNotFoundException(403);
+      throw new UserNotFoundException(StatusCode.Forbidden);
     }
 
     if (!(await SecurityHelper.comparePasswords(password, user.password))) {
@@ -31,7 +32,7 @@ export default class AuthManager {
     });
 
     if (!user) {
-      throw new UserNotFoundException(403);
+      throw new UserNotFoundException(StatusCode.Forbidden);
     }
 
     return AuthManager.generateLoginResponse(user);

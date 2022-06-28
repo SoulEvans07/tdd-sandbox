@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { HttpStatusCode } from 'tdd-sandbox-shared';
+import { HttpStatusCode } from 'shared-types';
 import { serverUrl } from '../config';
 
 export function createEmptyGetHandler(endpoint: string, statusCode: HttpStatusCode, statusText?: string) {

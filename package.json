@@ -19,7 +19,7 @@
     "test:server": "npm run test -w server",
     "test:e2e": "npm run test -w e2e",
     "----------": "echo ----------------turborepo-------------------------------",
-    "build": "turbo run build --dry",
+    "build": "turbo run build",
     "predev": "turbo run predev",
     "dev": "turbo run dev --parallel",
     "dev:web": "turbo run dev --filter=tdd-sandbox-web",
