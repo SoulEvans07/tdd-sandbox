@@ -2,6 +2,7 @@ name: React CI
 on:
   push:
     paths:
+      - '.github/workflows/react-ci.yml'
       - 'web/**'
   pull_request:
     paths:
