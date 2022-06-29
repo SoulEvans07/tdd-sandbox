@@ -7,7 +7,9 @@
   "scripts": {
     "serve": "cross-env NODE_ENV=test concurrently \"cd ../server && yarn serve:test\" \"cd ../web && yarn start\"",
     "test": "cypress open",
-    "test:serve": "concurrently \"yarn serve\" \"yarn test\""
+    "test:serve": "concurrently \"yarn serve\" \"yarn test\"",
+    "serve:prod": "cross-env NODE_ENV=test concurrently \"cd ../server && yarn start\" \"cd ../web && yarn run start:prod\"",
+    "test:prod": "concurrently \"yarn run serve:prod\" \"yarn test\""
   },
   "devDependencies": {
     "@testing-library/cypress": "^8.0.2",
