@@ -13,6 +13,7 @@
 - User should be able to remove tasks
 - User should be able to change task title
 - User should be able to change task description
+- User should be able to change task assignee
 - User should be able to change task status (todo, inProgress, blocked, done)
 
 ### Bonus

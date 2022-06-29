@@ -2,6 +2,7 @@ name: Node CI
 on:
   push:
     paths:
+      - '.github/workflows/node-ci.yml'
       - 'server/**'
   pull_request:
     paths:

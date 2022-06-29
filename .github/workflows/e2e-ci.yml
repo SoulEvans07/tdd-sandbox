@@ -2,6 +2,7 @@ name: E2E CI
 on:
   push:
     paths:
+      - '.github/workflows/e2e-ci.yml'
       - 'web/**'
       - 'server/**'
       - 'e2e/**'
