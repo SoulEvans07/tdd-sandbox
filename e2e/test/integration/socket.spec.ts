@@ -9,7 +9,7 @@ describe('socket', () => {
     CommonSequence.login(mainUser.username, mainUser.password);
   });
 
-  it('sees the task created by other user', async () => {
+  test('the task created by other user is visible', async () => {
     const otherUser = await DirectRequest.login(sameTenantUser.username, sameTenantUser.password);
     const newTask = await DirectRequest.createTask(otherUser.body.token, {
       title: `New Task: ${Date.now()}`,
