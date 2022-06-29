@@ -84,14 +84,12 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           install: false
-          start: |
-            cd e2e
-            yarn serve:build
+          start: yarn serve:build
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
           browser: chrome
           record: true
-          config-file: e2e/cypress.config.ts
+          working-directory: e2e
         env:
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
