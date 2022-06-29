@@ -20,7 +20,7 @@ export class DirectRequest {
         body: task,
         headers: this.toAuthHeader(token),
       }).then(response => {
-        cy.log('login response', response);
+        cy.log('task create response', response);
         resolve(response);
       });
     });
