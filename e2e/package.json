@@ -8,7 +8,7 @@
     "serve:dev": "cross-env NODE_ENV=test concurrently \"cd ../server && yarn serve:test\" \"cd ../web && yarn start\"",
     "serve:build": "cross-env NODE_ENV=test concurrently \"cd ../server && yarn start\" \"cd ../web && yarn run start:prod\"",
     "cy:open": "cypress open",
-    "cy:run": "cypress run --record",
+    "cy:run": "cypress run",
     "cy:ci": "cypress run --record --key $CYPRESS_RECORD_KEY\"",
     "open:dev": "concurrently \"yarn run serve:dev\" \"yarn cy:open\"",
     "open:build": "concurrently \"yarn run serve:build\" \"yarn cy:open\"",

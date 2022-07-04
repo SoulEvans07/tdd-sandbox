@@ -10,6 +10,7 @@ const config: Partial<Cypress.UserConfigOptions<any>> = {
   watchForFileChanges: false,
   viewportWidth: 1920,
   viewportHeight: 1080,
+  videoCompression: 2,
   e2e: {
     setupNodeEvents(on, config) {
       return require('./test/plugins/index.ts').default(on, config);

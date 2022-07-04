@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "test",
     "target": "es2021",
     "module": "esnext",
     "strict": true,

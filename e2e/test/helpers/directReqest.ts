@@ -1,42 +1,26 @@
+type Chainable<T> = Cypress.Chainable<T>;
 type Response<T> = Cypress.Response<T>;
 
 export class DirectRequest {
-  public static async login(username: string, password: string): Promise<Response<LoginResponseDTO>> {
-    return new Promise(resolve => {
-      cy.request({ method: 'POST', url: 'localhost:3001/api/1.0/auth/login', body: { username, password } }).then(
-        response => {
-          cy.log('login response', response);
-          resolve(response);
-        }
-      );
+  public static login(username: string, password: string): Chainable<Response<LoginResponseDTO>> {
+    return cy.request({ method: 'POST', url: 'localhost:3001/api/1.0/auth/login', body: { username, password } });
+  }
+
+  public static createTask(token: string, task: CreateTaskDTO): Chainable<Response<TaskResponseDTO>> {
+    return cy.request({
+      method: 'POST',
+      url: 'localhost:3001/api/1.0/task',
+      body: task,
+      headers: this.toAuthHeader(token),
     });
   }
 
-  public static async createTask(token: string, task: CreateTaskDTO): Promise<Response<TaskResponseDTO>> {
-    return new Promise(resolve => {
-      cy.request({
-        method: 'POST',
-        url: 'localhost:3001/api/1.0/task',
-        body: task,
-        headers: this.toAuthHeader(token),
-      }).then(response => {
-        cy.log('task create response', response);
-        resolve(response);
-      });
-    });
-  }
-
-  public static async getTasks(token: string, tenantId?: number): Promise<Response<TaskResponseDTO[]>> {
+  public static getTasks(token: string, tenantId?: number): Chainable<Response<TaskResponseDTO[]>> {
     const tenant = tenantId ? '/' + tenantId : '';
-    return new Promise(resolve => {
-      cy.request({
-        method: 'GET',
-        url: 'localhost:3001/api/1.0/tasks' + tenant,
-        headers: this.toAuthHeader(token),
-      }).then(response => {
-        cy.log(`tasks${tenant} response`, response);
-        resolve(response);
-      });
+    return cy.request({
+      method: 'GET',
+      url: 'localhost:3001/api/1.0/tasks' + tenant,
+      headers: this.toAuthHeader(token),
     });
   }
 
