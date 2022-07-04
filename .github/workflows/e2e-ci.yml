@@ -72,6 +72,10 @@ jobs:
         with:
           name: web-build
           path: web/build
+      - name: Install Server dependencies
+        run: |
+          cd server
+          yarn install
       - name: Install Web dependencies
         run: |
           cd web
