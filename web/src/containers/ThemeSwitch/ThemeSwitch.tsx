@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import './ThemeSwitch.scss';
 import { Icon } from '../../components/ui/Icon/Icon';
-import { ThemeName, useTheme } from '../../contexts/theme/ThemeContext';
+import { ThemeName, useTheme } from '../../contexts/theme/ThemeSlice';
 
 const themeIcons: Record<ThemeName, string> = {
   dark: 'sun',
@@ -10,7 +10,7 @@ const themeIcons: Record<ThemeName, string> = {
 
 export function ThemeSwitch(): ReactElement {
   const { currentTheme, switchTheme } = useTheme();
-  const icon = themeIcons[currentTheme];
+  const icon = themeIcons[currentTheme.currentTheme];
 
   return (
     <Icon
@@ -18,7 +18,7 @@ export function ThemeSwitch(): ReactElement {
       icon={icon}
       onClick={switchTheme}
       role="checkbox"
-      aria-checked={currentTheme === 'dark'}
+      aria-checked={currentTheme.currentTheme === 'dark'}
       aria-label="Switch Theme"
     />
   );

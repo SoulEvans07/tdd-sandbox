@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactElement, useEffect } from 'react';
-import { ThemeName, useTheme } from '../../contexts/theme/ThemeContext';
+import { ThemeName, useTheme } from '../../contexts/theme/ThemeSlice';
 
 const themePrefix = 'theme-';
 
@@ -18,7 +18,7 @@ export function ThemeSetter(props: PropsWithChildren<{}>): ReactElement {
 
   useEffect(() => {
     clearTheme();
-    addTheme(currentTheme);
+    addTheme(currentTheme.currentTheme);
   }, [currentTheme]);
 
   return <>{children}</>;
